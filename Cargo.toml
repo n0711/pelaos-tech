@@ -1,0 +1,9 @@
+[package]
+name = "pelaos-site"
+version = "1.0.0"
+edition = "2021"
+description = "Static site generator for pelaos-tech (GitHub Pages). Renders every page to complete HTML at build time."
+publish = false
+
+# No dependencies: builds offline and identically on any machine or CI runner.
+[dependencies]

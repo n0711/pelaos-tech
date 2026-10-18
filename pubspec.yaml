@@ -1,0 +1,8 @@
+name: pelaos_web
+description: Front-end script for the PelaosTech site (compiled to JavaScript).
+publish_to: none
+
+environment:
+  sdk: ^3.5.0
+
+# No dependencies: dart:js_interop is part of the SDK.

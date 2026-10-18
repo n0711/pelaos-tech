@@ -1,0 +1,55 @@
+# Builds the site (Rust generator + Dart front end) and deploys it to GitHub Pages.
+# Follows https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages
+# Actions are pinned to the commit of their latest release (18 October 2026).
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# Least privilege: the build job only reads; only the deploy job can publish.
+permissions:
+  contents: read
+
+# One deployment at a time; never cancel a deployment that is in progress.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: dart-lang/setup-dart@6afc89df92d6eb3834022f73cd65adc8cdfcb92d # v1.8.1
+        with:
+          sdk: stable
+      - name: Test the generator (one h1 per page, no forms, no http assets, links resolve)
+        run: cargo test --locked
+      - name: Render pages (Rust)
+        run: cargo run --release --locked -- dist
+      - name: Compile front end (Dart)
+        run: |
+          dart pub get
+          dart compile js -O2 --csp -o dist/app.js web/app.dart
+          rm -f dist/app.js.deps dist/app.js.map
+      - uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6.0.0
+      - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1
