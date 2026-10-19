@@ -25,13 +25,16 @@ Checked against the [GitHub Pages docs](https://docs.github.com/en/pages) on 18 
 | GitHub Free publishes Pages only from public repositories | The repository is public. It contains only the site's source, no secrets. |
 | Not for running an online business, e-commerce or SaaS | Project and research information plus a privacy policy. Nothing is sold and no transactions happen on the site. |
 | No sensitive transactions (passwords, credit cards) | No forms or inputs that send data. The CSP sets `form-action 'none'`, and a test fails the build if a `<form>` appears. |
-| Site ≤ 1 GB, repository ≤ 1 GB recommended, deploy < 10 min, soft 100 GB/month bandwidth | About 90 KB in total; the workflow jobs time out at 10 minutes. |
+| Site ≤ 1 GB, repository ≤ 1 GB recommended, deploy < 10 min, soft 100 GB/month bandwidth | About 90 KB in total, and the workflow jobs time out at 10 minutes. |
 | HTTPS, no mixed content | github.io is served over HTTPS with "Enforce HTTPS" on. A test fails the build on any `http://` asset or link. |
 | Visitors' IP addresses are logged by GitHub | Disclosed on `/privacy/`. |
-| Custom workflow: `pages: write` + `id-token: write`, `github-pages` environment | Granted only to the deploy job; the build job reads only. Actions are pinned to release commits. |
+| Custom workflow: `pages: write` + `id-token: write`, `github-pages` environment | Granted only to the deploy job. The build job only reads. Actions are pinned to release commits. |
 | GitHub Terms of Service and Acceptable Use Policies | Original content with cited sources. |
 
 ## Build locally
+
+Needs a stable Rust toolchain and the Dart SDK 3.5 or newer. Neither the Rust
+generator nor the Dart script pulls in third-party packages.
 
 ```powershell
 cargo test
