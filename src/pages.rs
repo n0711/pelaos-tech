@@ -6,7 +6,7 @@
 pub const SITE: &str = "https://n0711.github.io/pelaos-tech";
 pub const BASE: &str = "/pelaos-tech";
 /// Shown in the footer, JSON-LD `dateModified` and sitemap `lastmod`.
-pub const UPDATED: &str = "2026-10-18";
+pub const UPDATED: &str = "2026-10-19";
 
 /// Seawater density and standard gravity used for every pressure figure on the site.
 pub const RHO: f64 = 1025.0;
@@ -17,6 +17,7 @@ const NOAA_AUV_ROV: &str = "https://oceanservice.noaa.gov/facts/auv-rov.html";
 const NOAA_NAVIGATION: &str = "https://oceanexplorer.noaa.gov/expedition-feature/technology-development-partnerships-ex1904-logs-july29/";
 const GITHUB_PAGES_PRIVACY: &str = "https://docs.github.com/en/pages/getting-started-with-github-pages/what-is-github-pages";
 const CONTACT: &str = "https://github.com/n0711/pelaos-tech/issues";
+const LINKEDIN: &str = "https://www.linkedin.com/in/nadiotis/";
 
 pub struct File {
     pub path: String,
@@ -110,6 +111,26 @@ dt{font-weight:700;margin-top:16px}dd{margin:4px 0 0}
 small,.muted{color:var(--muted)}
 footer{border-top:1px solid var(--line);margin-top:48px;padding-top:16px;padding-bottom:32px;font-size:15px;color:var(--muted)}
 footer a{display:inline-block;min-height:44px;line-height:44px;margin-right:12px}
+:focus-visible{outline:3px solid var(--accent);outline-offset:4px}
+header,main,footer{max-width:1080px;padding-left:24px;padding-right:24px}
+main{padding-top:32px}main>p,main>ul,main>dl{max-width:780px}
+header{border-bottom:1px solid var(--line);padding-top:20px;padding-bottom:20px}
+h1{font-size:clamp(36px,6.5vw,72px);letter-spacing:-.055em;line-height:1.04;max-width:850px}
+h2{letter-spacing:-.025em}.lead{max-width:680px!important;font-size:21px;line-height:1.65}
+.eyebrow{text-transform:uppercase;font-size:12px;font-weight:750;letter-spacing:.15em;color:var(--accent)}
+.hero{padding:28px 0 44px}.hero h1{margin:18px 0 24px}.hero .lead{margin-bottom:28px}
+.actions{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin:24px 0}
+.button{display:inline-flex;min-height:46px;align-items:center;justify-content:center;padding:11px 18px;border:1px solid var(--accent);border-radius:8px;font-weight:650;text-decoration:none}
+.button.primary{background:var(--accent);color:var(--bg)}.button:hover{text-decoration:underline;text-underline-offset:4px}
+.project-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.project{padding:24px;margin:0;display:flex;flex-direction:column;align-items:flex-start;gap:8px}
+.project h3{font-size:25px;line-height:1.2;margin:16px 0 4px}.project p{margin:0 0 14px}
+.project a{margin-top:auto;min-height:44px;display:inline-flex;align-items:center;font-weight:650}
+.badge{display:inline-flex;border:1px solid var(--line);border-radius:30px;padding:4px 10px;font-size:12px;font-weight:650;color:var(--muted)}
+.panel{display:grid;grid-template-columns:1fr 1fr;gap:32px;border-top:1px solid var(--line);padding:32px 0;margin-top:48px}
+.panel h2{margin-top:0}.table-scroll{overflow-x:auto}.status-note{border-left:3px solid var(--accent);padding:8px 18px;margin:24px 0;color:var(--muted)}
+@media(max-width:720px){header,main,footer{padding-left:18px;padding-right:18px}.project-grid,.panel{grid-template-columns:1fr}.hero{padding:8px 0 28px}.lead{font-size:18px}.project{padding:22px}nav a{padding:0 8px}table{font-size:14px}}
+
 "#;
 
 fn layout(p: &Page) -> String {
@@ -194,7 +215,7 @@ fn layout(p: &Page) -> String {
 </main>
 <footer>
 <a href="{research}">Research</a><a href="{riotuner}">RioTuner</a><a href="{privacy}">Website privacy</a><a href="{CONTACT}">Contact</a>
-<p>© 2026 PelaosTech. Last updated <time datetime="{UPDATED}">18 October 2026</time>. Hosted on GitHub Pages.</p>
+<p>© 2026 PelaosTech. Last updated <time datetime="{UPDATED}">19 October 2026</time>. Hosted on GitHub Pages.</p>
 </footer>
 </body>
 </html>
@@ -212,27 +233,31 @@ fn layout(p: &Page) -> String {
 
 fn home() -> Page {
     let body = format!(
-        r#"
-<h1>PelaosTech</h1>
-<p class="lead">Marine robotics research and precision software.</p>
-<section class="card">
-<h2>Deep-sea robotics research</h2>
-<p>A research concept for an autonomous, deep-submergence remotely operated vehicle (ROV) for extreme underwater and volcanic environments: high pressure, poor visibility, unstable terrain and no GPS. The project is at the research stage.</p>
-<p><a href="{research}">The numbers behind deep-sea design</a>: pressure at depth, and how robots navigate without GPS.</p>
+        r##"
+<section class="hero">
+<p class="eyebrow">PELAOS / Independent software &amp; research / Cyprus</p>
+<h1>Useful software.<br>Built with a purpose.</h1>
+<p class="lead">Projects by Charalampos Nadiotis, connecting music, learning and local culture with practical engineering.</p>
+<div class="actions"><a class="button primary" href="#projects">Explore the projects ↓</a><a class="button" href="{LINKEDIN}">Meet the maker ↗</a></div>
 </section>
-<section class="card">
-<h2>RioTuner</h2>
-<p>A precision tuner for guitar, bass, ukulele and bouzouki. It measures every overtone of a string and fits a stiff-string model, so readings stay within a fraction of a cent, even on a phone microphone.</p>
-<p><a href="{riotuner}">About RioTuner</a></p>
+<section id="projects" aria-labelledby="project-heading">
+<p class="eyebrow">Selected projects</p><h2 id="project-heading">Different interests. Things you can use.</h2>
+<div class="project-grid">
+<article class="card project"><span class="badge">Android · Pre-release</span><h3>RioTuner</h3><p>An offline instrument tuner with needle and strobe displays. Built for guitar, bass, ukulele and bouzouki. Physical-device validation is still required.</p><a href="{riotuner}">Explore RioTuner →</a></article>
+<article class="card project"><span class="badge">Live · Community website</span><h3>cysk8clips</h3><p>Cyprus skateboarding clips, full parts, event stories and a public spot guide. A record of the people and places behind the scene.</p><a href="https://cysk8clips.com">Visit the skate archive ↗</a></article>
+<article class="card project"><span class="badge">Open source · Local planner</span><h3>LearnTwin</h3><p>Track degree progress, study tasks, thesis milestones and PhD applications. Records stay in your browser; export a backup to keep them.</p><a href="https://github.com/n0711/LearnTwin#start-the-planner">Try LearnTwin from source ↗</a></article>
+</div>
 </section>
-"#,
+<section class="panel"><div><p class="eyebrow">Research notebook</p><h2>Curiosity goes deeper.</h2></div><div><p>Marine robotics is a research interest: pressure, navigation and the challenges of operating underwater. The deep-submergence vehicle is a concept, not a deployed product.</p><a href="{research}">Explore the deep-sea notes →</a></div></section>
+<section class="panel"><div><p class="eyebrow">The person behind PELAOS</p><h2>From Cyprus, with curiosity.</h2></div><div><p>I’m Charalampos Nadiotis, a robotics engineer and Computer Science student. This is my project portfolio: what is available, what is being tested and what I’m exploring next.</p><p><a href="https://github.com/n0711">GitHub</a> · <a href="{LINKEDIN}">Contact on LinkedIn</a></p></div></section>
+"##,
         research = href("research/"),
         riotuner = href("riotuner/"),
     );
     Page {
         slug: "",
-        title: "PelaosTech: marine robotics and precision software",
-        description: "PelaosTech researches deep-sea robotics and builds precision software, including RioTuner, a sub-cent accurate instrument tuner.",
+        title: "PELAOS | Software, music & community projects",
+        description: "Explore PELAOS projects: RioTuner, cysk8clips and LearnTwin. Independent software and marine robotics research by Charalampos Nadiotis in Cyprus.",
         body,
         crumbs: vec![],
         extra_ld: vec![],
@@ -333,26 +358,28 @@ fn riotuner() -> Page {
     let body = format!(
         r#"
 <h1>RioTuner</h1>
-<p class="lead">A precision tuner for guitar, bass, ukulele and bouzouki, for Android. Currently in testing; a Google Play release is planned.</p>
+<p class="lead">A precision tuner for guitar, bass, ukulele and bouzouki, for Android. Pre-release software; a Google Play release is planned. A verified store link is not available yet.</p>
 
 <h2>How it measures</h2>
-<p>Most tuner apps time the waveform of a string. RioTuner measures each overtone separately, from the way its phase advances over time, and fits a stiff-string model, <code>f<sub>k</sub> = k·f<sub>0</sub>·√(1 + B·k²)</code>, to all of them. Real strings are slightly stiff, so their overtones run sharp. The fit separates that from the pitch, so the reading stays exact when a phone microphone barely picks up the low E. A true strobe shows the string's phase against the target: it stands still only when the string is exactly in tune.</p>
+<p>RioTuner estimates pitch from multiple string partials and fits a stiff-string model, <code>f<sub>k</sub> = k·f<sub>0</sub>·√(1 + B·k²)</code>, to all of them. Real strings are slightly stiff, so their overtones run sharp. The fit aims to separate string stiffness from pitch, including when the fundamental is weak. The strobe visualises phase drift relative to the target pitch. Real-device accuracy has not yet been established.</p>
 
-<h2>Measured accuracy</h2>
+<p class="status-note">No purchase or download is offered here yet. Review the testing guide to see what must be verified before release.</p>
+<p><a class="button primary" href="{testing}">Read the testing guide →</a></p>
+<h2>Synthetic benchmark results</h2>
 <div class="card">
 <table>
-<caption class="muted">95th-percentile error in cents (1/100 of a semitone), 160 test plucks per row</caption>
-<thead><tr><th scope="col">Condition</th><th scope="col">RioTuner</th><th scope="col">Classic YIN tuner</th></tr></thead>
+<caption class="muted">95th-percentile error on synthetic signals, in cents; 160 trials per row</caption>
+<thead><tr><th scope="col">Condition</th><th scope="col">RioTuner</th><th scope="col">Textbook YIN baseline</th></tr></thead>
 <tbody>
 <tr><td>Clean pluck</td><td>0.00</td><td>0.93</td></tr>
 <tr><td>Real-string overtone scatter</td><td>0.12</td><td>0.97</td></tr>
-<tr><td>Weak fundamental (phone microphone)</td><td>0.27</td><td>1.81</td></tr>
+<tr><td>Simulated weak fundamental</td><td>0.27</td><td>1.81</td></tr>
 <tr><td>Hard pluck, pitch glide</td><td>0.14</td><td>1.00</td></tr>
 <tr><td>Noisy room</td><td>0.12</td><td>3.95</td></tr>
 <tr><td>Very noisy room</td><td>0.15</td><td>46.7</td></tr>
 </tbody>
 </table>
-<p><small>Synthetic plucked strings with known pitch (B1 to E4, random detuning and string stiffness). Accuracy on a real phone also depends on its microphone; device tests are in progress.</small></p>
+<p><small>Synthetic plucked strings with known pitch (B1 to E4, random detuning and string stiffness). This is an algorithm benchmark, not a comparison with commercial tuner apps or a measured result on physical phones. Device accuracy and latency remain unverified.</small></p>
 </div>
 
 <h2>Features</h2>
@@ -368,16 +395,40 @@ fn riotuner() -> Page {
 <p>Sound is analysed on the phone and immediately discarded. Nothing is recorded, stored or sent. <a href="{policy}">RioTuner privacy policy</a></p>
 "#,
         policy = href("riotuner/privacy/"),
+        testing = href("riotuner/testing/"),
     );
     Page {
         slug: "riotuner/",
         title: "RioTuner: precision guitar tuner | PelaosTech",
-        description: "RioTuner measures every overtone of a string for sub-cent tuning accuracy, with a true strobe. Guitar, bass, ukulele, bouzouki. No ads, offline.",
+        description: "RioTuner: an offline Android instrument tuner with strobe and needle displays. Pre-release; synthetic benchmarks and physical-device testing requirements.",
         body,
         crumbs: vec![("riotuner/", "RioTuner")],
         extra_ld: vec![],
         script: false,
         noindex: false,
+    }
+}
+
+fn riotuner_testing() -> Page {
+    Page {
+        slug: "riotuner/testing/",
+        title: "RioTuner testing guide | PELAOS",
+        description: "How to evaluate a RioTuner test build: microphone permission, tuning response, interruptions and device details. Physical-device validation is still pending.",
+        body: format!(r#"
+<p class="eyebrow">RioTuner / Before release</p>
+<h1>Put it through a real practice session.</h1>
+<p class="lead">Synthetic signals test the algorithm. Instruments and phones test the product.</p>
+<p class="status-note">No public test build or Play opt-in link has been verified. This guide prepares testing; it does not enrol you in a test or provide a download.</p>
+<h2>When a build is available</h2>
+<ol><li>Check that the build comes from the developer or the official Play testing track.</li><li>Allow microphone access, then deny it once and check that the app explains how to continue.</li><li>Play each open string separately in a quiet room. Check string selection, the displayed note and response to a slow tuning change.</li><li>Compare needle and strobe displays, then repeat with background noise and a weaker low note.</li><li>Switch apps, lock and unlock the phone, and reopen the tuner. Microphone use should stop in the background and recover correctly.</li><li>Change reference pitch and tuning, restart the app and check that your settings are retained.</li></ol>
+<h2>Useful feedback</h2>
+<p>Include app version, phone model, Android version, instrument, tuning, expected behaviour and what actually happened. Report crashes and permission problems as well as tuning behaviour.</p>
+<p>A comparison with another tuner is a usability check, not calibrated accuracy evidence. Quantitative accuracy claims need a documented reference and measurement setup.</p>
+<p><a class="button" href="{LINKEDIN}">Ask about testing on LinkedIn ↗</a> <a href="{CONTACT}">Report a non-sensitive issue</a></p>
+<p class="muted">GitHub issues are public. Do not post contact details, private recordings, account information or device identifiers.</p>
+"#),
+        crumbs: vec![("riotuner/", "RioTuner"), ("riotuner/testing/", "Testing")],
+        extra_ld: vec![], script: false, noindex: false,
     }
 }
 
@@ -460,7 +511,7 @@ const FAVICON: &str = r##"<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1
 "##;
 
 fn pages() -> Vec<Page> {
-    vec![home(), research(), riotuner(), riotuner_privacy(), site_privacy(), not_found()]
+    vec![home(), research(), riotuner(), riotuner_testing(), riotuner_privacy(), site_privacy(), not_found()]
 }
 
 pub fn site() -> Vec<File> {
@@ -564,7 +615,7 @@ mod tests {
             assert!(c.contains("<link rel=\"canonical\" href=\"https://"), "{path}");
         }
         let sitemap = site().into_iter().find(|f| f.path == "sitemap.xml").unwrap().contents;
-        assert_eq!(sitemap.matches("<url>").count(), 5);
+        assert_eq!(sitemap.matches("<url>").count(), 6);
         assert!(!sitemap.contains("404"));
     }
 
