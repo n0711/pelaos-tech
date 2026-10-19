@@ -1,4 +1,4 @@
-# PelaosTech website
+# PELAOS — software projects & research
 
 Live at **https://n0711.github.io/pelaos-tech/** (GitHub Pages).
 
@@ -10,9 +10,10 @@ Live at **https://n0711.github.io/pelaos-tech/** (GitHub Pages).
 
 ## Pages
 
-- `/`: PelaosTech
+- `/`: project portfolio with RioTuner, cysk8clips and LearnTwin
 - `/research/`: pressure at depth, ROV vs AUV, navigation without GPS (NOAA sources)
-- `/riotuner/`: RioTuner, the precision tuner app
+- `/riotuner/`: RioTuner overview, pre-release status and synthetic benchmark limits
+- `/riotuner/testing/`: practical device-testing guide and feedback channels
 - `/riotuner/privacy/`: RioTuner privacy policy (the URL to enter in Google Play Console)
 - `/privacy/`: website privacy
 
@@ -48,3 +49,12 @@ dart compile js -O2 --csp -o dist/app.js web/app.dart
 Change `SITE` and `BASE` in `src/pages.rs` (`https://pelaos-tech.com` and `""`), add a `CNAME` file containing `pelaos-tech.com` to the output, and set the custom domain in the repository's Pages settings. `robots.txt` and `llms.txt` take effect only at a domain root, so they start working after that move.
 
 © 2026 PelaosTech.
+
+## Product documentation
+
+- [Commercial priorities and decision record](docs/PRODUCT_DECISIONS.md)
+- [Fixed-scope website service](docs/SERVICE_OFFER.md)
+
+The Pages site is an informational portfolio. It has no checkout or sales form.
+Commercial offer documents live in the repository, not the generated Pages site.
+A custom domain does not remove the hosting provider's usage restrictions.
