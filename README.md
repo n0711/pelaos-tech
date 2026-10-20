@@ -41,8 +41,13 @@ generator nor the Dart script pulls in third-party packages.
 cargo test
 cargo run -- dist
 dart pub get
+dart analyze --fatal-infos web/app.dart
 dart compile js -O2 --csp -o dist/app.js web/app.dart
 ```
+
+Pull requests run the Rust tests, render the site, analyze the Dart enhancement
+(including informational diagnostics), and compile it before deployment is eligible.
+Only pushes to `main` and manually triggered workflows deploy the site.
 
 ### Output directory safety
 
