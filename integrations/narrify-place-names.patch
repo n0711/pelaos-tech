@@ -1,0 +1,1802 @@
+diff --git a/frontend/src/data/placeNames.json b/frontend/src/data/placeNames.json
+new file mode 100644
+--- /dev/null
++++ b/frontend/src/data/placeNames.json
+@@ -0,0 +1,175 @@
++{
++  "schemaVersion": 1,
++  "places": [
++    {
++      "id": "nicosia",
++      "displayName": "Lefkosia / Nicosia",
++      "editorialStatus": "published",
++      "latitude": 35.17284,
++      "longitude": 33.35397,
++      "locationSourceId": "geonames-nicosia",
++      "aliases": [
++        {
++          "name": "Λευκωσία",
++          "language": "el",
++          "kind": "current",
++          "sourceId": "geonames-nicosia"
++        },
++        {
++          "name": "Lefkoşa",
++          "language": "tr",
++          "kind": "current",
++          "sourceId": "geonames-nicosia"
++        },
++        {
++          "name": "Ledra",
++          "kind": "historical",
++          "sourceId": "nicosia-municipality"
++        },
++        {
++          "name": "Lefkothea",
++          "kind": "historical",
++          "sourceId": "nicosia-municipality"
++        },
++        {
++          "name": "Lefkousia",
++          "kind": "historical",
++          "sourceId": "nicosia-municipality"
++        }
++      ],
++      "claims": [
++        {
++          "id": "historical-forms",
++          "kind": "name-history",
++          "status": "reported",
++          "summary": "The municipality lists Ledra, Lefkothea and Lefkousia as earlier names associated with the city.",
++          "sourceIds": [
++            "nicosia-municipality"
++          ]
++        }
++      ],
++      "sources": [
++        {
++          "id": "nicosia-municipality",
++          "title": "Nicosia from antiquity to the present",
++          "publisher": "Nicosia Municipality",
++          "url": "https://www.nicosia.org.cy/en-GB/discover/nicosia/nicosia/names/",
++          "accessedOn": "2026-10-20"
++        },
++        {
++          "id": "geonames-nicosia",
++          "title": "GeoNames: nicosia",
++          "publisher": "GeoNames",
++          "url": "https://www.geonames.org/146268/nicosia.html",
++          "accessedOn": "2026-10-20"
++        }
++      ]
++    },
++    {
++      "id": "anogyra",
++      "displayName": "Anogyra",
++      "editorialStatus": "published",
++      "latitude": 34.73969,
++      "longitude": 32.73453,
++      "locationSourceId": "geonames-anogyra",
++      "aliases": [
++        {
++          "name": "Ανώγυρα",
++          "language": "el",
++          "kind": "current",
++          "sourceId": "geonames-anogyra"
++        },
++        {
++          "name": "Anoyira",
++          "kind": "variant",
++          "sourceId": "geonames-anogyra"
++        }
++      ],
++      "claims": [
++        {
++          "id": "plant-origin",
++          "kind": "etymology",
++          "status": "proposed",
++          "summary": "One explanation connects the village name to the local anagyris plant.",
++          "sourceIds": [
++            "visitcyprus-anogyra"
++          ]
++        },
++        {
++          "id": "upper-village-origin",
++          "kind": "etymology",
++          "status": "proposed",
++          "summary": "Another explanation combines ano (upper) with Gyroi, a former village name.",
++          "sourceIds": [
++            "visitcyprus-anogyra"
++          ]
++        }
++      ],
++      "sources": [
++        {
++          "id": "visitcyprus-anogyra",
++          "title": "Anogyra village (Lemesos district)",
++          "publisher": "Cyprus Deputy Ministry of Tourism",
++          "url": "https://www.visitcyprus.com/discover-cyprus/rural/villages-rural/anogyra-village-2/",
++          "accessedOn": "2026-10-20"
++        },
++        {
++          "id": "geonames-anogyra",
++          "title": "GeoNames: anogyra",
++          "publisher": "GeoNames",
++          "url": "https://www.geonames.org/146810/anogyra.html",
++          "accessedOn": "2026-10-20"
++        }
++      ]
++    },
++    {
++      "id": "lazanias",
++      "displayName": "Lazanias",
++      "editorialStatus": "published",
++      "latitude": 34.948669,
++      "longitude": 33.174646,
++      "locationSourceId": "geonames-lazanias",
++      "aliases": [
++        {
++          "name": "Λαζανιάς",
++          "language": "el",
++          "kind": "current",
++          "sourceId": "geonames-lazanias"
++        },
++        {
++          "name": "Lazania",
++          "kind": "variant",
++          "sourceId": "geonames-lazanias"
++        }
++      ],
++      "claims": [
++        {
++          "id": "lusignan-origin",
++          "kind": "etymology",
++          "status": "reported",
++          "summary": "The tourism portal links the village name to Lusignan and a farm associated with the Crusaders.",
++          "sourceIds": [
++            "visitcyprus-lazanias"
++          ]
++        }
++      ],
++      "sources": [
++        {
++          "id": "visitcyprus-lazanias",
++          "title": "Saint George's Church - Lazanias village",
++          "publisher": "Cyprus Deputy Ministry of Tourism",
++          "url": "https://www.visitcyprus.com/discover-cyprus/culture/sites-and-monuments/saint-george-s-church-lazanias-village/",
++          "accessedOn": "2026-10-20"
++        },
++        {
++          "id": "geonames-lazanias",
++          "title": "GeoNames: lazanias",
++          "publisher": "GeoNames",
++          "url": "https://www.geonames.org/146393/lazanias.html",
++          "accessedOn": "2026-10-20",
++          "coordinateEvidenceUrl": "https://www.geonames.org/advanced-search.html?country=CY&featureClass=P&q=&startRow=450"
++        }
++      ]
++    }
++  ]
++}
+diff --git a/frontend/src/utils/placeNames.js b/frontend/src/utils/placeNames.js
+new file mode 100644
+--- /dev/null
++++ b/frontend/src/utils/placeNames.js
+@@ -0,0 +1,112 @@
++import catalog from "../data/placeNames.json";
++
++export const CLAIM_STATUS_LABELS = {
++    reported: "Source-reported",
++    proposed: "Possible explanation",
++    disputed: "Disputed explanation",
++    unresolved: "Origin not yet added",
++};
++
++export function normalizePlaceText(value) {
++    return String(value ?? "").normalize("NFD")
++        .replace(/[\u0300-\u036f]/g, "").toLowerCase()
++        .replace(/ς/g, "σ").replace(/ı/g, "i").trim();
++}
++
++export function isSourceUrl(value) {
++    // Public documentary links must be absolute HTTPS URLs, without credentials,
++    // whitespace or backslashes. No network lookup is performed by the app.
++    return typeof value === "string" &&
++        /^https:\/\/(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z]{2,63}(?::[0-9]{1,5})?(?:[/?#][^\s\\]*)?$/i.test(value);
++}
++
++const nonempty = (value) => typeof value === "string" && Boolean(value.trim());
++const numberInRange = (value, min, max) =>
++    typeof value === "number" && Number.isFinite(value) && value >= min && value <= max;
++
++// Invalid or unpublished records are never presented as public evidence.
++export function validatePlace(place) {
++    if (!place || typeof place !== "object") return false;
++    if (!nonempty(place.id) || !nonempty(place.displayName)) return false;
++    if (!["published", "draft"].includes(place.editorialStatus)) return false;
++    if (!numberInRange(place.latitude, -90, 90) ||
++        !numberInRange(place.longitude, -180, 180)) return false;
++    if (!Array.isArray(place.aliases) || !Array.isArray(place.claims) ||
++        !Array.isArray(place.sources) || !place.sources.length) return false;
++    if (place.sources.some((source) => !source || !nonempty(source.id) ||
++        !nonempty(source.title) || !nonempty(source.publisher) ||
++        !isSourceUrl(source.url) || (source.coordinateEvidenceUrl && !isSourceUrl(source.coordinateEvidenceUrl)) ||
++        !/^\d{4}-\d{2}-\d{2}$/.test(source.accessedOn))) return false;
++    const sourceIds = new Set(place.sources.map((source) => source.id));
++    if (sourceIds.size !== place.sources.length || !sourceIds.has(place.locationSourceId)) return false;
++    if (place.aliases.some((alias) => !alias || !nonempty(alias.name) ||
++        !["current", "historical", "variant"].includes(alias.kind) ||
++        !sourceIds.has(alias.sourceId))) return false;
++    const claimIds = new Set();
++    return place.claims.every((claim) => {
++        if (!claim || !nonempty(claim.id) || claimIds.has(claim.id)) return false;
++        claimIds.add(claim.id);
++        return ["name-history", "etymology"].includes(claim.kind) &&
++            ["reported", "proposed", "disputed"].includes(claim.status) &&
++            nonempty(claim.summary) && Array.isArray(claim.sourceIds) &&
++            claim.sourceIds.length > 0 && claim.sourceIds.every((id) => sourceIds.has(id));
++    });
++}
++
++export function publishedPlaces(records) {
++    if (!Array.isArray(records)) return [];
++    const seen = new Set();
++    return records.filter((place) => {
++        if (!validatePlace(place) || place.editorialStatus !== "published" || seen.has(place.id)) return false;
++        seen.add(place.id);
++        return true;
++    });
++}
++
++export const PLACE_NAMES = catalog.schemaVersion === 1 ? publishedPlaces(catalog.places) : [];
++
++export function getOriginStatus(place) {
++    const claims = place.claims.filter((claim) => claim.kind === "etymology");
++    if (!claims.length) return "unresolved";
++    if (claims.some((claim) => claim.status === "disputed")) return "disputed";
++    if (claims.some((claim) => claim.status === "proposed")) return "proposed";
++    return "reported";
++}
++
++export function filterPlaceNames(places, query = "", status = "all") {
++    const term = normalizePlaceText(query);
++    return places.filter((place) => {
++        if (status !== "all" && getOriginStatus(place) !== status) return false;
++        const text = [place.displayName, ...place.aliases.map((alias) => alias.name),
++            ...place.claims.map((claim) => claim.summary)].join(" ");
++        return !term || normalizePlaceText(text).includes(term);
++    });
++}
++
++function coordinate(value, min, max) {
++    if (typeof value !== "number" &&
++        (typeof value !== "string" || !value.trim())) return null;
++    const result = Number(value);
++    return Number.isFinite(result) && result >= min && result <= max ? result : null;
++}
++
++function distanceKm(lat1, lon1, lat2, lon2) {
++    const radians = (degrees) => degrees * Math.PI / 180;
++    const dLat = radians(lat2 - lat1);
++    const dLon = radians(lon2 - lon1);
++    const a = Math.sin(dLat / 2) ** 2 + Math.cos(radians(lat1)) *
++        Math.cos(radians(lat2)) * Math.sin(dLon / 2) ** 2;
++    return 6371 * 2 * Math.asin(Math.sqrt(Math.min(1, a)));
++}
++
++// Geographic proximity is a browsing aid, never an asserted historical link.
++export function nearbyApprovedStories(place, stories) {
++    return stories.filter((story) => story.status === "approved").map((story) => {
++        const latitude = coordinate(story.latitude, -90, 90);
++        const longitude = coordinate(story.longitude, -180, 180);
++        if (latitude === null || longitude === null) return null;
++        return { story, distanceKm: distanceKm(place.latitude, place.longitude, latitude, longitude) };
++    }).filter((match) => match && match.distanceKm <= 2)
++        .sort((a, b) => a.distanceKm - b.distanceKm || a.story.id - b.story.id)
++        .slice(0, 3);
++}
+diff --git a/frontend/src/components/PlaceNameCard.js b/frontend/src/components/PlaceNameCard.js
+new file mode 100644
+--- /dev/null
++++ b/frontend/src/components/PlaceNameCard.js
+@@ -0,0 +1,93 @@
++import { Link } from "react-router-dom";
++import { CLAIM_STATUS_LABELS, nearbyApprovedStories } from "../utils/placeNames";
++
++function SourceLink({ source }) {
++    return <a href={source.url} target="_blank" rel="noopener noreferrer">{source.publisher}</a>;
++}
++
++function Claim({ claim, sources }) {
++    return (
++        <li className="place-name-claim">
++            <span className={`place-name-status place-name-status-${claim.status}`}>
++                {CLAIM_STATUS_LABELS[claim.status]}
++            </span>
++            <p>{claim.summary}</p>
++            <span className="place-name-citation">
++                Source: {claim.sourceIds.map((id, index) => (
++                    <span key={id}>{index > 0 && "; "}<SourceLink source={sources.find((source) => source.id === id)} /></span>
++                ))}
++            </span>
++        </li>
++    );
++}
++
++export default function PlaceNameCard({ place, stories = [], storiesLoading = false, storiesError = "" }) {
++    const origins = place.claims.filter((claim) => claim.kind === "etymology");
++    const history = place.claims.filter((claim) => claim.kind === "name-history");
++    const nearby = nearbyApprovedStories(place, stories);
++    const locationSource = place.sources.find((source) => source.id === place.locationSourceId);
++
++    return (
++        <article className="place-name-card" aria-label={`Place-name record: ${place.displayName}`}>
++            <span className="place-name-eyebrow">OpenPELAOS · Place names</span>
++            <h3>{place.displayName}</h3>
++            <ul className="place-name-aliases" aria-label="Names in this record">
++                {place.aliases.map((alias) => (
++                    <li key={alias.name}>
++                        <span lang={alias.language}>{alias.name}</span> <small>({alias.kind})</small>{" "}
++                        <a href={place.sources.find((source) => source.id === alias.sourceId).url}
++                            target="_blank" rel="noopener noreferrer" aria-label={`Source for ${alias.name}`}>source</a>
++                    </li>
++                ))}
++            </ul>
++            {history.length > 0 && (
++                <section>
++                    <h4>Name history</h4>
++                    <ul className="place-name-claims">
++                        {history.map((claim) => <Claim key={claim.id} claim={claim} sources={place.sources} />)}
++                    </ul>
++                </section>
++            )}
++            <section>
++                <h4>The story behind the name</h4>
++                {origins.length ? (
++                    <ul className="place-name-claims">
++                        {origins.map((claim) => <Claim key={claim.id} claim={claim} sources={place.sources} />)}
++                    </ul>
++                ) : <p>No origin explanation has been added to this record.</p>}
++            </section>
++            <details className="place-name-sources">
++                <summary>Sources and map location</summary>
++                <p>Approximate settlement point from <SourceLink source={locationSource} />; not a historical boundary.</p>
++                <ul>
++                    {place.sources.map((source) => (
++                        <li key={source.id}>
++                            <a href={source.url} target="_blank" rel="noopener noreferrer">{source.title}</a>
++                            <small>{source.publisher} · Accessed {source.accessedOn}</small>
++                            {source.coordinateEvidenceUrl && (
++                                <a href={source.coordinateEvidenceUrl} target="_blank" rel="noopener noreferrer">Coordinate record</a>
++                            )}
++                        </li>
++                    ))}
++                </ul>
++                <p>Coordinates and selected name variants: <a href="https://www.geonames.org/export/"
++                    target="_blank" rel="noopener noreferrer">GeoNames (CC BY)</a>.</p>
++            </details>
++            <section className="place-name-nearby">
++                <h4>Nearby community stories</h4>
++                <p>Within 2 km of the map point, in the selected story category. Proximity does not establish a historical connection.</p>
++                {storiesLoading ? <p role="status">Loading nearby stories…</p> : storiesError ? (
++                    <p>Nearby stories are temporarily unavailable.</p>
++                ) : nearby.length ? (
++                    <ul>{nearby.map(({ story, distanceKm }) => (
++                        <li key={story.id}>
++                            <Link to={`/story/${story.id}`}>{story.title}</Link>
++                            <small>Approximately {distanceKm.toFixed(1)} km away</small>
++                        </li>
++                    ))}</ul>
++                ) : <p>No approved stories within 2 km in this category yet.</p>}
++                <Link to="/upload">Share a community story</Link>
++            </section>
++        </article>
++    );
++}
+diff --git a/frontend/src/components/PlaceNameLayer.js b/frontend/src/components/PlaceNameLayer.js
+new file mode 100644
+--- /dev/null
++++ b/frontend/src/components/PlaceNameLayer.js
+@@ -0,0 +1,32 @@
++import { useEffect } from "react";
++import L from "leaflet";
++import { Marker, Popup, useMap } from "react-leaflet";
++import PlaceNameCard from "./PlaceNameCard";
++
++const placeNameIcon = L.divIcon({
++    className: "place-name-marker",
++    html: '<span aria-hidden="true">Aa</span>',
++    iconSize: [38, 38],
++    iconAnchor: [19, 19],
++    popupAnchor: [0, -18],
++});
++
++export default function PlaceNameLayer({ places, focusPlace, stories, storiesLoading, storiesError }) {
++    const map = useMap();
++    useEffect(() => {
++        if (focusPlace) {
++            const reducedMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches || false;
++            map.flyTo([focusPlace.latitude, focusPlace.longitude], 12, { duration: 0.6, animate: !reducedMotion });
++        }
++    }, [map, focusPlace]);
++
++    return places.map((place) => (
++        <Marker key={place.id} position={[place.latitude, place.longitude]}
++            icon={placeNameIcon} title={place.displayName} alt={place.displayName}>
++            <Popup className="place-name-popup" autoPanPadding={[20, 20]}>
++                <PlaceNameCard place={place} stories={stories}
++                    storiesLoading={storiesLoading} storiesError={storiesError} />
++            </Popup>
++        </Marker>
++    ));
++}
+diff --git a/frontend/src/assets/styles/placenames.css b/frontend/src/assets/styles/placenames.css
+new file mode 100644
+--- /dev/null
++++ b/frontend/src/assets/styles/placenames.css
+@@ -0,0 +1,83 @@
++.map-layer-toggle {
++    display: flex;
++    gap: 4px;
++    padding: 4px;
++    background: #fff;
++    border: 1px solid var(--border);
++    border-radius: var(--radius-pill);
++    box-shadow: var(--shadow-sm);
++}
++.map-layer-toggle button {
++    flex: 1;
++    min-height: 40px;
++    border: 0;
++    border-radius: var(--radius-pill);
++    background: transparent;
++    color: var(--ink);
++    font: inherit;
++    font-size: 14px;
++    cursor: pointer;
++}
++.map-layer-toggle button[aria-pressed="true"] { background: var(--brand); color: #fff; }
++.map-layer-toggle button:focus-visible,
++.place-name-filter select:focus-visible { outline: 3px solid #7152a3; outline-offset: 2px; }
++.place-name-filter {
++    display: flex;
++    flex-wrap: wrap;
++    align-items: center;
++    gap: 8px;
++    padding: 8px 12px;
++    border: 1px solid var(--border);
++    border-radius: 12px;
++    background: #fff;
++    font-size: 13px;
++}
++.place-name-filter select { flex: 1; min-width: 0; min-height: 36px; border-radius: 6px; }
++.place-name-marker {
++    display: grid;
++    place-items: center;
++    border: 2px solid #fff;
++    border-radius: 50%;
++    background: #68438b;
++    color: #fff;
++    font-size: 16px;
++    font-weight: 700;
++    box-shadow: 0 2px 8px #16202c55;
++}
++.place-name-popup .leaflet-popup-content { width: min(320px, calc(100vw - 64px)) !important; }
++.place-name-card {
++    box-sizing: border-box;
++    padding: 18px;
++    max-height: min(64vh, 520px);
++    overflow-y: auto;
++    overscroll-behavior: contain;
++    color: var(--ink);
++    background: #fff;
++    font-size: 13px;
++    line-height: 1.5;
++    overflow-wrap: anywhere;
++}
++.place-name-card h3 { margin: 6px 0 12px; font-size: 19px; }
++.place-name-card h4 { margin: 16px 0 8px; font-size: 15px; }
++.place-name-card p { margin: 6px 0; }
++.place-name-card ul { padding-left: 18px; margin: 8px 0; }
++.place-name-card a { color: #4f2c76; text-decoration: underline; }
++.place-name-card small { display: block; color: #53505c; font-size: 11px; }
++.place-name-aliases small { display: inline; }
++.place-name-eyebrow { color: #68438b; font-size: 11px; font-weight: 700; }
++.place-name-claims { list-style: none; padding: 0 !important; }
++.place-name-claim { padding: 8px 0; border-bottom: 1px solid #ece7f1; }
++.place-name-status { display: inline-block; padding: 3px 7px; border-radius: 5px; background: #eee8f5; color: #4f2c76; font-size: 11px; font-weight: 700; }
++.place-name-status-proposed { background: #fff1d4; color: #705000; }
++.place-name-status-disputed { background: #fde2e2; color: #8d2727; }
++.place-name-citation { display: block; font-size: 11px; }
++.place-name-sources { margin-top: 16px; padding: 10px; background: #f6f3fa; border-radius: 8px; }
++.place-name-sources summary { cursor: pointer; font-weight: 600; }
++.place-name-sources li { margin-top: 8px; }
++.place-name-nearby li { margin: 8px 0; }
++@media (max-height: 600px) {
++    .place-name-card { max-height: 50vh; }
++}
++@media (prefers-reduced-motion: reduce) {
++    .map-search { animation: none; }
++}
+diff --git a/frontend/src/components/MapView.js b/frontend/src/components/MapView.js
+--- a/frontend/src/components/MapView.js
++++ b/frontend/src/components/MapView.js
+@@ -1,264 +1,321 @@
+-import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
+-import { ZoomControl } from "react-leaflet";
+-import { Link } from "react-router-dom";
+-import "leaflet/dist/leaflet.css";
+-import "../assets/styles/mapview.css";
+-import { useEffect, useMemo, useState } from "react";
+-import API, { mediaUrl } from "../services/Api";
+-import { getCategory, getMarkerIcon } from "../constants/categories";
+-import Logo from "../assets/images/logo.png";
+-
+-// centers the map on cyprus and keeps panning inside island bounds
+-const CYPRUS_CENTER = [35.1264, 33.4299];
+-const CYPRUS_BOUNDS = [
+-    [34.5, 32.0], // southwest map limit
+-    [35.7, 34.8], // northeast map limit
+-];
+-
+-// pans and zooms the map to a matching story when searching
+-function FlyToStory({ story }) {
+-    const map = useMap();
+-    const id = story?.id;
+-
+-    useEffect(() => {
+-        if (story) {
+-            map.flyTo([Number(story.latitude), Number(story.longitude)], 14, {
+-                duration: 1.2,
+-            });
+-        }
+-        // only re-fly when the matched story changes
+-        // eslint-disable-next-line react-hooks/exhaustive-deps
+-    }, [id]);
+-
+-    return null;
+-}
+-
+-// builds a short preview for each story popup
+-const getStoryPreview = (story) => {
+-    if (!story.content) {
+-        return "No story content available yet.";
+-    }
+-
+-    return story.content.length > 110
+-        ? `${story.content.slice(0, 110).trimEnd()}…`
+-        : story.content;
+-};
+-
+-// renders the reusable story map with approved story markers
+-export default function MapView({ activeCategory, focusStoryId, focusLocationLabel }) {
+-    const [stories, setStories] = useState([]);
+-    const [isLoading, setIsLoading] = useState(true);
+-    const [loadError, setLoadError] = useState("");
+-    const [searchTerm, setSearchTerm] = useState("");
+-
+-    // fetches stories whenever the selected category changes
+-    useEffect(() => {
+-        let isCurrent = true;
+-
+-        const fetchStories = async () => {
+-            setIsLoading(true);
+-            setLoadError("");
+-
+-            try {
+-                const url =
+-                    activeCategory === "all"
+-                        ? "/stories"
+-                        : `/stories?category=${activeCategory}`;
+-
+-                const res = await API.get(url);
+-                if (isCurrent) setStories(res.data);
+-            } catch (err) {
+-                if (isCurrent) {
+-                    setLoadError(
+-                        "We couldn't load the stories. Check the connection and try again."
+-                    );
+-                }
+-            } finally {
+-                if (isCurrent) setIsLoading(false);
+-            }
+-        };
+-
+-        fetchStories();
+-        return () => {
+-            isCurrent = false;
+-        };
+-    }, [activeCategory]);
+-
+-    // matches on title and story body so search finds themes, not just names
+-    const filteredStories = useMemo(() => {
+-        const term = searchTerm.trim().toLowerCase();
+-
+-        return stories.filter((story) => {
+-            const hasValidCoords =
+-                Number.isFinite(Number(story.latitude)) &&
+-                Number.isFinite(Number(story.longitude));
+-
+-            if (!hasValidCoords) return false;
+-            if (!term) return true;
+-
+-            return (
+-                story.title?.toLowerCase().includes(term) ||
+-                story.content?.toLowerCase().includes(term)
+-            );
+-        });
+-    }, [stories, searchTerm]);
+-
+-    return (
+-        <div className="map-container">
+-            {/* floating search panel over the map */}
+-            <div className="map-search">
+-                <div className="map-search-field">
+-                    <i className="bi bi-search" aria-hidden="true"></i>
+-                    <input
+-                        type="search"
+-                        placeholder="Search stories, places, themes…"
+-                        aria-label="Search stories"
+-                        value={searchTerm}
+-                        onChange={(e) => setSearchTerm(e.target.value)}
+-                    />
+-                    {searchTerm && (
+-                        <button
+-                            type="button"
+-                            className="map-search-clear"
+-                            aria-label="Clear search"
+-                            onClick={() => setSearchTerm("")}
+-                        >
+-                            <i className="bi bi-x-lg"></i>
+-                        </button>
+-                    )}
+-                </div>
+-
+-                {/* live status under the search field */}
+-                {isLoading && (
+-                    <div className="map-status">
+-                        <span className="map-status-dot" />
+-                        Loading stories…
+-                    </div>
+-                )}
+-
+-                {!isLoading && loadError && (
+-                    <div className="map-status map-status-error">
+-                        <i className="bi bi-exclamation-triangle-fill"></i>
+-                        {loadError}
+-                    </div>
+-                )}
+-
+-                {!isLoading && !loadError && (
+-                    <div className="map-status">
+-                        <i className="bi bi-geo-alt-fill"></i>
+-                        {filteredStories.length}{" "}
+-                        {filteredStories.length === 1 ? "story" : "stories"}
+-                        {activeCategory !== "all" &&
+-                            ` in ${getCategory(activeCategory).label}`}
+-                    </div>
+-                )}
+-                {!isLoading && !loadError && focusLocationLabel && !searchTerm.trim() &&
+-                    filteredStories.some((story) => story.id === focusStoryId) && (
+-                        <div className="map-status" role="status" aria-live="polite">
+-                            <i className="bi bi-stars" aria-hidden="true"></i>
+-                            <span>Approximate place (AI): {focusLocationLabel}</span>
+-                        </div>
+-                    )}
+-            </div>
+-
+-            <MapContainer
+-                center={CYPRUS_CENTER}
+-                zoom={9}
+-                maxBounds={CYPRUS_BOUNDS}
+-                maxBoundsViscosity={1.0}
+-                zoomControl={false}
+-                style={{ height: "100%", width: "100%" }}
+-            >
+-                <TileLayer
+-                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+-                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+-                />
+-
+-                {/* flies to a search match first, otherwise a story handed off
+-                    from the Browse tab's "locate" button */}
+-                <FlyToStory
+-                    story={
+-                        searchTerm.trim() && filteredStories.length > 0
+-                            ? filteredStories[0]
+-                            : stories.find((s) => s.id === focusStoryId) || null
+-                    }
+-                />
+-
+-                {filteredStories.map((story) => {
+-                    const category = getCategory(story.category);
+-                    const image = mediaUrl(story.image_url);
+-                    const audio = mediaUrl(story.audio_url);
+-
+-                    return (
+-                        <Marker
+-                            key={story.id}
+-                            position={[Number(story.latitude), Number(story.longitude)]}
+-                            icon={getMarkerIcon(story.category)}
+-                        >
+-                            <Popup>
+-                                <article className="popup-card">
+-                                    {image ? (
+-                                        <div className="popup-image">
+-                                            <img src={image} alt={story.title} />
+-                                            <span
+-                                                className="cat-chip popup-chip"
+-                                                style={{ background: category.color }}
+-                                            >
+-                                                <i className={`bi ${category.icon}`}></i>
+-                                                {category.label}
+-                                            </span>
+-                                        </div>
+-                                    ) : (
+-                                        <div
+-                                            className="popup-image popup-image-empty"
+-                                            style={{ background: category.color }}
+-                                        >
+-                                            <i className={`bi ${category.icon}`}></i>
+-                                            <span className="cat-chip popup-chip popup-chip-solid">
+-                                                {category.label}
+-                                            </span>
+-                                        </div>
+-                                    )}
+-
+-                                    <div className="popup-content">
+-                                        <h5>{story.title}</h5>
+-                                        <p>{getStoryPreview(story)}</p>
+-
+-                                        {audio && (
+-                                            <audio controls preload="none" src={audio}>
+-                                                Your browser does not support audio playback.
+-                                            </audio>
+-                                        )}
+-
+-                                        <Link to={`/story/${story.id}`} className="popup-btn">
+-                                            Read full story
+-                                            <i className="bi bi-arrow-right"></i>
+-                                        </Link>
+-                                    </div>
+-                                </article>
+-                            </Popup>
+-                        </Marker>
+-                    );
+-                })}
+-
+-                <ZoomControl position="topright" />
+-            </MapContainer>
+-
+-            {/* empty state when a filter or search returns nothing */}
+-            {!isLoading && !loadError && filteredStories.length === 0 && (
+-                <div className="map-empty">
+-                    <img src={Logo} alt="" className="map-empty-mark" />
+-                    <h5>No stories here yet</h5>
+-                    <p>
+-                        {searchTerm
+-                            ? "Try a different search term or clear the filter."
+-                            : "Be the first to add a story to this category."}
+-                    </p>
+-                    <Link to="/upload" className="map-empty-btn">
+-                        Share a story
+-                    </Link>
+-                </div>
+-            )}
+-        </div>
+-    );
+-}
++import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
++import { ZoomControl } from "react-leaflet";
++import { Link } from "react-router-dom";
++import "leaflet/dist/leaflet.css";
++import "../assets/styles/mapview.css";
++import { useEffect, useMemo, useState } from "react";
++import API, { mediaUrl } from "../services/Api";
++import { getCategory, getMarkerIcon } from "../constants/categories";
++import Logo from "../assets/images/logo.png";
++import PlaceNameLayer from "./PlaceNameLayer";
++import { PLACE_NAMES, CLAIM_STATUS_LABELS, filterPlaceNames } from "../utils/placeNames";
++import "../assets/styles/placenames.css";
++
++// centers the map on cyprus and keeps panning inside island bounds
++const CYPRUS_CENTER = [35.1264, 33.4299];
++const CYPRUS_BOUNDS = [
++    [34.5, 32.0], // southwest map limit
++    [35.7, 34.8], // northeast map limit
++];
++
++// pans and zooms the map to a matching story when searching
++function FlyToStory({ story }) {
++    const map = useMap();
++    const id = story?.id;
++
++    useEffect(() => {
++        if (story) {
++            map.flyTo([Number(story.latitude), Number(story.longitude)], 14, {
++                duration: 1.2,
++            });
++        }
++        // only re-fly when the matched story changes
++        // eslint-disable-next-line react-hooks/exhaustive-deps
++    }, [id]);
++
++    return null;
++}
++
++// builds a short preview for each story popup
++const getStoryPreview = (story) => {
++    if (!story.content) {
++        return "No story content available yet.";
++    }
++
++    return story.content.length > 110
++        ? `${story.content.slice(0, 110).trimEnd()}…`
++        : story.content;
++};
++
++// renders the reusable story map with approved story markers
++export default function MapView({ activeCategory, focusStoryId, focusLocationLabel }) {
++    const [stories, setStories] = useState([]);
++    const [isLoading, setIsLoading] = useState(true);
++    const [loadError, setLoadError] = useState("");
++    const [searchTerm, setSearchTerm] = useState("");
++    const [mapLayer, setMapLayer] = useState("stories");
++    const [originFilter, setOriginFilter] = useState("all");
++    const isPlaceLayer = mapLayer === "place-names";
++    const filteredPlaces = useMemo(
++        () => filterPlaceNames(PLACE_NAMES, searchTerm, originFilter),
++        [searchTerm, originFilter]
++    );
++
++    // fetches stories whenever the selected category changes
++    useEffect(() => {
++        let isCurrent = true;
++
++        const fetchStories = async () => {
++            setIsLoading(true);
++            setLoadError("");
++
++            try {
++                const url =
++                    activeCategory === "all"
++                        ? "/stories"
++                        : `/stories?category=${activeCategory}`;
++
++                const res = await API.get(url);
++                if (isCurrent) setStories(res.data);
++            } catch (err) {
++                if (isCurrent) {
++                    setLoadError(
++                        "We couldn't load the stories. Check the connection and try again."
++                    );
++                }
++            } finally {
++                if (isCurrent) setIsLoading(false);
++            }
++        };
++
++        fetchStories();
++        return () => {
++            isCurrent = false;
++        };
++    }, [activeCategory]);
++
++    // matches on title and story body so search finds themes, not just names
++    const filteredStories = useMemo(() => {
++        const term = searchTerm.trim().toLowerCase();
++
++        return stories.filter((story) => {
++            const hasValidCoords =
++                Number.isFinite(Number(story.latitude)) &&
++                Number.isFinite(Number(story.longitude));
++
++            if (!hasValidCoords) return false;
++            if (!term) return true;
++
++            return (
++                story.title?.toLowerCase().includes(term) ||
++                story.content?.toLowerCase().includes(term)
++            );
++        });
++    }, [stories, searchTerm]);
++
++    return (
++        <div className="map-container">
++            {/* floating search panel over the map */}
++            <div className="map-search">
++                <div className="map-layer-toggle" role="group" aria-label="Map layers">
++                    <button type="button" aria-pressed={!isPlaceLayer}
++                        onClick={() => { setMapLayer("stories"); setSearchTerm(""); }}>
++                        Stories
++                    </button>
++                    <button type="button" aria-pressed={isPlaceLayer}
++                        onClick={() => { setMapLayer("place-names"); setSearchTerm(""); }}>
++                        Place names
++                    </button>
++                </div>
++                <div className="map-search-field">
++                    <i className="bi bi-search" aria-hidden="true"></i>
++                    <input
++                        type="search"
++                        placeholder={isPlaceLayer ? "Search current or historical names…" : "Search stories, places, themes…"}
++                        aria-label={isPlaceLayer ? "Search place names" : "Search stories"}
++                        value={searchTerm}
++                        onChange={(e) => setSearchTerm(e.target.value)}
++                    />
++                    {searchTerm && (
++                        <button
++                            type="button"
++                            className="map-search-clear"
++                            aria-label="Clear search"
++                            onClick={() => setSearchTerm("")}
++                        >
++                            <i className="bi bi-x-lg"></i>
++                        </button>
++                    )}
++                </div>
++
++                {isPlaceLayer && (
++                    <>
++                        <label className="place-name-filter" htmlFor="place-name-origin-filter">
++                            Origins
++                            <select id="place-name-origin-filter" value={originFilter}
++                                onChange={(event) => setOriginFilter(event.target.value)}>
++                                <option value="all">All records</option>
++                                {Object.entries(CLAIM_STATUS_LABELS).map(([value, label]) => (
++                                    <option key={value} value={value}>{label}</option>
++                                ))}
++                            </select>
++                        </label>
++                        <div className="map-status" role="status" aria-live="polite">
++                            {filteredPlaces.length} {filteredPlaces.length === 1 ? "place name" : "place names"}
++                            {" · Sourced pilot"}
++                        </div>
++                    </>
++                )}
++
++                {/* live status under the search field */}
++                {!isPlaceLayer && isLoading && (
++                    <div className="map-status">
++                        <span className="map-status-dot" />
++                        Loading stories…
++                    </div>
++                )}
++
++                {!isPlaceLayer && !isLoading && loadError && (
++                    <div className="map-status map-status-error">
++                        <i className="bi bi-exclamation-triangle-fill"></i>
++                        {loadError}
++                    </div>
++                )}
++
++                {!isPlaceLayer && !isLoading && !loadError && (
++                    <div className="map-status">
++                        <i className="bi bi-geo-alt-fill"></i>
++                        {filteredStories.length}{" "}
++                        {filteredStories.length === 1 ? "story" : "stories"}
++                        {activeCategory !== "all" &&
++                            ` in ${getCategory(activeCategory).label}`}
++                    </div>
++                )}
++                {!isPlaceLayer && !isLoading && !loadError && focusLocationLabel && !searchTerm.trim() &&
++                    filteredStories.some((story) => story.id === focusStoryId) && (
++                        <div className="map-status" role="status" aria-live="polite">
++                            <i className="bi bi-stars" aria-hidden="true"></i>
++                            <span>Approximate place (AI): {focusLocationLabel}</span>
++                        </div>
++                    )}
++            </div>
++
++            <MapContainer
++                center={CYPRUS_CENTER}
++                zoom={9}
++                maxBounds={CYPRUS_BOUNDS}
++                maxBoundsViscosity={1.0}
++                zoomControl={false}
++                style={{ height: "100%", width: "100%" }}
++            >
++                <TileLayer
++                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
++                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
++                />
++
++                {/* flies to a search match first, otherwise a story handed off
++                    from the Browse tab's "locate" button */}
++                <FlyToStory
++                    story={
++                        isPlaceLayer ? null : (
++                            searchTerm.trim() && filteredStories.length > 0
++                                ? filteredStories[0]
++                                : stories.find((s) => s.id === focusStoryId) || null
++                        )
++                    }
++                />
++
++                {!isPlaceLayer && filteredStories.map((story) => {
++                    const category = getCategory(story.category);
++                    const image = mediaUrl(story.image_url);
++                    const audio = mediaUrl(story.audio_url);
++
++                    return (
++                        <Marker
++                            key={story.id}
++                            position={[Number(story.latitude), Number(story.longitude)]}
++                            icon={getMarkerIcon(story.category)}
++                        >
++                            <Popup>
++                                <article className="popup-card">
++                                    {image ? (
++                                        <div className="popup-image">
++                                            <img src={image} alt={story.title} />
++                                            <span
++                                                className="cat-chip popup-chip"
++                                                style={{ background: category.color }}
++                                            >
++                                                <i className={`bi ${category.icon}`}></i>
++                                                {category.label}
++                                            </span>
++                                        </div>
++                                    ) : (
++                                        <div
++                                            className="popup-image popup-image-empty"
++                                            style={{ background: category.color }}
++                                        >
++                                            <i className={`bi ${category.icon}`}></i>
++                                            <span className="cat-chip popup-chip popup-chip-solid">
++                                                {category.label}
++                                            </span>
++                                        </div>
++                                    )}
++
++                                    <div className="popup-content">
++                                        <h5>{story.title}</h5>
++                                        <p>{getStoryPreview(story)}</p>
++
++                                        {audio && (
++                                            <audio controls preload="none" src={audio}>
++                                                Your browser does not support audio playback.
++                                            </audio>
++                                        )}
++
++                                        <Link to={`/story/${story.id}`} className="popup-btn">
++                                            Read full story
++                                            <i className="bi bi-arrow-right"></i>
++                                        </Link>
++                                    </div>
++                                </article>
++                            </Popup>
++                        </Marker>
++                    );
++                })}
++
++                {isPlaceLayer && (
++                    <PlaceNameLayer places={filteredPlaces}
++                        focusPlace={searchTerm.trim() ? filteredPlaces[0] || null : null}
++                        stories={stories} storiesLoading={isLoading} storiesError={loadError} />
++                )}
++                <ZoomControl position="topright" />
++            </MapContainer>
++
++            {isPlaceLayer && filteredPlaces.length === 0 && (
++                <div className="map-empty" role="status">
++                    <h5>No place names match</h5>
++                    <p>This pilot covers a small set of sourced records. Try another name or origin filter.</p>
++                    <button type="button" className="map-empty-btn"
++                        onClick={() => { setSearchTerm(""); setOriginFilter("all"); }}>
++                        Reset place-name filters
++                    </button>
++                </div>
++            )}
++
++            {/* empty state when a filter or search returns nothing */}
++            {!isPlaceLayer && !isLoading && !loadError && filteredStories.length === 0 && (
++                <div className="map-empty">
++                    <img src={Logo} alt="" className="map-empty-mark" />
++                    <h5>No stories here yet</h5>
++                    <p>
++                        {searchTerm
++                            ? "Try a different search term or clear the filter."
++                            : "Be the first to add a story to this category."}
++                    </p>
++                    <Link to="/upload" className="map-empty-btn">
++                        Share a story
++                    </Link>
++                </div>
++            )}
++        </div>
++    );
++}
+diff --git a/frontend/src/pages/About.js b/frontend/src/pages/About.js
+--- a/frontend/src/pages/About.js
++++ b/frontend/src/pages/About.js
+@@ -1,106 +1,118 @@
+-import Navbar from "../components/Navbar";
+-import { Link } from "react-router-dom";
+-import Logo from "../assets/images/logo.png";
+-import '../assets/styles/about.css';
+-
+-export default function About() {
+-    return (
+-        <div>
+-            <Navbar />
+-
+-            {/* HERO -- two-column so the logo earns its place instead of
+-                floating in a wall of flat colour */}
+-            <div className="about-hero">
+-                <div className="about-hero-inner">
+-                    <div className="about-hero-copy">
+-                        <span className="about-eyebrow">Cultural Inclusion Storytelling Map</span>
+-                        <h1>Every Place Holds a Story</h1>
+-                        <p>
+-                            Discover, preserve, and share cultural stories connected to real locations around the world.
+-                        </p>
+-
+-                        <div className="hero-cta">
+-                            <Link to="/upload" className="upload-btn mt-auto">
+-                                <i className="bi bi-send"></i>
+-                                Start Sharing
+-                            </Link>
+-                            <Link to="/browse" className="hero-secondary-link">
+-                                Browse stories
+-                                <i className="bi bi-arrow-right"></i>
+-                            </Link>
+-                        </div>
+-                    </div>
+-
+-                    <div className="about-hero-mark">
+-                        <div className="about-hero-glow"></div>
+-                        <img src={Logo} alt="Narrify" />
+-                    </div>
+-                </div>
+-            </div>
+-
+-            {/* CONTENT */}
+-            <div className="about-background">
+-                <div className="about-container">
+-                        <section className="about-card">
+-                            <h3>The Problem</h3>
+-                            <p>
+-                                Many minority communities lack visibility, and their
+-                                stories risk being lost over time.
+-                            </p>
+-                        </section>
+-
+-                        <section className="about-card alt">
+-                            <h3>Our Solution</h3>
+-                            <p>
+-                                We connect storytelling with maps to create an immersive,
+-                                location-based cultural archive.
+-                            </p>
+-                        </section>
+-
+-                        <section className="about-steps">
+-                            <h3>How It Works</h3>
+-
+-                            <div className="steps-grid">
+-                                <div className="step">
+-                                    <h4> <i className="bi bi-geo-alt-fill me-2"></i> Explore</h4>
+-                                    <p>Browse stories pinned across the map.</p>
+-                                </div>
+-
+-                                <div className="step">
+-                                    <h4> <i className="bi bi-pencil-fill me-2"></i> Share</h4>
+-                                    <p>Upload your story with images or audio.</p>
+-                                </div>
+-
+-                                <div className="step">
+-                                    <h4> <i className="bi bi-check-circle-fill me-2"></i> Review</h4>
+-                                    <p>Stories are reviewed before becoming public.</p>
+-                                </div>
+-
+-                                <div className="step">
+-                                    <h4> <i className="bi bi-globe2 me-2"></i> Connect</h4>
+-                                    <p>Discover cultures and histories worldwide.</p>
+-                                </div>
+-                            </div>
+-                        </section>
+-
+-                        <section className="about-impact">
+-                            <h3>Why It Matters</h3>
+-                            <p className="para">
+-                                Stories shape identity and culture. By preserving them, we ensure
+-                                that voices, memories, and traditions are never lost.
+-                            </p>
+-
+-                            <div className="about-cta">
+-                                <h3>Be part of the story</h3>
+-                                <p className="para">Start sharing your cultural experience today.</p>
+-                                <Link to="/upload" className="upload-btn mt-auto">
+-                                    <i className="bi bi-plus-lg"></i>
+-                                    Upload Story
+-                                </Link>
+-                            </div>
+-                        </section>
+-                </div>
+-            </div>
+-        </div>
+-    );
+-}
+\ No newline at end of file
++import Navbar from "../components/Navbar";
++import { Link } from "react-router-dom";
++import Logo from "../assets/images/logo.png";
++import '../assets/styles/about.css';
++
++export default function About() {
++    return (
++        <div>
++            <Navbar />
++
++            {/* HERO -- two-column so the logo earns its place instead of
++                floating in a wall of flat colour */}
++            <div className="about-hero">
++                <div className="about-hero-inner">
++                    <div className="about-hero-copy">
++                        <span className="about-eyebrow">Cultural Inclusion Storytelling Map</span>
++                        <h1>Every Place Holds a Story</h1>
++                        <p>
++                            Discover, preserve, and share cultural stories connected to real locations around the world.
++                        </p>
++
++                        <div className="hero-cta">
++                            <Link to="/upload" className="upload-btn mt-auto">
++                                <i className="bi bi-send"></i>
++                                Start Sharing
++                            </Link>
++                            <Link to="/browse" className="hero-secondary-link">
++                                Browse stories
++                                <i className="bi bi-arrow-right"></i>
++                            </Link>
++                        </div>
++                    </div>
++
++                    <div className="about-hero-mark">
++                        <div className="about-hero-glow"></div>
++                        <img src={Logo} alt="Narrify" />
++                    </div>
++                </div>
++            </div>
++
++            {/* CONTENT */}
++            <div className="about-background">
++                <div className="about-container">
++                        <section className="about-card">
++                            <h3>The Problem</h3>
++                            <p>
++                                Many minority communities lack visibility, and their
++                                stories risk being lost over time.
++                            </p>
++                        </section>
++
++                        <section className="about-card alt">
++                            <h3>Our Solution</h3>
++                            <p>
++                                We connect storytelling with maps to create an immersive,
++                                location-based cultural archive.
++                            </p>
++                        </section>
++
++                        <section className="about-steps">
++                            <h3>How It Works</h3>
++
++                            <div className="steps-grid">
++                                <div className="step">
++                                    <h4> <i className="bi bi-geo-alt-fill me-2"></i> Explore</h4>
++                                    <p>Browse stories pinned across the map.</p>
++                                </div>
++
++                                <div className="step">
++                                    <h4> <i className="bi bi-pencil-fill me-2"></i> Share</h4>
++                                    <p>Upload your story with images or audio.</p>
++                                </div>
++
++                                <div className="step">
++                                    <h4> <i className="bi bi-check-circle-fill me-2"></i> Review</h4>
++                                    <p>Stories are reviewed before becoming public.</p>
++                                </div>
++
++                                <div className="step">
++                                    <h4> <i className="bi bi-globe2 me-2"></i> Connect</h4>
++                                    <p>Discover cultures and histories worldwide.</p>
++                                </div>
++                            </div>
++                        </section>
++
++                        <section className="about-card">
++                            <h3>Narrify and OpenPELAOS</h3>
++                            <p>
++                                Narrify is a team project by Charalampos Nadiotis (n0711),
++                                Hussain Jamil and Nikitas Savva. The OpenPELAOS place-name
++                                layer connects sourced name histories with nearby community stories,
++                                while keeping alternative explanations visible.
++                            </p>
++                            <a href="https://github.com/hussainJamil24/cultural-storytelling-map"
++                                target="_blank" rel="noopener noreferrer">Project repository</a>
++                        </section>
++
++                        <section className="about-impact">
++                            <h3>Why It Matters</h3>
++                            <p className="para">
++                                Stories shape identity and culture. By preserving them, we ensure
++                                that voices, memories, and traditions are never lost.
++                            </p>
++
++                            <div className="about-cta">
++                                <h3>Be part of the story</h3>
++                                <p className="para">Start sharing your cultural experience today.</p>
++                                <Link to="/upload" className="upload-btn mt-auto">
++                                    <i className="bi bi-plus-lg"></i>
++                                    Upload Story
++                                </Link>
++                            </div>
++                        </section>
++                </div>
++            </div>
++        </div>
++    );
++}
+diff --git a/README.md b/README.md
+--- a/README.md
++++ b/README.md
+@@ -1,59 +1,77 @@
+-# Narrify — cultural storytelling map
+-
+-React/Leaflet frontend, FastAPI/SQLite backend, and server-side Gemini features.
+-
+-**For the Windows demo: follow [the short setup instructions](docs/WINDOWS_DEMO.md), then [the 115-second filming checklist](docs/DEMO_FILMING_CHECKLIST.md).**
+-
+-## Start the Windows demo
+-
+-Install Git, Python **3.13** (including its launcher), and Node.js **24 LTS**. Open PowerShell:
+-
+-```powershell
+-git clone https://github.com/hussainJamil24/cultural-storytelling-map.git narrify-demo
+-cd narrify-demo
+-.\SetupDemo.bat
+-.\RunDemo.bat
+-```
+-
+-Setup asks for the private Gemini key if it is not already in `backend/.env`. Paste it and press Enter; it will not be displayed. Alternatively copy the private `.env` file supplied by Charalampos into `backend/.env` before setup. Never upload it to GitHub. Wait for **Setup complete** before starting the app. Keep both app windows open and visit <http://127.0.0.1:3000>.
+-
+-Before recording, double-click `CheckDemo.bat`. It makes an actual Gemini request; a configuration badge alone is not a successful API test. Internet is required for Gemini and map tiles.
+-
+-## Accounts and stored stories
+-
+-Setup initializes an empty database with **16 stories: 13 approved and 3 rejected**, plus 6 translations, 3 comments and 2 likes. All existing story fields, authors' display names and relationships are preserved. Private account emails and old password hashes are replaced with local demo credentials. Double-click `ShowAdminLogin.bat` to display and verify this installation's admin email/password. Log out first or use a private browser window to sign in as admin. All local demo logins are also stored in `backend/.demo-accounts.json`.
+-
+-All **8 available uploaded files** are bundled under `backend/demo/uploads/`. Four pre-existing missing image/audio references remain listed in `backend/demo/manifest.json`; those missing files cannot be restored from this checkout. The checklist explains how to create a clearly labelled multimedia rehearsal story without altering the existing records.
+-
+-**Autoapproval is OFF.** New stories remain pending until an admin approves them. Rejected stories remain in the database and the admin's Flagged tab; they are not public map markers. Setup never replaces a populated database. Use a fresh clone for the exact supplied snapshot. Runtime database, media uploads, API keys and generated passwords stay local and are gitignored. Keep your local backend/storymap.db, backend/uploads, backend/.env and backend/.demo-accounts.json when moving the same running installation to another folder.
+-
+-## Features covered by the demo
+-
+-- Registration, login, logout and public access to approved stories.
+-- Map markers, location selection, category filtering, keyword search and list browsing.
+-- Text, photo, audio and optional anonymous attribution.
+-- Gemini companion cards, Greek/Turkish translation, approximate location labels and moderation assistance.
+-- Human approval, rejection and restoration.
+-- Likes, comments, nested replies and authorised comment removal.
+-- SQLite persistence across refreshes/restarts.
+-
+-The optional Replicate video endpoint is not connected to the current frontend and is not part of the filmed feature list. Gemini output varies between requests; the same version/data do not imply identical generated wording.
+-
+-## Updating an existing checkout
+-
+-For filming, a **new `narrify-demo` folder is recommended**. This update removes the old database from Git tracking, so before the **first pull** of this release, stop the app and back up `backend/storymap.db`, `backend/uploads`, `backend/.env`, and any `.demo-accounts.json` outside the repository. Do not discard uncommitted work to force a pull. A populated database is preserved by setup; an incompatible schema produces a clear stop instead of deleting tables. Existing older databases may require an explicit migration; a fresh clone needs none.
+-
+-## Verification
+-
+-From the repository root after setup:
+-
+-```powershell
+-cd backend
+-.\.venv\Scripts\python.exe -m unittest discover -s tests -p "test_demo*.py" -v
+-cd ..
+-.\backend\.venv\Scripts\python.exe scripts/check_demo.py
+-cd frontend
+-npm run build
+-```
+-
+-The data tests use temporary folders and check the snapshot, media, repeat-run preservation, schema mismatch, and tamper detection. `npm ci` uses the committed lockfile; Windows setup installs the tested pinned Python dependencies from `backend/requirements-demo.lock.txt`. The current Create React App toolchain has known dependency audit findings; the demo is intended to run locally, not as a production deployment.
++# Narrify — cultural storytelling map
++
++React/Leaflet frontend, FastAPI/SQLite backend, and server-side Gemini features.
++
++**For the Windows demo: follow [the short setup instructions](docs/WINDOWS_DEMO.md), then [the 115-second filming checklist](docs/DEMO_FILMING_CHECKLIST.md).**
++
++## Start the Windows demo
++
++Install Git, Python **3.13** (including its launcher), and Node.js **24 LTS**. Open PowerShell:
++
++```powershell
++git clone https://github.com/hussainJamil24/cultural-storytelling-map.git narrify-demo
++cd narrify-demo
++.\SetupDemo.bat
++.\RunDemo.bat
++```
++
++Setup asks for the private Gemini key if it is not already in `backend/.env`. Paste it and press Enter; it will not be displayed. Alternatively copy the private `.env` file supplied by Charalampos into `backend/.env` before setup. Never upload it to GitHub. Wait for **Setup complete** before starting the app. Keep both app windows open and visit <http://127.0.0.1:3000>.
++
++Before recording, double-click `CheckDemo.bat`. It makes an actual Gemini request; a configuration badge alone is not a successful API test. Internet is required for Gemini and map tiles.
++
++## Accounts and stored stories
++
++Setup initializes an empty database with **16 stories: 13 approved and 3 rejected**, plus 6 translations, 3 comments and 2 likes. All existing story fields, authors' display names and relationships are preserved. Private account emails and old password hashes are replaced with local demo credentials. Double-click `ShowAdminLogin.bat` to display and verify this installation's admin email/password. Log out first or use a private browser window to sign in as admin. All local demo logins are also stored in `backend/.demo-accounts.json`.
++
++All **8 available uploaded files** are bundled under `backend/demo/uploads/`. Four pre-existing missing image/audio references remain listed in `backend/demo/manifest.json`; those missing files cannot be restored from this checkout. The checklist explains how to create a clearly labelled multimedia rehearsal story without altering the existing records.
++
++**Autoapproval is OFF.** New stories remain pending until an admin approves them. Rejected stories remain in the database and the admin's Flagged tab; they are not public map markers. Setup never replaces a populated database. Use a fresh clone for the exact supplied snapshot. Runtime database, media uploads, API keys and generated passwords stay local and are gitignored. Keep your local backend/storymap.db, backend/uploads, backend/.env and backend/.demo-accounts.json when moving the same running installation to another folder.
++
++## Features covered by the demo
++
++- Registration, login, logout and public access to approved stories.
++- Map markers, location selection, category filtering, keyword search and list browsing.
++- Text, photo, audio and optional anonymous attribution.
++- Gemini companion cards, Greek/Turkish translation, approximate location labels and moderation assistance.
++- Human approval, rejection and restoration.
++- Likes, comments, nested replies and authorised comment removal.
++- SQLite persistence across refreshes/restarts.
++
++The optional Replicate video endpoint is not connected to the current frontend and is not part of the filmed feature list. Gemini output varies between requests; the same version/data do not imply identical generated wording.
++
++## OpenPELAOS place-name layer
++
++On the Map tab, choose **Place names** to browse a small sourced pilot for
++Lefkosia/Nicosia, Anogyra and Lazanias. Search current and historical names
++(including Greek without accents), filter by the status of origin explanations,
++and open a marker for source links, alternative explanations and nearby approved
++stories. Nearby means within 2 km of a settlement reference point; it does not
++assert a historical relationship. Story category filters still apply to nearby
++stories. The name records remain available if the story API is offline.
++
++Narrify was co-developed by **Charalampos Nadiotis (n0711), Hussain Jamil and
++Nikitas Savva**. This layer is an OpenPELAOS extension of the existing team
++project. Repository ownership and the existing license status are unchanged.
++
++Records are curated in `frontend/src/data/placeNames.json`; see
++[the source and curation guide](docs/PLACE_NAMES.md).
++No story database migration, new account, paid API, or Gemini request is needed.
++
++## Updating an existing checkout
++
++For filming, a **new `narrify-demo` folder is recommended**. This update removes the old database from Git tracking, so before the **first pull** of this release, stop the app and back up `backend/storymap.db`, `backend/uploads`, `backend/.env`, and any `.demo-accounts.json` outside the repository. Do not discard uncommitted work to force a pull. A populated database is preserved by setup; an incompatible schema produces a clear stop instead of deleting tables. Existing older databases may require an explicit migration; a fresh clone needs none.
++
++## Verification
++
++From the repository root after setup:
++
++```powershell
++cd backend
++.\.venv\Scripts\python.exe -m unittest discover -s tests -p "test_demo*.py" -v
++cd ..
++.\backend\.venv\Scripts\python.exe scripts/check_demo.py
++cd frontend
++npm run build
++```
++
++The data tests use temporary folders and check the snapshot, media, repeat-run preservation, schema mismatch, and tamper detection. `npm ci` uses the committed lockfile; Windows setup installs the tested pinned Python dependencies from `backend/requirements-demo.lock.txt`. The current Create React App toolchain has known dependency audit findings; the demo is intended to run locally, not as a production deployment.
+diff --git a/docs/PLACE_NAMES.md b/docs/PLACE_NAMES.md
+new file mode 100644
+--- /dev/null
++++ b/docs/PLACE_NAMES.md
+@@ -0,0 +1,97 @@
++# Place names: sources, uncertainty and curation
++
++The OpenPELAOS layer extends Narrify, the team project by Charalampos Nadiotis
++(n0711), Hussain Jamil and Nikitas Savva. It is a read-only, version-controlled
++pilot in the existing React/Leaflet map. It does not change story submission,
++moderation, accounts, SQLite data, or the project's license status.
++
++## Using it
++
++1. Open the Map tab and choose **Place names**.
++2. Search by a current name, historical form, or words in a sourced explanation.
++   Greek accents, final sigma, and Turkish dotted-I variations are normalized for
++   search only; the original spelling remains on screen.
++3. Use **Origins** to filter by the status of *etymology* claims. A record with
++   historical names but no derivation is **Origin not yet added**.
++4. Open a purple **Aa** marker. Every name variant and explanation links to its
++   source. **Sources and map location** lists publishers, access dates and
++   coordinate evidence.
++5. Nearby stories are the nearest three approved records within 2 km, from the
++   currently selected story category. This is geographic browsing, not an
++   inferred historical link. Loading, API failure and no-result states are distinct.
++6. Return to **Stories** for the original category map.
++
++This is a small pilot, not a language-origin classification of the island.
++Settlement points are approximate reference locations, not historical boundaries.
++The layer is bundled with the frontend and needs no additional network requests;
++the existing story API and map tiles still require their usual connections.
++
++## Evidence and initial records
++
++Sources were consulted on 20 October 2026. Summaries are short paraphrases;
++source photographs, maps and full text are not bundled.
++
++- **Lefkosia / Nicosia:** [Nicosia Municipality](https://www.nicosia.org.cy/en-GB/discover/nicosia/nicosia/names/)
++  records earlier city names including Ledra, Lefkothea and Lefkousia. The pilot
++  does not choose an etymology for the present names.
++- **Anogyra:** [Cyprus Deputy Ministry of Tourism](https://www.visitcyprus.com/discover-cyprus/rural/villages-rural/anogyra-village-2/)
++  gives two possible explanations: the anagyris plant, and ano plus Gyroi.
++  Both stay visible as possible explanations.
++- **Lazanias:** [Cyprus Deputy Ministry of Tourism](https://www.visitcyprus.com/discover-cyprus/culture/sites-and-monuments/saint-george-s-church-lazanias-village/)
++  links the name to Lusignan. It is labelled source-reported, not an independent
++  scholarly resolution.
++
++Coordinates and selected modern variants are credited to **GeoNames**, under its
++[CC BY terms](https://www.geonames.org/export/). Permanent records:
++[Nicosia 146268](https://www.geonames.org/146268/nicosia.html),
++[Anogyra 146810](https://www.geonames.org/146810/anogyra.html),
++[Lazanias 146393](https://www.geonames.org/146393/lazanias.html).
++Lazanias coordinates and variants were also checked in the
++[GeoNames populated-place listing](https://www.geonames.org/advanced-search.html?country=CY&featureClass=P&q=&startRow=450).
++Map tiles keep their existing OpenStreetMap attribution.
++
++The user-supplied settlement-name infographic is visual inspiration only.
++Its compiler credit remains separate from the Narrify team credits.
++Its raster, boundaries and settlement classifications were not imported.
++
++## Adding a record
++
++Edit `frontend/src/data/placeNames.json` in a reviewable branch. Each place has:
++
++- A stable unique `id`, `displayName`, numeric latitude/longitude, and a
++  `locationSourceId` referencing a source in that record.
++- `editorialStatus`: `draft` or `published`. Only valid published records render.
++- `aliases`: original `name`, optional language tag, `kind` (current, historical,
++  variant), and `sourceId`. Language of a name is not an ethnic or territorial claim.
++- `claims`: stable unique ID, `kind` (name-history or etymology), `summary`,
++  `status`, and one or more valid `sourceIds`.
++- `sources`: ID, title, publisher, absolute HTTPS URL and ISO access date.
++  Coordinate listing evidence can be supplied in `coordinateEvidenceUrl`.
++
++Use **reported** for an explanation explicitly made by the source, **proposed**
++when the source presents it as possible, and **disputed** when sources document
++disagreement. These labels describe the evidence, not a truth score. For no
++sourced origin explanation, omit etymology claims; the UI supplies an unresolved
++state. Do not invent origins, fill gaps using AI text, or treat a modern name
++variant as proof of derivation. Keep distinct explanations as separate claims.
++
++Invalid records, missing source references, duplicate place IDs and drafts are
++excluded at runtime. Tests also reject invalid committed pilot data so an editor
++cannot silently lose a record. A pull request is the review step for publishing
++new records; there is no public editing API in this pilot.
++
++## Validation
++
++From `frontend`:
++
++```sh
++npm ci
++CI=true npm test -- --watchAll=false --runInBand
++npm run build
++```
++
++The focused tests cover source integrity, draft exclusion, multilingual search,
++origin status filtering, competing explanations, approved-only nearby results,
++the card's source links, and switching map layers. Existing backend demo checks
++remain documented in the main README. No research impact or deployment is
++claimed by adding this feature.
+diff --git a/frontend/src/utils/placeNames.test.js b/frontend/src/utils/placeNames.test.js
+new file mode 100644
+--- /dev/null
++++ b/frontend/src/utils/placeNames.test.js
+@@ -0,0 +1,74 @@
++import catalog from "../data/placeNames.json";
++import {
++    PLACE_NAMES, filterPlaceNames, getOriginStatus, isSourceUrl,
++    nearbyApprovedStories, publishedPlaces, validatePlace,
++} from "./placeNames";
++
++const nicosia = catalog.places.find((place) => place.id === "nicosia");
++const localStory = { id: 7, title: "A local memory", status: "approved",
++    latitude: nicosia.latitude, longitude: nicosia.longitude };
++
++test("every committed pilot record is valid, public and uniquely identified", () => {
++    expect(catalog.schemaVersion).toBe(1);
++    expect(catalog.places.every(validatePlace)).toBe(true);
++    expect(PLACE_NAMES).toHaveLength(catalog.places.length);
++});
++
++test.each([
++    ["ανωγυρα", "anogyra"], ["ΑΝΏΓΥΡΑ", "anogyra"],
++    ["LEFKOSA", "nicosia"], ["Ledra", "nicosia"], ["ΛΑΖΑΝΙΑΣ", "lazanias"],
++])("searches current and historical forms: %s", (query, id) => {
++    expect(filterPlaceNames(PLACE_NAMES, query).map((place) => place.id)).toEqual([id]);
++});
++
++test("historical forms do not imply an origin; alternatives remain separate", () => {
++    expect(getOriginStatus(nicosia)).toBe("unresolved");
++    expect(filterPlaceNames(PLACE_NAMES, "", "unresolved").map((place) => place.id)).toEqual(["nicosia"]);
++    const [anogyra] = filterPlaceNames(PLACE_NAMES, "", "proposed");
++    expect(anogyra.id).toBe("anogyra");
++    expect(anogyra.claims.filter((claim) => claim.kind === "etymology")).toHaveLength(2);
++    expect(filterPlaceNames(PLACE_NAMES, "", "reported").map((place) => place.id)).toEqual(["lazanias"]);
++});
++
++test("disagreement remains distinct from possible explanations", () => {
++    const disputed = {...nicosia, claims: [{...nicosia.claims[0], kind: "etymology", status: "disputed"}]};
++    expect(getOriginStatus(disputed)).toBe("disputed");
++    expect(filterPlaceNames([disputed], "", "reported")).toEqual([]);
++});
++
++test("requires valid documentary sources for explanations, variants and coordinates", () => {
++    expect(validatePlace({...nicosia, claims: [{...nicosia.claims[0], sourceIds: []}]})).toBe(false);
++    expect(validatePlace({...nicosia, claims: [{...nicosia.claims[0], sourceIds: ["missing"]}]})).toBe(false);
++    expect(validatePlace({...nicosia, aliases: [{...nicosia.aliases[0], sourceId: "missing"}]})).toBe(false);
++    expect(validatePlace({...nicosia, locationSourceId: "missing"})).toBe(false);
++    expect(validatePlace({...nicosia, latitude: null})).toBe(false);
++});
++
++test.each(["javascript:alert(1)", "https://user:pass@example.com/", "https://./",
++    "http://example.com/", "https://example.com/ a", "https://example.com/\\evil"])(
++    "rejects unsafe or malformed source links: %s", (url) => {
++        expect(isSourceUrl(url)).toBe(false);
++        expect(validatePlace({...nicosia, sources: nicosia.sources.map((source) => ({...source, url}))})).toBe(false);
++    }
++);
++
++test("hides drafts, duplicate IDs and invalid records", () => {
++    expect(publishedPlaces([null, {...nicosia, editorialStatus: "draft"}, nicosia, nicosia])).toEqual([nicosia]);
++});
++
++test("nearby results require approval and valid coordinates", () => {
++    const records = [
++        localStory, {...localStory, id: 8, status: "rejected"},
++        {...localStory, id: 9, status: "pending"}, {...localStory, id: 10, latitude: null},
++        {...localStory, id: 11, longitude: " "}, {...localStory, id: 12, latitude: 181},
++        {...localStory, id: 13, latitude: nicosia.latitude + 1},
++    ];
++    expect(nearbyApprovedStories(nicosia, records).map(({story}) => story.id)).toEqual([7]);
++});
++
++test("caps nearby results, sorts equal distances consistently and preserves input", () => {
++    const records = [4,3,2,1].map((id) => ({...localStory, id}));
++    const before = JSON.stringify(records);
++    expect(nearbyApprovedStories(nicosia, records).map(({story}) => story.id)).toEqual([1,2,3]);
++    expect(JSON.stringify(records)).toBe(before);
++});
+diff --git a/frontend/src/components/PlaceNameCard.test.js b/frontend/src/components/PlaceNameCard.test.js
+new file mode 100644
+--- /dev/null
++++ b/frontend/src/components/PlaceNameCard.test.js
+@@ -0,0 +1,32 @@
++import { render, screen } from "@testing-library/react";
++import { MemoryRouter } from "react-router-dom";
++import PlaceNameCard from "./PlaceNameCard";
++import { PLACE_NAMES } from "../utils/placeNames";
++
++const renderCard = (id, props = {}) => render(
++    <MemoryRouter><PlaceNameCard place={PLACE_NAMES.find((place) => place.id === id)} {...props} /></MemoryRouter>
++);
++
++test("shows both Anogyra explanations with their individual sources", () => {
++    renderCard("anogyra");
++    expect(screen.getByText(/local anagyris plant/)).toBeTruthy();
++    expect(screen.getByText(/Another explanation combines/)).toBeTruthy();
++    expect(screen.getAllByText("Possible explanation")).toHaveLength(2);
++    const sources = screen.getAllByRole("link", { name: "Cyprus Deputy Ministry of Tourism" });
++    expect(sources).toHaveLength(2);
++    expect(sources[0].getAttribute("href")).toContain("anogyra-village-2");
++    expect(screen.getByRole("link", { name: "Source for Ανώγυρα" }).getAttribute("href")).toContain("geonames.org");
++});
++
++test("keeps historical forms distinct from missing etymology", () => {
++    renderCard("nicosia");
++    expect(screen.getByText("Ledra")).toBeTruthy();
++    expect(screen.getByText("No origin explanation has been added to this record.")).toBeTruthy();
++    expect(screen.getByText(/not a historical boundary/)).toBeTruthy();
++});
++
++test("shows API failure separately from a genuine empty result", () => {
++    renderCard("lazanias", { storiesError: "offline" });
++    expect(screen.getByText("Nearby stories are temporarily unavailable.")).toBeTruthy();
++    expect(screen.queryByText(/No approved stories within/)).toBeNull();
++});
+diff --git a/frontend/src/components/MapView.test.js b/frontend/src/components/MapView.test.js
+new file mode 100644
+--- /dev/null
++++ b/frontend/src/components/MapView.test.js
+@@ -0,0 +1,51 @@
++import { render, screen, fireEvent } from "@testing-library/react";
++import { MemoryRouter } from "react-router-dom";
++import API from "../services/Api";
++import MapView from "./MapView";
++
++const mockMap = { flyTo: jest.fn() };
++jest.mock("react-leaflet", () => ({
++    MapContainer: ({ children }) => <div>{children}</div>,
++    Marker: ({ children }) => <div>{children}</div>,
++    Popup: ({ children }) => <div>{children}</div>,
++    TileLayer: () => null,
++    ZoomControl: () => null,
++    useMap: () => mockMap,
++}));
++jest.mock("leaflet", () => ({ divIcon: () => ({}) }));
++jest.mock("../services/Api", () => ({
++    __esModule: true, default: { get: jest.fn() }, mediaUrl: () => null,
++}));
++
++beforeEach(() => {
++    jest.clearAllMocks();
++    API.get.mockResolvedValue({ data: [{ id: 1, title: "Community memory", content: "Local history",
++        category: "heritage", status: "approved", latitude: 35.17284, longitude: 33.35397 }] });
++});
++
++test("switches layers, searches Greek names, resets filters and restores stories", async () => {
++    render(<MemoryRouter><MapView activeCategory="all" /></MemoryRouter>);
++    await screen.findByRole("heading", { name: "Community memory" });
++    fireEvent.click(screen.getByRole("button", { name: "Place names" }));
++    expect(screen.getByText(/3 place names/)).toBeTruthy();
++    fireEvent.change(screen.getByRole("searchbox", { name: "Search place names" }),
++        { target: { value: "ανωγυρα" } });
++    expect(screen.getByRole("heading", { name: "Anogyra" })).toBeTruthy();
++    expect(screen.queryByRole("heading", { name: "Lazanias" })).toBeNull();
++    fireEvent.change(screen.getByLabelText("Origins"), { target: { value: "reported" } });
++    expect(screen.getByText("No place names match")).toBeTruthy();
++    fireEvent.click(screen.getByRole("button", { name: "Reset place-name filters" }));
++    expect(screen.getByText(/3 place names/)).toBeTruthy();
++    fireEvent.click(screen.getByRole("button", { name: "Stories" }));
++    expect(screen.getByRole("heading", { name: "Community memory" })).toBeTruthy();
++    expect(API.get).toHaveBeenCalledTimes(1);
++});
++
++test("place-name records remain usable when the story API is unavailable", async () => {
++    API.get.mockRejectedValueOnce(new Error("offline"));
++    render(<MemoryRouter><MapView activeCategory="all" /></MemoryRouter>);
++    await screen.findByText(/We couldn't load the stories/);
++    fireEvent.click(screen.getByRole("button", { name: "Place names" }));
++    expect(screen.getByRole("heading", { name: "Anogyra" })).toBeTruthy();
++    expect(screen.getAllByText("Nearby stories are temporarily unavailable.")).toHaveLength(3);
++});
+diff --git a/frontend/src/setupTests.js b/frontend/src/setupTests.js
+new file mode 100644
+--- /dev/null
++++ b/frontend/src/setupTests.js
+@@ -0,0 +1,5 @@
++// React Router uses the encoding APIs, which older JSDOM environments omit.
++import { TextEncoder, TextDecoder } from "util";
++
++global.TextEncoder = TextEncoder;
++global.TextDecoder = TextDecoder;
+diff --git a/.github/workflows/frontend.yml b/.github/workflows/frontend.yml
+new file mode 100644
+--- /dev/null
++++ b/.github/workflows/frontend.yml
+@@ -0,0 +1,35 @@
++name: Frontend checks
++
++on:
++  pull_request:
++    paths:
++      - "frontend/**"
++      - ".github/workflows/frontend.yml"
++  push:
++    branches: [main]
++    paths:
++      - "frontend/**"
++      - ".github/workflows/frontend.yml"
++
++permissions:
++  contents: read
++
++jobs:
++  frontend:
++    runs-on: ubuntu-latest
++    timeout-minutes: 15
++    defaults:
++      run:
++        working-directory: frontend
++    env:
++      CI: "true"
++    steps:
++      - uses: actions/checkout@v4
++      - uses: actions/setup-node@v4
++        with:
++          node-version: "24"
++          cache: npm
++          cache-dependency-path: frontend/package-lock.json
++      - run: npm ci --no-audit --no-fund
++      - run: npm test -- --watchAll=false --runInBand
++      - run: npm run build

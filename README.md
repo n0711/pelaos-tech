@@ -10,7 +10,8 @@ Live at **https://n0711.github.io/pelaos-tech/** (GitHub Pages).
 
 ## Pages
 
-- `/`: project portfolio with RioTuner, cysk8clips and LearnTwin
+- `/`: project portfolio with RioTuner, cysk8clips, Narrify and LearnTwin
+- `/cultural-storytelling-map/`: Narrify team credits, source repository and a sourced place-name pilot
 - `/research/`: pressure at depth, ROV vs AUV, navigation without GPS (NOAA sources)
 - `/riotuner/`: RioTuner overview, pre-release status and synthetic benchmark limits
 - `/riotuner/testing/`: practical device-testing guide and feedback channels
@@ -75,3 +76,14 @@ Change `SITE` and `BASE` in `src/pages.rs` (`https://pelaos-tech.com` and `""`),
 The Pages site is an informational portfolio. It has no checkout or sales form.
 Commercial offer documents live in the repository, not the generated Pages site.
 A custom domain does not remove the hosting provider's usage restrictions.
+
+## Narrify / OpenPELAOS integration
+
+Narrify is the Cultural Storytelling Map co-developed by **Charalampos Nadiotis
+(n0711), Hussain Jamil and Nikitas Savva**. The site gives it a credited project
+page and distinguishes the existing prototype from the prepared place-name layer.
+
+The complete source change for the separate team repository is preserved in
+[`integrations/narrify-place-names.patch`](integrations/narrify-place-names.patch).
+See [integration instructions and validation status](docs/NARRIFY_INTEGRATION.md).
+This patch is not applied to the PELAOS Rust/Dart site and is not deployed here.

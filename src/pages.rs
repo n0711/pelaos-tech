@@ -6,7 +6,7 @@
 pub const SITE: &str = "https://n0711.github.io/pelaos-tech";
 pub const BASE: &str = "/pelaos-tech";
 /// Shown in the footer, JSON-LD `dateModified` and sitemap `lastmod`.
-pub const UPDATED: &str = "2026-10-19";
+pub const UPDATED: &str = "2026-10-20";
 
 /// Seawater density and standard gravity used for every pressure figure on the site.
 pub const RHO: f64 = 1025.0;
@@ -216,7 +216,7 @@ fn layout(p: &Page) -> String {
 </main>
 <footer>
 <a href="{research}">Research</a><a href="{riotuner}">RioTuner</a><a href="{privacy}">Website privacy</a><a href="{CONTACT}">Contact</a>
-<p>© 2026 PelaosTech. Last updated <time datetime="{UPDATED}">19 October 2026</time>. Hosted on GitHub Pages.</p>
+<p>© 2026 PelaosTech. Last updated <time datetime="{UPDATED}">20 October 2026</time>. Hosted on GitHub Pages.</p>
 </footer>
 </body>
 </html>
@@ -238,7 +238,7 @@ fn home() -> Page {
 <section class="hero">
 <p class="eyebrow">PELAOS / Independent software &amp; research / Cyprus</p>
 <h1>Useful software.<br>Built with a purpose.</h1>
-<p class="lead">Projects by Charalampos Nadiotis, connecting music, learning and local culture with practical engineering.</p>
+<p class="lead">Independent and team projects by Charalampos Nadiotis, connecting music, learning and local culture with practical engineering.</p>
 <div class="actions"><a class="button primary" href="#projects">Explore the projects ↓</a><a class="button" href="{LINKEDIN}">Meet the maker ↗</a></div>
 </section>
 <section id="projects" aria-labelledby="project-heading">
@@ -246,6 +246,7 @@ fn home() -> Page {
 <div class="project-grid">
 <article class="card project"><span class="badge">Android · Pre-release</span><h3>RioTuner</h3><p>An offline instrument tuner with needle and strobe displays. Built for guitar, bass, ukulele and bouzouki. Physical-device validation is still required.</p><a href="{riotuner}">Explore RioTuner →</a></article>
 <article class="card project"><span class="badge">Live · Community website</span><h3>cysk8clips</h3><p>Cyprus skateboarding clips, full parts, event stories and a public spot guide. A record of the people and places behind the scene.</p><a href="https://cysk8clips.com">Visit the skate archive ↗</a></article>
+<article class="card project"><span class="badge">OpenPELAOS · Team prototype</span><h3>Cultural Storytelling Map</h3><p>Narrify connects community stories with places. Co-developed by Charalampos Nadiotis, Hussain Jamil and Nikitas Savva.</p><a href="{narrify}">Explore Narrify →</a></article>
 <article class="card project"><span class="badge">Open source · Local planner</span><h3>LearnTwin</h3><p>Track degree progress, study tasks, thesis milestones and PhD applications. Records stay in your browser; export a backup to keep them.</p><a href="https://github.com/n0711/LearnTwin#start-the-planner">Try LearnTwin from source ↗</a></article>
 </div>
 </section>
@@ -254,6 +255,7 @@ fn home() -> Page {
 "##,
         research = href("research/"),
         riotuner = href("riotuner/"),
+        narrify = href("cultural-storytelling-map/"),
     );
     Page {
         slug: "",
@@ -261,6 +263,56 @@ fn home() -> Page {
         description: "Explore PELAOS projects: RioTuner, cysk8clips and LearnTwin. Independent software and marine robotics research by Charalampos Nadiotis in Cyprus.",
         body,
         crumbs: vec![],
+        extra_ld: vec![],
+        script: false,
+        noindex: false,
+    }
+}
+
+
+fn cultural_storytelling_map() -> Page {
+    Page {
+        slug: "cultural-storytelling-map/",
+        title: "Narrify: Cultural Storytelling Map | OpenPELAOS",
+        description: "Narrify by Charalampos Nadiotis, Hussain Jamil and Nikitas Savva: community stories, cultural places and a sourced Cyprus place-name pilot.",
+        body: r##"
+<p class="eyebrow">OpenPELAOS / Culture &amp; community</p>
+<h1>Cultural Storytelling Map</h1>
+<p class="lead">Narrify connects the stories people tell with the places they belong to.</p>
+<p>Explore community accounts through a map, with text, photographs and audio. The existing prototype includes translation and human moderation.</p>
+<div class="actions"><a class="button primary" href="https://github.com/hussainJamil24/cultural-storytelling-map">Explore the Narrify source ↗</a></div>
+<h2>The team</h2>
+<ul>
+<li><a href="https://github.com/n0711">Charalampos Nadiotis (n0711)</a></li>
+<li><a href="https://github.com/hussainJamil24">Hussain Jamil</a></li>
+<li>Nikitas Savva</li>
+</ul>
+<p>The team repository is hosted under Hussain Jamil's account. The OpenPELAOS extension keeps that project attribution visible.</p>
+<h2>The story behind the name</h2>
+<p>A proposed place-name layer connects historical names and origin explanations to their sources. Different explanations remain separate, with uncertainty visible.</p>
+<p class="status-note">The extension is prepared for review. It is not yet integrated into the Narrify prototype. The examples below are a small sourced pilot, not a classification of every settlement in Cyprus.</p>
+<article class="card">
+<span class="badge">Name history · Origin not yet added</span>
+<h3>Lefkosia / Nicosia</h3>
+<p>Nicosia Municipality records Ledra, Lefkothea and Lefkousia among earlier names associated with the city. Historical names alone do not establish a derivation for the present name.</p>
+<p><a href="https://www.nicosia.org.cy/en-GB/discover/nicosia/nicosia/names/">Source: Nicosia Municipality</a> · <a href="https://www.geonames.org/146268/nicosia.html">Location: GeoNames</a></p>
+</article>
+<article class="card">
+<span class="badge">Two possible explanations</span>
+<h3>Anogyra</h3>
+<p>The tourism portal offers two possibilities: a connection to the local anagyris plant, or ano (upper) combined with Gyroi, a former village name. The pilot preserves both explanations.</p>
+<p><a href="https://www.visitcyprus.com/discover-cyprus/rural/villages-rural/anogyra-village-2/">Source: Cyprus Deputy Ministry of Tourism</a> · <a href="https://www.geonames.org/146810/anogyra.html">Location: GeoNames</a></p>
+</article>
+<article class="card">
+<span class="badge">Source-reported explanation</span>
+<h3>Lazanias</h3>
+<p>The tourism portal links the name to Lusignan and a farm associated with the Crusaders. This is presented as the source's explanation, rather than an independent scholarly resolution.</p>
+<p><a href="https://www.visitcyprus.com/discover-cyprus/culture/sites-and-monuments/saint-george-s-church-lazanias-village/">Source: Cyprus Deputy Ministry of Tourism</a> · <a href="https://www.geonames.org/146393/lazanias.html">Location: GeoNames</a></p>
+</article>
+<p class="muted">Sources consulted on 20 October 2026. Settlement points in the proposed layer are approximate reference locations, not historical boundaries. Geographic proximity to a community story does not establish a historical connection.</p>
+<p class="muted">The settlement-name infographic that inspired this direction remains separate source material. Its map, boundaries and classifications have not been imported.</p>
+"##.to_string(),
+        crumbs: vec![("cultural-storytelling-map/", "Cultural Storytelling Map")],
         extra_ld: vec![],
         script: false,
         noindex: false,
@@ -512,7 +564,7 @@ const FAVICON: &str = r##"<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1
 "##;
 
 fn pages() -> Vec<Page> {
-    vec![home(), research(), riotuner(), riotuner_testing(), riotuner_privacy(), site_privacy(), not_found()]
+    vec![home(), research(), cultural_storytelling_map(), riotuner(), riotuner_testing(), riotuner_privacy(), site_privacy(), not_found()]
 }
 
 pub fn site() -> Vec<File> {
@@ -643,7 +695,7 @@ mod tests {
             assert!(c.contains("<link rel=\"canonical\" href=\"https://"), "{path}");
         }
         let sitemap = site().into_iter().find(|f| f.path == "sitemap.xml").unwrap().contents;
-        assert_eq!(sitemap.matches("<url>").count(), 6);
+        assert_eq!(sitemap.matches("<url>").count(), 7);
         assert!(!sitemap.contains("404"));
     }
 
