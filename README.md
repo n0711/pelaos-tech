@@ -6,7 +6,7 @@ Live at **https://n0711.github.io/pelaos-tech/** (GitHub Pages).
 |---|---|---|
 | `src/` | Rust | Renders every page to complete HTML at build time: content, layout, JSON-LD, sitemap. GitHub Pages can't run a server, so the "backend" runs in the build. |
 | `web/app.dart` | Dart | Compiled to `app.js`. Adds the live depth slider on /research/. Pages work fully without it. |
-| `.github/workflows/pages.yml` | | Tests, builds and deploys on every push to `main`. |
+| `.github/workflows/pages.yml` | | Tests and builds pull requests; deploys on every push to `main`. |
 
 ## Pages
 
@@ -43,6 +43,18 @@ cargo run -- dist
 dart pub get
 dart compile js -O2 --csp -o dist/app.js web/app.dart
 ```
+
+### Output directory safety
+
+The Rust generator accepts a new or empty output directory. Later builds replace
+that directory only when it contains the generator's `.pelaos-site-output` marker.
+The whole marked directory is generated output; keep source files elsewhere and
+do not add the marker manually. Symbolic links and `..` in output paths are rejected.
+A complete build is staged before the previous build is replaced.
+
+An older, unmarked `dist` is deliberately refused. Use a fresh output path (for
+example `cargo run -- dist-new`), or inspect and manually remove the old generated
+directory before rebuilding. Never use the repository or a source directory as output.
 
 ## Moving to pelaos-tech.com later
 
