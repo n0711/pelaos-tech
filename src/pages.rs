@@ -57,6 +57,7 @@ fn js(s: &str) -> String {
             '\\' => o.push_str("\\\\"),
             '\n' => o.push_str("\\n"),
             '<' => o.push_str("\\u003c"),
+            c if c <= '\u{001f}' => o.push_str(&format!("\\u{:04x}", c as u32)),
             c => o.push(c),
         }
     }
@@ -542,7 +543,7 @@ pub fn site() -> Vec<File> {
     files.push(File {
         path: "llms.txt".into(),
         contents: format!(
-            "# PelaosTech\n\n> Marine robotics research (deep-submergence ROV concept) and precision software (RioTuner, an instrument tuner).\n\n- [Research: pressure and navigation]({}): pressure at depth with NOAA sources, ROV vs AUV, navigation without GPS\n- [RioTuner]({}): how the tuner measures pitch, measured accuracy, features\n- [RioTuner privacy policy]({})\n",
+            "# PelaosTech\n\n> Marine robotics research (deep-submergence ROV concept) and precision software (RioTuner, an instrument tuner).\n\n- [Research: pressure and navigation]({}): pressure at depth with NOAA sources, ROV vs AUV, navigation without GPS\n- [RioTuner]({}): pre-release pitch detection, synthetic benchmark results and limits; microphone and device accuracy remain unverified\n- [RioTuner privacy policy]({})\n",
             url("research/"),
             url("riotuner/"),
             url("riotuner/privacy/")
@@ -558,6 +559,33 @@ mod tests {
 
     fn html() -> Vec<(String, String)> {
         site().into_iter().filter(|f| f.path.ends_with(".html")).map(|f| (f.path, f.contents)).collect()
+    }
+
+    #[test]
+    fn json_escapes_every_control_character() {
+        for code in 0u8..=31 {
+            let input = char::from(code).to_string();
+            let expected = if code == b'\n' {
+                "\"\\n\"".to_string()
+            } else {
+                format!("\"\\u{code:04x}\"")
+            };
+            assert_eq!(js(&input), expected, "control character {code}");
+        }
+    }
+
+    #[test]
+    fn json_preserves_unicode_and_escapes_script_delimiters() {
+        assert_eq!(js("α海"), "\"α海\"");
+        assert_eq!(js("\"\\\r\t\n</script>"), "\"\\\"\\\\\\u000d\\u0009\\n\\u003c/script>\"");
+    }
+
+    #[test]
+    fn crawler_summary_qualifies_tuner_benchmarks() {
+        let summary = site().into_iter().find(|f| f.path == "llms.txt").unwrap().contents;
+        assert!(summary.contains("synthetic benchmark results and limits"));
+        assert!(summary.contains("microphone and device accuracy remain unverified"));
+        assert!(!summary.contains("measured accuracy"));
     }
 
     #[test]
