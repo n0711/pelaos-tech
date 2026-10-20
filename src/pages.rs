@@ -123,7 +123,7 @@ h2{letter-spacing:-.025em}.lead{max-width:680px!important;font-size:21px;line-he
 .actions{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin:24px 0}
 .button{display:inline-flex;min-height:46px;align-items:center;justify-content:center;padding:11px 18px;border:1px solid var(--accent);border-radius:8px;font-weight:650;text-decoration:none}
 .button.primary{background:var(--accent);color:var(--bg)}.button:hover{text-decoration:underline;text-underline-offset:4px}
-.project-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.project-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
 .project{padding:24px;margin:0;display:flex;flex-direction:column;align-items:flex-start;gap:8px}
 .project h3{font-size:25px;line-height:1.2;margin:16px 0 4px}.project p{margin:0 0 14px}
 .project a{margin-top:auto;min-height:44px;display:inline-flex;align-items:center;font-weight:650}
@@ -260,7 +260,7 @@ fn home() -> Page {
     Page {
         slug: "",
         title: "PELAOS | Software, music & community projects",
-        description: "Explore PELAOS projects: RioTuner, cysk8clips and LearnTwin. Independent software and marine robotics research by Charalampos Nadiotis in Cyprus.",
+        description: "Explore RioTuner, cysk8clips, Narrify and LearnTwin: PELAOS software, culture and marine robotics research by Charalampos Nadiotis in Cyprus.",
         body,
         crumbs: vec![],
         extra_ld: vec![],
