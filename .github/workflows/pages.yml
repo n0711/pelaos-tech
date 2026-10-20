@@ -6,6 +6,8 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches: [main]
+  pull_request:
+    branches: [main]
   workflow_dispatch:
 
 # Least privilege: the build job only reads; only the deploy job can publish.
@@ -14,7 +16,7 @@ permissions:
 
 # One deployment at a time; never cancel a deployment that is in progress.
 concurrency:
-  group: pages
+  group: pages-${{ github.event.pull_request.number || 'production' }}
   cancel-in-progress: false
 
 jobs:
@@ -41,6 +43,7 @@ jobs:
           path: dist
 
   deploy:
+    if: github.event_name != 'pull_request'
     needs: build
     runs-on: ubuntu-24.04
     timeout-minutes: 10
