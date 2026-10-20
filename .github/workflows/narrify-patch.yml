@@ -1,0 +1,43 @@
+name: Verify Narrify integration patch
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "integrations/narrify-place-names.patch"
+      - ".github/workflows/narrify-patch.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  narrify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    env:
+      CI: "true"
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: hussainJamil24/cultural-storytelling-map
+          ref: d8306ba6554320513a2b4bea93b8c97c2df3542b
+          path: narrify
+          persist-credentials: false
+      - name: Check patch against the inspected Narrify revision
+        run: git -C narrify apply --check ../integrations/narrify-place-names.patch
+      - name: Apply integration patch
+        run: git -C narrify apply ../integrations/narrify-place-names.patch
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: "24"
+          cache: npm
+          cache-dependency-path: narrify/frontend/package-lock.json
+      - run: npm ci --no-audit --no-fund
+        working-directory: narrify/frontend
+      - run: npm test -- --watchAll=false --runInBand
+        working-directory: narrify/frontend
+      - run: npm run build
+        working-directory: narrify/frontend

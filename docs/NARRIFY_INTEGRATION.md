@@ -61,9 +61,11 @@ The workflow file may require workflow-write permission when pushed.
 
 A shell/build environment was unavailable in this session. Jest, the React
 production build, Rust compilation and Dart compilation were not run locally.
-The OpenPELAOS PR uses its existing Rust/Dart CI; that pipeline does not execute
-the separate Narrify patch. Narrify React tests/build still need to run after
-application in the team repository.
+The OpenPELAOS PR uses its existing Rust/Dart CI. A separate read-only
+`narrify-patch.yml` check clones the pinned public Narrify revision, runs
+`git apply --check`, applies the patch, and runs its Jest suite and React build.
+That check does not write to or deploy the team repository. Consult the PR checks
+for actual outcomes; pending or queued checks are not successful results.
 
 The screenshot is inspiration only; its raster, settlement boundaries and
 language classifications are not copied. The patch's curation guide records the
