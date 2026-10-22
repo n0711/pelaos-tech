@@ -6,7 +6,7 @@
 pub const SITE: &str = "https://n0711.github.io/pelaos-tech";
 pub const BASE: &str = "/pelaos-tech";
 /// Shown in the footer, JSON-LD `dateModified` and sitemap `lastmod`.
-pub const UPDATED: &str = "2026-10-20";
+pub const UPDATED: &str = "2026-10-22";
 
 /// Seawater density and standard gravity used for every pressure figure on the site.
 pub const RHO: f64 = 1025.0;
@@ -216,7 +216,7 @@ fn layout(p: &Page) -> String {
 </main>
 <footer>
 <a href="{research}">Research</a><a href="{riotuner}">RioTuner</a><a href="{privacy}">Website privacy</a><a href="{CONTACT}">Contact</a>
-<p>© 2026 PelaosTech. Last updated <time datetime="{UPDATED}">20 October 2026</time>. Hosted on GitHub Pages.</p>
+<p>© 2026 PelaosTech. Last updated <time datetime="{UPDATED}">22 October 2026</time>. Hosted on GitHub Pages.</p>
 </footer>
 </body>
 </html>
@@ -244,7 +244,7 @@ fn home() -> Page {
 <section id="projects" aria-labelledby="project-heading">
 <p class="eyebrow">Selected projects</p><h2 id="project-heading">Different interests. Things you can use.</h2>
 <div class="project-grid">
-<article class="card project"><span class="badge">Android · Pre-release</span><h3>RioTuner</h3><p>An offline instrument tuner with needle and strobe displays. Built for guitar, bass, ukulele and bouzouki. Physical-device validation is still required.</p><a href="{riotuner}">Explore RioTuner →</a></article>
+<article class="card project"><span class="badge">Android · Coming to Google Play</span><h3>RioTuner</h3><p>An offline instrument tuner with needle and strobe displays for guitar, bass, ukulele and bouzouki. Tested on Android phones and heading to Google Play.</p><a href="{riotuner}">Explore RioTuner →</a></article>
 <article class="card project"><span class="badge">Live · Community website</span><h3>cysk8clips</h3><p>Cyprus skateboarding clips, full parts, event stories and a public spot guide. A record of the people and places behind the scene.</p><a href="https://cysk8clips.com">Visit the skate archive ↗</a></article>
 <article class="card project"><span class="badge">OpenPELAOS · Team prototype</span><h3>Cultural Storytelling Map</h3><p>Narrify connects community stories with places. Co-developed by Charalampos Nadiotis, Hussain Jamil and Nikitas Savva.</p><a href="{narrify}">Explore Narrify →</a></article>
 <article class="card project"><span class="badge">Open source · Local planner</span><h3>LearnTwin</h3><p>Track degree progress, study tasks, thesis milestones and PhD applications. Records stay in your browser; export a backup to keep them.</p><a href="https://github.com/n0711/LearnTwin#start-the-planner">Try LearnTwin from source ↗</a></article>
@@ -411,13 +411,13 @@ fn riotuner() -> Page {
     let body = format!(
         r#"
 <h1>RioTuner</h1>
-<p class="lead">A precision tuner for guitar, bass, ukulele and bouzouki, for Android. Pre-release software; a Google Play release is planned. A verified store link is not available yet.</p>
+<p class="lead">A precision tuner for guitar, bass, ukulele and bouzouki, for Android. Version 1.0 has been tested on real phones and is on its way to Google Play.</p>
 
 <h2>How it measures</h2>
-<p>RioTuner estimates pitch from multiple string partials and fits a stiff-string model, <code>f<sub>k</sub> = k·f<sub>0</sub>·√(1 + B·k²)</code>, to all of them. Real strings are slightly stiff, so their overtones run sharp. The fit aims to separate string stiffness from pitch, including when the fundamental is weak. The strobe visualises phase drift relative to the target pitch. Real-device accuracy has not yet been established.</p>
+<p>RioTuner estimates pitch from multiple string partials and fits a stiff-string model, <code>f<sub>k</sub> = k·f<sub>0</sub>·√(1 + B·k²)</code>, to all of them. Real strings are slightly stiff, so their overtones run sharp. The fit aims to separate string stiffness from pitch, including when the fundamental is weak. The strobe shows phase drift against the target pitch, so the pattern only stands still when the string is in tune.</p>
 
-<p class="status-note">No purchase or download is offered here yet. Review the testing guide to see what must be verified before release.</p>
-<p><a class="button primary" href="{testing}">Read the testing guide →</a></p>
+<p class="status-note">The Google Play link will appear here as soon as the listing goes live. Want early access? Join the closed test on Google Play.</p>
+<p><a class="button primary" href="{testing}">Become a tester →</a></p>
 <h2>Synthetic benchmark results</h2>
 <div class="card">
 <table>
@@ -432,13 +432,15 @@ fn riotuner() -> Page {
 <tr><td>Very noisy room</td><td>0.15</td><td>46.7</td></tr>
 </tbody>
 </table>
-<p><small>Synthetic plucked strings with known pitch (B1 to E4, random detuning and string stiffness). This is an algorithm benchmark, not a comparison with commercial tuner apps or a measured result on physical phones. Device accuracy and latency remain unverified.</small></p>
+<p><small>Synthetic plucked strings with known pitch (B1 to E4, random detuning and string stiffness). This benchmarks the algorithm itself, not other tuner apps. On a phone, results also depend on the microphone and the room.</small></p>
 </div>
 
 <h2>Features</h2>
 <ul>
 <li>16 tunings: guitar (standard, drop D, half and full step down, drop C, DADGAD, open G/D/E, 7-string), bass (4- and 5-string), ukulele, bouzouki (CFAD, DAD), baglamas, plus chromatic mode</li>
+<li>Needle and strobe displays</li>
 <li>Automatic string detection, or tap a string to lock it</li>
+<li>Adjustable in-tune tolerance</li>
 <li>Reference pitch from 380 to 480 Hz in 0.1 Hz steps</li>
 <li>Note names in C♯, D♭ or Do Re Mi</li>
 <li>No ads, no account, no internet permission</li>
@@ -453,7 +455,7 @@ fn riotuner() -> Page {
     Page {
         slug: "riotuner/",
         title: "RioTuner: precision guitar tuner | PelaosTech",
-        description: "RioTuner: an offline Android instrument tuner with strobe and needle displays. Pre-release; synthetic benchmarks and physical-device testing requirements.",
+        description: "RioTuner: an offline Android tuner for guitar, bass, ukulele and bouzouki with strobe and needle displays. Tested and coming to Google Play.",
         body,
         crumbs: vec![("riotuner/", "RioTuner")],
         extra_ld: vec![],
@@ -466,18 +468,18 @@ fn riotuner_testing() -> Page {
     Page {
         slug: "riotuner/testing/",
         title: "RioTuner testing guide | PELAOS",
-        description: "How to evaluate a RioTuner test build: microphone permission, tuning response, interruptions and device details. Physical-device validation is still pending.",
+        description: "Join the RioTuner closed test on Google Play: what to check, and how to send useful feedback.",
         body: format!(r#"
-<p class="eyebrow">RioTuner / Before release</p>
+<p class="eyebrow">RioTuner / Closed testing</p>
 <h1>Put it through a real practice session.</h1>
 <p class="lead">Synthetic signals test the algorithm. Instruments and phones test the product.</p>
-<p class="status-note">No public test build or Play opt-in link has been verified. This guide prepares testing; it does not enrol you in a test or provide a download.</p>
-<h2>When a build is available</h2>
-<ol><li>Check that the build comes from the developer or the official Play testing track.</li><li>Allow microphone access, then deny it once and check that the app explains how to continue.</li><li>Play each open string separately in a quiet room. Check string selection, the displayed note and response to a slow tuning change.</li><li>Compare needle and strobe displays, then repeat with background noise and a weaker low note.</li><li>Switch apps, lock and unlock the phone, and reopen the tuner. Microphone use should stop in the background and recover correctly.</li><li>Change reference pitch and tuning, restart the app and check that your settings are retained.</li></ol>
+<p class="status-note">RioTuner 1.0 is tested and going through the Google Play closed test before public release. Message me on LinkedIn with the Google account email you use on Play and I will send you the opt-in link. Please stay opted in for at least 14 days.</p>
+<h2>What to check</h2>
+<ol><li>Install RioTuner only from the Google Play testing link.</li><li>Allow microphone access, then deny it once and check that the app explains how to continue.</li><li>Play each open string separately in a quiet room. Check string selection, the displayed note and response to a slow tuning change.</li><li>Compare needle and strobe displays, then repeat with background noise and a weaker low note.</li><li>Switch apps, lock and unlock the phone, and reopen the tuner. Microphone use should stop in the background and recover correctly.</li><li>Change reference pitch and tuning, restart the app and check that your settings are retained.</li></ol>
 <h2>Useful feedback</h2>
 <p>Include app version, phone model, Android version, instrument, tuning, expected behaviour and what actually happened. Report crashes and permission problems as well as tuning behaviour.</p>
 <p>A comparison with another tuner is a usability check, not calibrated accuracy evidence. Quantitative accuracy claims need a documented reference and measurement setup.</p>
-<p><a class="button" href="{LINKEDIN}">Ask about testing on LinkedIn ↗</a> <a href="{CONTACT}">Report a non-sensitive issue</a></p>
+<p><a class="button" href="{LINKEDIN}">Join the test on LinkedIn ↗</a> <a href="{CONTACT}">Report a non-sensitive issue</a></p>
 <p class="muted">GitHub issues are public. Do not post contact details, private recordings, account information or device identifiers.</p>
 "#),
         crumbs: vec![("riotuner/", "RioTuner"), ("riotuner/testing/", "Testing")],
@@ -595,7 +597,7 @@ pub fn site() -> Vec<File> {
     files.push(File {
         path: "llms.txt".into(),
         contents: format!(
-            "# PelaosTech\n\n> Marine robotics research (deep-submergence ROV concept) and precision software (RioTuner, an instrument tuner).\n\n- [Research: pressure and navigation]({}): pressure at depth with NOAA sources, ROV vs AUV, navigation without GPS\n- [RioTuner]({}): pre-release pitch detection, synthetic benchmark results and limits; microphone and device accuracy remain unverified\n- [RioTuner privacy policy]({})\n",
+            "# PelaosTech\n\n> Marine robotics research (deep-submergence ROV concept) and precision software (RioTuner, an instrument tuner).\n\n- [Research: pressure and navigation]({}): pressure at depth with NOAA sources, ROV vs AUV, navigation without GPS\n- [RioTuner]({}): offline Android instrument tuner, tested and coming to Google Play, with synthetic benchmark results\n- [RioTuner privacy policy]({})\n",
             url("research/"),
             url("riotuner/"),
             url("riotuner/privacy/")
@@ -635,8 +637,7 @@ mod tests {
     #[test]
     fn crawler_summary_qualifies_tuner_benchmarks() {
         let summary = site().into_iter().find(|f| f.path == "llms.txt").unwrap().contents;
-        assert!(summary.contains("synthetic benchmark results and limits"));
-        assert!(summary.contains("microphone and device accuracy remain unverified"));
+        assert!(summary.contains("synthetic benchmark results"));
         assert!(!summary.contains("measured accuracy"));
     }
 

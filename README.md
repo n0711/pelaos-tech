@@ -13,8 +13,8 @@ Live at **https://n0711.github.io/pelaos-tech/** (GitHub Pages).
 - `/`: project portfolio with RioTuner, cysk8clips, Narrify and LearnTwin
 - `/cultural-storytelling-map/`: Narrify team credits, source repository and a sourced place-name pilot
 - `/research/`: pressure at depth, ROV vs AUV, navigation without GPS (NOAA sources)
-- `/riotuner/`: RioTuner overview, pre-release status and synthetic benchmark limits
-- `/riotuner/testing/`: practical device-testing guide and feedback channels
+- `/riotuner/`: RioTuner overview, release status (tested, coming to Google Play) and synthetic benchmark
+- `/riotuner/testing/`: how to join the Google Play closed test and send feedback
 - `/riotuner/privacy/`: RioTuner privacy policy (the URL to enter in Google Play Console)
 - `/privacy/`: website privacy
 
