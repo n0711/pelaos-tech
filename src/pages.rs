@@ -15,7 +15,7 @@ const HOSTING: &str = match option_env!("PELAOS_HOSTING") {
     None => "github-pages",
 };
 /// Shown in the footer, JSON-LD `dateModified` and sitemap `lastmod`.
-pub const UPDATED: &str = "2026-10-23";
+pub const UPDATED: &str = "2026-10-24";
 
 pub fn validate_config() -> std::io::Result<()> {
     let invalid = || std::io::Error::new(std::io::ErrorKind::InvalidInput, "deployment needs an HTTPS site URL without a trailing slash, a matching base path, and github-pages or vercel hosting");
@@ -155,7 +155,7 @@ h2{letter-spacing:-.025em}.lead{max-width:680px!important;font-size:21px;line-he
 .project-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
 .project{padding:24px;margin:0;display:flex;flex-direction:column;align-items:flex-start;gap:8px}
 .project h3{font-size:25px;line-height:1.2;margin:16px 0 4px}.project p{margin:0 0 14px}
-.project a{margin-top:auto;min-height:44px;display:inline-flex;align-items:center;font-weight:650}
+.project.wide{grid-column:1/-1}.project a{margin-top:auto;min-height:44px;display:inline-flex;align-items:center;font-weight:650}
 .badge{display:inline-flex;border:1px solid var(--line);border-radius:30px;padding:4px 10px;font-size:12px;font-weight:650;color:var(--muted)}
 .panel{display:grid;grid-template-columns:1fr 1fr;gap:32px;border-top:1px solid var(--line);padding:32px 0;margin-top:48px}
 .panel h2{margin-top:0}.table-scroll{overflow-x:auto}.status-note{border-left:3px solid var(--accent);padding:8px 18px;margin:24px 0;color:var(--muted)}
@@ -245,7 +245,7 @@ fn layout(p: &Page) -> String {
 </main>
 <footer>
 <a href="{research}">Research</a><a href="{riotuner}">RioTuner</a><a href="{privacy}">Website privacy</a><a href="{CONTACT}">Contact</a>
-<p>© 2026 PelaosTech. Last updated <time datetime="{UPDATED}">23 October 2026</time>. Hosted on {hosting}.</p>
+<p>© 2026 PelaosTech. Last updated <time datetime="{UPDATED}">24 October 2026</time>. Hosted on {hosting}.</p>
 </footer>
 </body>
 </html>
@@ -274,14 +274,15 @@ fn home() -> Page {
 <section id="projects" aria-labelledby="project-heading">
 <p class="eyebrow">Selected projects</p><h2 id="project-heading">Different interests. Things you can use.</h2>
 <div class="project-grid">
-<article class="card project"><span class="badge">Android · Pre-release</span><h3>RioTuner</h3><p>An offline instrument tuner with needle and strobe displays for guitar, bass, ukulele and bouzouki. APK verification and physical-device validation are pending.</p><a href="{riotuner}">Explore RioTuner →</a></article>
+<article class="card project"><span class="badge">Android · Coming to Google Play</span><h3>RioTuner</h3><p>An offline instrument tuner with needle and strobe displays for guitar, bass, ukulele and bouzouki. Development is finished and the Google Play release is being prepared.</p><a href="{riotuner}">Explore RioTuner →</a></article>
 <article class="card project"><span class="badge">Live · Community website</span><h3>cysk8clips</h3><p>Cyprus skateboarding clips, full parts, event stories and a public spot guide. A record of the people and places behind the scene.</p><a href="https://cysk8clips.com">Visit the skate archive ↗</a></article>
 <article class="card project"><span class="badge">OpenPELAOS · Team prototype</span><h3>Cultural Storytelling Map</h3><p>Narrify connects community stories with places. Co-developed by Charalampos Nadiotis, Hussain Jamil and Nikitas Savva.</p><a href="{narrify}">Explore Narrify →</a></article>
 <article class="card project"><span class="badge">Open source · Local planner</span><h3>LearnTwin</h3><p>Track degree progress, study tasks, thesis milestones and PhD applications. Records stay in your browser; export a backup to keep them.</p><a href="https://github.com/n0711/LearnTwin#start-the-planner">Try LearnTwin from source ↗</a></article>
+<article class="card project wide"><span class="badge">Research code · In progress</span><h3>VERA-MOT</h3><p>Multi-object tracking for drone video. The question: can unreliable appearance embeddings be stopped from corrupting identity memory when the camera moves, targets shrink and vehicles hide behind each other? The detector and a frozen BoT-SORT baseline are done (held-out detector AP 50.1, tracker HOTA 43.3). ReID training and the VERA association method come next.</p><a href="https://github.com/n0711/vera-mot">Read the VERA-MOT source ↗</a></article>
 </div>
 </section>
-<section class="panel"><div><p class="eyebrow">Research notebook</p><h2>Curiosity goes deeper.</h2></div><div><p>Marine robotics is a research interest: pressure, navigation and the challenges of operating underwater. The deep-submergence vehicle is a concept, not a deployed product.</p><a href="{research}">Explore the deep-sea notes →</a></div></section>
-<section class="panel"><div><p class="eyebrow">The person behind PELAOS</p><h2>From Cyprus, with curiosity.</h2></div><div><p>I’m Charalampos Nadiotis, a robotics engineer and Computer Science student. This is my project portfolio: what is available, what is being tested and what I’m exploring next.</p><p><a href="https://github.com/n0711">GitHub</a> · <a href="{LINKEDIN}">Contact on LinkedIn</a></p></div></section>
+<section class="panel"><div><p class="eyebrow">Research notebook</p><h2>Curiosity goes deeper.</h2></div><div><p>Marine robotics is my main research direction. I have published my ROV work on ResearchGate and plan to take it further as doctoral research. The notes cover pressure, navigation and why operating underwater is hard. The deep-submergence vehicle is a concept, not a deployed product.</p><a href="{research}">Explore the deep-sea notes →</a></div></section>
+<section class="panel"><div><p class="eyebrow">The person behind PELAOS</p><h2>From Cyprus, with curiosity.</h2></div><div><p>I’m Charalampos Nadiotis, a robotics engineer and Computer Science student at Frederick University. I was previously a Robotics Engineer at ADDITESS, working across the full R&amp;D cycle of field robotics, from research and software to integration and field testing. This is my project portfolio: what is available, what is being tested and what I’m exploring next.</p><p><a href="https://github.com/n0711">GitHub</a> · <a href="{LINKEDIN}">Contact on LinkedIn</a></p></div></section>
 "##,
         research = href("research/"),
         riotuner = href("riotuner/"),
@@ -290,7 +291,7 @@ fn home() -> Page {
     Page {
         slug: "",
         title: "PELAOS | Software, music & community projects",
-        description: "Explore RioTuner, cysk8clips, Narrify and LearnTwin: PELAOS software, culture and marine robotics research by Charalampos Nadiotis in Cyprus.",
+        description: "RioTuner, cysk8clips, Narrify, LearnTwin and VERA-MOT: PELAOS software and marine robotics research by Charalampos Nadiotis in Cyprus.",
         body,
         crumbs: vec![],
         extra_ld: vec![],
@@ -400,6 +401,7 @@ fn research() -> Page {
         r#"
 <h1>Deep-sea robotics: the numbers</h1>
 <p class="lead">Why deep-sea vehicles are hard to build, in figures, with sources.</p>
+<p class="status-note">These notes support my research direction in marine robotics. My ROV work is published on ResearchGate, and I plan to continue it at doctoral level.</p>
 
 <h2>Pressure</h2>
 <p>NOAA: <q>For every 33 feet (10.06 meters) you go down, the pressure increases by one atmosphere.</q> (<a href="{NOAA_PRESSURE}">NOAA Ocean Service</a>)</p>
@@ -441,12 +443,12 @@ fn riotuner() -> Page {
     let body = format!(
         r#"
 <h1>RioTuner</h1>
-<p class="lead">An offline tuner for guitar, bass, ukulele and bouzouki, for Android. Version 1.0 is in pre-release: APK verification, physical-device testing and Google Play availability are pending.</p>
+<p class="lead">An offline tuner for guitar, bass, ukulele and bouzouki, for Android. Development of version 1.0 is finished. The Google Play listing, signed release build and store testing are being prepared.</p>
 
 <h2>How it measures</h2>
 <p>RioTuner estimates pitch from multiple string partials and fits a stiff-string model, <code>f<sub>k</sub> = k·f<sub>0</sub>·√(1 + B·k²)</code>, to all of them. Real strings are slightly stiff, so their overtones run sharp. The fit aims to separate string stiffness from pitch, including when the fundamental is weak. The strobe shows phase drift against the target pitch, so the pattern only stands still when the string is in tune.</p>
 
-<p class="status-note">No verified APK download or Google Play opt-in link is published here yet. Synthetic benchmark results do not establish accuracy on a physical phone.</p>
+<p class="status-note">The Google Play link will be added here once the app is live. Until then there is no public download. Synthetic benchmark results do not establish accuracy on a physical phone.</p>
 <p><a class="button primary" href="{testing}">Read the testing guide →</a></p>
 <h2>Synthetic benchmark results</h2>
 <div class="card">
@@ -485,7 +487,7 @@ fn riotuner() -> Page {
     Page {
         slug: "riotuner/",
         title: "RioTuner: precision guitar tuner | PelaosTech",
-        description: "RioTuner: a pre-release offline Android tuner for guitar, bass, ukulele and bouzouki. Synthetic benchmarks; physical-device validation pending.",
+        description: "RioTuner: an offline Android tuner for guitar, bass, ukulele and bouzouki, coming to Google Play. Synthetic benchmark results inside.",
         body,
         crumbs: vec![("riotuner/", "RioTuner")],
         extra_ld: vec![],
@@ -503,7 +505,7 @@ fn riotuner_testing() -> Page {
 <p class="eyebrow">RioTuner / Testing preparation</p>
 <h1>Put it through a real practice session.</h1>
 <p class="lead">Synthetic signals test the algorithm. Instruments and phones test the product.</p>
-<p class="status-note">The installable APK and physical-device behaviour are not yet verified. No Google Play closed-test link is published here. Contact me on LinkedIn for testing updates; an opt-in link will be added when it is available.</p>
+<p class="status-note">RioTuner is heading to Google Play, which needs a closed test with opted-in testers before public release. No opt-in link is published here yet. Contact me on LinkedIn if you want to join, and the link will be added when it is available.</p>
 <h2>What to check</h2>
 <ol><li>When a verified test release is available, install it from the published test link and record the app version.</li><li>Allow microphone access, then deny it once and check that the app explains how to continue.</li><li>Play each open string separately in a quiet room. Check string selection, the displayed note and response to a slow tuning change.</li><li>Compare needle and strobe displays, then repeat with background noise and a weaker low note.</li><li>Switch apps, lock and unlock the phone, and reopen the tuner. Microphone use should stop in the background and recover correctly.</li><li>Change reference pitch and tuning, restart the app and check that your settings are retained.</li></ol>
 <h2>Useful feedback</h2>
@@ -631,7 +633,7 @@ pub fn site() -> Vec<File> {
     files.push(File {
         path: "llms.txt".into(),
         contents: format!(
-            "# PelaosTech\n\n> Marine robotics research (deep-submergence ROV concept) and precision software (RioTuner, an instrument tuner).\n\n- [Research: pressure and navigation]({}): pressure at depth with NOAA sources, ROV vs AUV, navigation without GPS\n- [RioTuner]({}): pre-release offline Android instrument tuner, with synthetic benchmark results; physical-device validation pending\n- [RioTuner privacy policy]({})\n",
+            "# PelaosTech\n\n> Marine robotics research (deep-submergence ROV concept) and precision software (RioTuner, an instrument tuner).\n\n- [Research: pressure and navigation]({}): pressure at depth with NOAA sources, ROV vs AUV, navigation without GPS\n- [RioTuner]({}): offline Android instrument tuner, Google Play release in preparation, with synthetic benchmark results\n- [RioTuner privacy policy]({})\n",
             url("research/"),
             url("riotuner/"),
             url("riotuner/privacy/")
