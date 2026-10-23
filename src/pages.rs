@@ -47,6 +47,7 @@ const NOAA_NAVIGATION: &str = "https://oceanexplorer.noaa.gov/expedition-feature
 const GITHUB_PAGES_PRIVACY: &str = "https://docs.github.com/en/pages/getting-started-with-github-pages/what-is-github-pages";
 const CONTACT: &str = "https://github.com/n0711/pelaos-tech/issues";
 const LINKEDIN: &str = "https://www.linkedin.com/in/nadiotis/";
+const RESEARCHGATE: &str = "https://www.researchgate.net/profile/Charalampos-Nadiotis-2";
 
 pub struct File {
     pub path: String,
@@ -281,8 +282,8 @@ fn home() -> Page {
 <article class="card project wide"><span class="badge">Research code · In progress</span><h3>VERA-MOT</h3><p>Multi-object tracking for drone video. The question: can unreliable appearance embeddings be stopped from corrupting identity memory when the camera moves, targets shrink and vehicles hide behind each other? The detector and a frozen BoT-SORT baseline are done (held-out detector AP 50.1, tracker HOTA 43.3). ReID training and the VERA association method come next.</p><a href="https://github.com/n0711/vera-mot">Read the VERA-MOT source ↗</a></article>
 </div>
 </section>
-<section class="panel"><div><p class="eyebrow">Research notebook</p><h2>Curiosity goes deeper.</h2></div><div><p>Marine robotics is my main research direction. I have published my ROV work on ResearchGate and plan to take it further as doctoral research. The notes cover pressure, navigation and why operating underwater is hard. The deep-submergence vehicle is a concept, not a deployed product.</p><a href="{research}">Explore the deep-sea notes →</a></div></section>
-<section class="panel"><div><p class="eyebrow">The person behind PELAOS</p><h2>From Cyprus, with curiosity.</h2></div><div><p>I’m Charalampos Nadiotis, a robotics engineer and Computer Science student at Frederick University. I was previously a Robotics Engineer at ADDITESS, working across the full R&amp;D cycle of field robotics, from research and software to integration and field testing. This is my project portfolio: what is available, what is being tested and what I’m exploring next.</p><p><a href="https://github.com/n0711">GitHub</a> · <a href="{LINKEDIN}">Contact on LinkedIn</a></p></div></section>
+<section class="panel"><div><p class="eyebrow">Research notebook</p><h2>Curiosity goes deeper.</h2></div><div><p>Marine robotics is my main research direction. I have published my ROV work on <a href="{RESEARCHGATE}">ResearchGate</a> and plan to take it further as doctoral research. The notes cover pressure, navigation and why operating underwater is hard. The deep-submergence vehicle is a concept, not a deployed product.</p><a href="{research}">Explore the deep-sea notes →</a></div></section>
+<section class="panel"><div><p class="eyebrow">The person behind PELAOS</p><h2>From Cyprus, with curiosity.</h2></div><div><p>I’m Charalampos Nadiotis, a robotics engineer and Computer Science student at Frederick University. I was previously a Robotics Engineer at ADDITESS, working across the full R&amp;D cycle of field robotics, from research and software to integration and field testing. This is my project portfolio: what is available, what is being tested and what I’m exploring next.</p><p><a href="https://github.com/n0711">GitHub</a> · <a href="{RESEARCHGATE}">ResearchGate</a> · <a href="{LINKEDIN}">Contact on LinkedIn</a></p></div></section>
 "##,
         research = href("research/"),
         riotuner = href("riotuner/"),
@@ -401,7 +402,7 @@ fn research() -> Page {
         r#"
 <h1>Deep-sea robotics: the numbers</h1>
 <p class="lead">Why deep-sea vehicles are hard to build, in figures, with sources.</p>
-<p class="status-note">These notes support my research direction in marine robotics. My ROV work is published on ResearchGate, and I plan to continue it at doctoral level.</p>
+<p class="status-note">These notes support my research direction in marine robotics. My ROV work is published on <a href="{RESEARCHGATE}">ResearchGate</a>, and I plan to continue it at doctoral level.</p>
 
 <h2>Pressure</h2>
 <p>NOAA: <q>For every 33 feet (10.06 meters) you go down, the pressure increases by one atmosphere.</q> (<a href="{NOAA_PRESSURE}">NOAA Ocean Service</a>)</p>
