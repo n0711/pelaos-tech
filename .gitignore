@@ -1,3 +1,5 @@
 /target/
 /dist/
 .dart_tool/
+/.build-tools/
+/.vercel/

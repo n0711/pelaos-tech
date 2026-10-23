@@ -10,6 +10,7 @@ mod output;
 use std::path::Path;
 
 fn main() -> std::io::Result<()> {
+    pages::validate_config()?;
     let out = std::env::args().nth(1).unwrap_or_else(|| "dist".to_string());
     let out = Path::new(&out);
     let files = pages::site();

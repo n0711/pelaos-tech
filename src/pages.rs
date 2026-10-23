@@ -1,12 +1,41 @@
 //! Page content, layout, structured data, sitemap. Tests at the bottom enforce the
-//! GitHub Pages and SEO rules the site relies on.
+//! Static-hosting and SEO rules the site relies on.
 
-/// Canonical origin + base path, without a trailing slash. Change these two (and add a
-/// CNAME file) when the site moves to its own domain.
-pub const SITE: &str = "https://n0711.github.io/pelaos-tech";
-pub const BASE: &str = "/pelaos-tech";
+/// Compile-time deployment settings. Unset values preserve GitHub Pages builds.
+pub const SITE: &str = match option_env!("PELAOS_SITE_URL") {
+    Some(value) => value,
+    None => "https://n0711.github.io/pelaos-tech",
+};
+pub const BASE: &str = match option_env!("PELAOS_BASE_PATH") {
+    Some(value) => value,
+    None => "/pelaos-tech",
+};
+const HOSTING: &str = match option_env!("PELAOS_HOSTING") {
+    Some(value) => value,
+    None => "github-pages",
+};
 /// Shown in the footer, JSON-LD `dateModified` and sitemap `lastmod`.
-pub const UPDATED: &str = "2026-10-22";
+pub const UPDATED: &str = "2026-10-23";
+
+pub fn validate_config() -> std::io::Result<()> {
+    let invalid = || std::io::Error::new(std::io::ErrorKind::InvalidInput, "deployment needs an HTTPS site URL without a trailing slash, a matching base path, and github-pages or vercel hosting");
+    let Some(site) = SITE.strip_prefix("https://") else { return Err(invalid()); };
+    if site.is_empty()
+        || SITE.ends_with('/')
+        || SITE.chars().any(|c| c.is_whitespace() || matches!(c, '"' | '\'' | '<' | '>' | '?' | '#' | '\\'))
+        || (!BASE.is_empty() && (!BASE.starts_with('/') || BASE.ends_with('/') || BASE.contains("//") || BASE.split('/').any(|part| part == "." || part == "..")))
+        || !matches!(HOSTING, "github-pages" | "vercel")
+    {
+        return Err(invalid());
+    }
+    let Some(origin) = site.strip_suffix(BASE) else { return Err(invalid()); };
+    if origin.is_empty() || origin.contains('/') { return Err(invalid()); }
+    Ok(())
+}
+
+fn hosting_name() -> &'static str {
+    if HOSTING == "vercel" { "Vercel" } else { "GitHub Pages" }
+}
 
 /// Seawater density and standard gravity used for every pressure figure on the site.
 pub const RHO: f64 = 1025.0;
@@ -216,7 +245,7 @@ fn layout(p: &Page) -> String {
 </main>
 <footer>
 <a href="{research}">Research</a><a href="{riotuner}">RioTuner</a><a href="{privacy}">Website privacy</a><a href="{CONTACT}">Contact</a>
-<p>© 2026 PelaosTech. Last updated <time datetime="{UPDATED}">22 October 2026</time>. Hosted on GitHub Pages.</p>
+<p>© 2026 PelaosTech. Last updated <time datetime="{UPDATED}">23 October 2026</time>. Hosted on {hosting}.</p>
 </footer>
 </body>
 </html>
@@ -228,6 +257,7 @@ fn layout(p: &Page) -> String {
         research = href("research/"),
         riotuner = href("riotuner/"),
         privacy = href("privacy/"),
+        hosting = hosting_name(),
         body = p.body.trim(),
     )
 }
@@ -244,7 +274,7 @@ fn home() -> Page {
 <section id="projects" aria-labelledby="project-heading">
 <p class="eyebrow">Selected projects</p><h2 id="project-heading">Different interests. Things you can use.</h2>
 <div class="project-grid">
-<article class="card project"><span class="badge">Android · Coming to Google Play</span><h3>RioTuner</h3><p>An offline instrument tuner with needle and strobe displays for guitar, bass, ukulele and bouzouki. Tested on Android phones and heading to Google Play.</p><a href="{riotuner}">Explore RioTuner →</a></article>
+<article class="card project"><span class="badge">Android · Pre-release</span><h3>RioTuner</h3><p>An offline instrument tuner with needle and strobe displays for guitar, bass, ukulele and bouzouki. APK verification and physical-device validation are pending.</p><a href="{riotuner}">Explore RioTuner →</a></article>
 <article class="card project"><span class="badge">Live · Community website</span><h3>cysk8clips</h3><p>Cyprus skateboarding clips, full parts, event stories and a public spot guide. A record of the people and places behind the scene.</p><a href="https://cysk8clips.com">Visit the skate archive ↗</a></article>
 <article class="card project"><span class="badge">OpenPELAOS · Team prototype</span><h3>Cultural Storytelling Map</h3><p>Narrify connects community stories with places. Co-developed by Charalampos Nadiotis, Hussain Jamil and Nikitas Savva.</p><a href="{narrify}">Explore Narrify →</a></article>
 <article class="card project"><span class="badge">Open source · Local planner</span><h3>LearnTwin</h3><p>Track degree progress, study tasks, thesis milestones and PhD applications. Records stay in your browser; export a backup to keep them.</p><a href="https://github.com/n0711/LearnTwin#start-the-planner">Try LearnTwin from source ↗</a></article>
@@ -411,13 +441,13 @@ fn riotuner() -> Page {
     let body = format!(
         r#"
 <h1>RioTuner</h1>
-<p class="lead">A precision tuner for guitar, bass, ukulele and bouzouki, for Android. Version 1.0 has been tested on real phones and is on its way to Google Play.</p>
+<p class="lead">An offline tuner for guitar, bass, ukulele and bouzouki, for Android. Version 1.0 is in pre-release: APK verification, physical-device testing and Google Play availability are pending.</p>
 
 <h2>How it measures</h2>
 <p>RioTuner estimates pitch from multiple string partials and fits a stiff-string model, <code>f<sub>k</sub> = k·f<sub>0</sub>·√(1 + B·k²)</code>, to all of them. Real strings are slightly stiff, so their overtones run sharp. The fit aims to separate string stiffness from pitch, including when the fundamental is weak. The strobe shows phase drift against the target pitch, so the pattern only stands still when the string is in tune.</p>
 
-<p class="status-note">The Google Play link will appear here as soon as the listing goes live. Want early access? Join the closed test on Google Play.</p>
-<p><a class="button primary" href="{testing}">Become a tester →</a></p>
+<p class="status-note">No verified APK download or Google Play opt-in link is published here yet. Synthetic benchmark results do not establish accuracy on a physical phone.</p>
+<p><a class="button primary" href="{testing}">Read the testing guide →</a></p>
 <h2>Synthetic benchmark results</h2>
 <div class="card">
 <table>
@@ -455,7 +485,7 @@ fn riotuner() -> Page {
     Page {
         slug: "riotuner/",
         title: "RioTuner: precision guitar tuner | PelaosTech",
-        description: "RioTuner: an offline Android tuner for guitar, bass, ukulele and bouzouki with strobe and needle displays. Tested and coming to Google Play.",
+        description: "RioTuner: a pre-release offline Android tuner for guitar, bass, ukulele and bouzouki. Synthetic benchmarks; physical-device validation pending.",
         body,
         crumbs: vec![("riotuner/", "RioTuner")],
         extra_ld: vec![],
@@ -468,18 +498,18 @@ fn riotuner_testing() -> Page {
     Page {
         slug: "riotuner/testing/",
         title: "RioTuner testing guide | PELAOS",
-        description: "Join the RioTuner closed test on Google Play: what to check, and how to send useful feedback.",
+        description: "RioTuner testing preparation: release status, what to check on an Android phone, and how to send useful feedback.",
         body: format!(r#"
-<p class="eyebrow">RioTuner / Closed testing</p>
+<p class="eyebrow">RioTuner / Testing preparation</p>
 <h1>Put it through a real practice session.</h1>
 <p class="lead">Synthetic signals test the algorithm. Instruments and phones test the product.</p>
-<p class="status-note">RioTuner 1.0 is tested and going through the Google Play closed test before public release. Message me on LinkedIn with the Google account email you use on Play and I will send you the opt-in link. Please stay opted in for at least 14 days.</p>
+<p class="status-note">The installable APK and physical-device behaviour are not yet verified. No Google Play closed-test link is published here. Contact me on LinkedIn for testing updates; an opt-in link will be added when it is available.</p>
 <h2>What to check</h2>
-<ol><li>Install RioTuner only from the Google Play testing link.</li><li>Allow microphone access, then deny it once and check that the app explains how to continue.</li><li>Play each open string separately in a quiet room. Check string selection, the displayed note and response to a slow tuning change.</li><li>Compare needle and strobe displays, then repeat with background noise and a weaker low note.</li><li>Switch apps, lock and unlock the phone, and reopen the tuner. Microphone use should stop in the background and recover correctly.</li><li>Change reference pitch and tuning, restart the app and check that your settings are retained.</li></ol>
+<ol><li>When a verified test release is available, install it from the published test link and record the app version.</li><li>Allow microphone access, then deny it once and check that the app explains how to continue.</li><li>Play each open string separately in a quiet room. Check string selection, the displayed note and response to a slow tuning change.</li><li>Compare needle and strobe displays, then repeat with background noise and a weaker low note.</li><li>Switch apps, lock and unlock the phone, and reopen the tuner. Microphone use should stop in the background and recover correctly.</li><li>Change reference pitch and tuning, restart the app and check that your settings are retained.</li></ol>
 <h2>Useful feedback</h2>
 <p>Include app version, phone model, Android version, instrument, tuning, expected behaviour and what actually happened. Report crashes and permission problems as well as tuning behaviour.</p>
 <p>A comparison with another tuner is a usability check, not calibrated accuracy evidence. Quantitative accuracy claims need a documented reference and measurement setup.</p>
-<p><a class="button" href="{LINKEDIN}">Join the test on LinkedIn ↗</a> <a href="{CONTACT}">Report a non-sensitive issue</a></p>
+<p><a class="button" href="{LINKEDIN}">Ask about testing on LinkedIn ↗</a> <a href="{CONTACT}">Report a non-sensitive issue</a></p>
 <p class="muted">GitHub issues are public. Do not post contact details, private recordings, account information or device identifiers.</p>
 "#),
         crumbs: vec![("riotuner/", "RioTuner"), ("riotuner/testing/", "Testing")],
@@ -519,11 +549,16 @@ fn riotuner_privacy() -> Page {
 }
 
 fn site_privacy() -> Page {
+    let hosting_notice = if HOSTING == "vercel" {
+        "<p>This site is delivered through Vercel. Hosting involves handling network requests, including IP addresses and request metadata. See <a href=\"https://vercel.com/legal/privacy-notice\">Vercel's Privacy Notice</a> for its privacy practices. PelaosTech adds no analytics or tracking scripts.</p>".to_string()
+    } else {
+        format!("<p>The site is hosted on GitHub Pages. GitHub states that <q>when a GitHub Pages site is visited, the visitor's IP address is logged and stored for security purposes</q> (<a href=\"{GITHUB_PAGES_PRIVACY}\">GitHub Docs</a>). PelaosTech does not receive or use those logs. GitHub's handling of them is covered by the GitHub General Privacy Statement.</p>")
+    };
     let body = format!(
         r#"
 <h1>Website privacy</h1>
 <p>This website has no cookies, no analytics, no tracking and no forms. Its only script is the depth slider on the research page, which runs entirely in your browser.</p>
-<p>The site is hosted on GitHub Pages. GitHub states that <q>when a GitHub Pages site is visited, the visitor's IP address is logged and stored for security purposes</q> (<a href="{GITHUB_PAGES_PRIVACY}">GitHub Docs</a>). PelaosTech does not receive or use those logs. GitHub's handling of them is covered by the GitHub General Privacy Statement.</p>
+{hosting_notice}
 <p>The RioTuner app has its own <a href="{policy}">privacy policy</a>.</p>
 "#,
         policy = href("riotuner/privacy/"),
@@ -531,7 +566,7 @@ fn site_privacy() -> Page {
     Page {
         slug: "privacy/",
         title: "Website privacy | PelaosTech",
-        description: "The PelaosTech website uses no cookies, analytics or forms. GitHub Pages logs visitor IP addresses for security.",
+        description: "The PelaosTech website adds no cookies, analytics or forms. Hosting-provider information and the separate RioTuner app privacy policy.",
         body,
         crumbs: vec![("privacy/", "Website privacy")],
         extra_ld: vec![],
@@ -591,13 +626,12 @@ pub fn site() -> Vec<File> {
             "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n{urls}\n</urlset>\n"
         ),
     });
-    // Crawlers only read robots.txt and llms.txt at a domain root; they take effect once
-    // the site has its own domain. Until then, submit the sitemap URL directly.
+    // Crawlers read these files at the domain root, including root-path Vercel builds.
     files.push(File { path: "robots.txt".into(), contents: format!("User-agent: *\nAllow: /\nSitemap: {SITE}/sitemap.xml\n") });
     files.push(File {
         path: "llms.txt".into(),
         contents: format!(
-            "# PelaosTech\n\n> Marine robotics research (deep-submergence ROV concept) and precision software (RioTuner, an instrument tuner).\n\n- [Research: pressure and navigation]({}): pressure at depth with NOAA sources, ROV vs AUV, navigation without GPS\n- [RioTuner]({}): offline Android instrument tuner, tested and coming to Google Play, with synthetic benchmark results\n- [RioTuner privacy policy]({})\n",
+            "# PelaosTech\n\n> Marine robotics research (deep-submergence ROV concept) and precision software (RioTuner, an instrument tuner).\n\n- [Research: pressure and navigation]({}): pressure at depth with NOAA sources, ROV vs AUV, navigation without GPS\n- [RioTuner]({}): pre-release offline Android instrument tuner, with synthetic benchmark results; physical-device validation pending\n- [RioTuner privacy policy]({})\n",
             url("research/"),
             url("riotuner/"),
             url("riotuner/privacy/")
@@ -613,6 +647,32 @@ mod tests {
 
     fn html() -> Vec<(String, String)> {
         site().into_iter().filter(|f| f.path.ends_with(".html")).map(|f| (f.path, f.contents)).collect()
+    }
+
+    #[test]
+    fn deployment_urls_and_hosting_match_configuration() {
+        validate_config().unwrap();
+        for page in pages() {
+            let rendered = layout(&page);
+            assert!(rendered.contains(&format!("<link rel=\"canonical\" href=\"{}\">", url(page.slug))));
+            assert!(rendered.contains(&format!("href=\"{BASE}/favicon.svg\"")));
+            assert!(rendered.contains(&format!("Hosted on {}.", hosting_name())));
+            if page.script {
+                assert!(rendered.contains(&format!("src=\"{BASE}/app.js\"")));
+            }
+        }
+        let privacy = site_privacy().body;
+        assert_eq!(privacy.contains("https://vercel.com/legal/privacy-notice"), HOSTING == "vercel");
+    }
+
+    #[test]
+    fn release_status_does_not_claim_unverified_phone_or_store_testing() {
+        for file in site() {
+            let content = file.contents.to_lowercase();
+            assert!(!content.contains("tested on android phones"), "{}", file.path);
+            assert!(!content.contains("tested on real phones"), "{}", file.path);
+            assert!(!content.contains("going through the google play closed test"), "{}", file.path);
+        }
     }
 
     #[test]
