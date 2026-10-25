@@ -18,6 +18,7 @@ The portfolio links to [ROS3-Limassol](https://github.com/n0711/ROS3-Limassol), 
 ## Pages
 
 - `/`: project portfolio with RioTuner, cysk8clips.com, Narrify, LearnTwin, ROS3-Limassol and VERA-MOT
+- `/ros3-limassol/`: ROS3-Limassol receiver-level telemetry-liveness research, original idea and author credits, synthetic experiment states, GitHub sources, manuscript licence and explicit field-validation limits
 - `/cultural-storytelling-map/`: Narrify team credits, source repository and a sourced place-name pilot
 - `/research/`: 0–500 m depth meter, seawater gauge pressure and viewport force, ROV vs AUV, navigation without GPS (NOAA sources). The meter is a calculator, not connected to a pressure sensor. Its range and initial depth are passed from Rust to Dart through data attributes.
 - `/riotuner/`: Google Play release in preparation, with synthetic benchmark results
