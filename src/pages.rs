@@ -176,7 +176,7 @@ h2{letter-spacing:-.025em}.lead{max-width:680px!important;font-size:21px;line-he
 
 fn layout(p: &Page) -> String {
     let canonical = url(p.slug);
-    let nav = [("", "Home"), ("research/", "Research"), ("riotuner/", "RioTuner")]
+    let nav = [("", "Home"), ("research/", "Research"), ("ros3-limassol/", "ROS3"), ("riotuner/", "RioTuner")]
         .iter()
         .map(|(slug, label)| {
             let current = if *slug == p.slug { " aria-current=\"page\"" } else { "" };
@@ -289,7 +289,7 @@ fn home() -> Page {
 <article class="card project"><span class="badge">Live · Community website</span><h3>cysk8clips</h3><p>Cyprus skateboarding clips, full parts, event stories and a public spot guide. A record of the people and places behind the scene.</p><a href="https://cysk8clips.com">Visit the skate archive ↗</a></article>
 <article class="card project"><span class="badge">OpenPELAOS · Team prototype</span><h3>Cultural Storytelling Map</h3><p>Narrify connects community stories with places. Co-developed by Charalampos Nadiotis, Hussain Jamil and Nikitas Savva.</p><a href="{narrify}">Explore Narrify →</a></article>
 <article class="card project"><span class="badge">Open source · Local planner</span><h3>LearnTwin</h3><p>Track degree progress, study tasks, thesis milestones and PhD applications. Records stay in your browser; export a backup to keep them.</p><a href="https://github.com/n0711/LearnTwin#start-the-planner">Try LearnTwin from source ↗</a></article>
-<article class="card project wide"><span class="badge">OpenPELAOS · ROS 2 Humble / Jazzy</span><h3>ROS3-Limassol</h3><p>Telemetry arrival-liveness monitoring for robots with intermittent connectivity. Record and replay blackouts, detect stale updates and study recovery using synthetic scenarios; physical field validation is pending. Original idea: Christos Paparistodemou. Project lead and manuscript author: Charalampos Nadiotis. This independent prototype is not an official ROS release.</p><a href="https://github.com/n0711/ROS3-Limassol">Read the ROS3-Limassol source ↗</a></article>
+<article class="card project wide"><span class="badge">OpenPELAOS · ROS 2 Humble / Jazzy</span><h3>ROS3-Limassol</h3><p>Telemetry arrival-liveness monitoring for robots with intermittent connectivity. Record and replay blackouts, detect stale updates and study recovery using synthetic scenarios; physical field validation is pending. Original idea: Christos Paparistodemou. Project lead and manuscript author: Charalampos Nadiotis. This independent prototype is not an official ROS release.</p><a href="{ros3}">Explore ROS3 research →</a></article>
 <article class="card project wide"><span class="badge">Research code · In progress</span><h3>VERA-MOT</h3><p>Multi-object tracking for drone video. The question: can unreliable appearance embeddings be stopped from corrupting identity memory when the camera moves, targets shrink and vehicles hide behind each other? The detector and a frozen BoT-SORT baseline are done (held-out detector AP 50.1, tracker HOTA 43.3). ReID training and the VERA association method come next.</p><a href="https://github.com/n0711/vera-mot">Read the VERA-MOT source ↗</a></article>
 </div>
 </section>
@@ -300,6 +300,7 @@ fn home() -> Page {
         research = href("research/"),
         riotuner = href("riotuner/"),
         narrify = href("cultural-storytelling-map/"),
+        ros3 = href("ros3-limassol/"),
     );
     Page {
         slug: "",
@@ -313,6 +314,58 @@ fn home() -> Page {
     }
 }
 
+
+
+fn ros3_limassol() -> Page {
+    Page {
+        slug: "ros3-limassol/",
+        title: "ROS3-Limassol | OpenPELAOS Robotics Research",
+        description: "Explore ROS3-Limassol: ROS 2 telemetry-liveness recording and replay, communication blackouts, research credits and validation limits.",
+        body: r##"
+<section class="hero">
+<p class="eyebrow">OpenPELAOS / Robotics research / Experimental</p>
+<h1>ROS3-Limassol</h1>
+<p class="lead">A reproducible telemetry arrival-liveness monitor for robotic systems with intermittent connections. The question is simple: how can an observer detect that accepted telemetry stopped arriving, then record its recovery?</p>
+<div class="actions"><a class="button primary" href="https://github.com/n0711/ROS3-Limassol">Explore the source ↗</a><a class="button" href="https://github.com/n0711/ROS3-Limassol/blob/main/robotics/ros3_limassol/docs/VALIDATION.md">Read validation notes ↗</a></div>
+</section>
+<section aria-labelledby="ros3-flow-title">
+<p class="eyebrow">Receiver-level observation</p>
+<h2 id="ros3-flow-title">A reproducible connection-interruption experiment</h2>
+<ol>
+<li><strong>WAITING:</strong> No accepted telemetry has arrived in this receiver session.</li>
+<li><strong>HEALTHY:</strong> A valid telemetry message has arrived within the configured receiver-time interval.</li>
+<li><strong>STALE:</strong> The interval expires with no newly accepted arrival, including when the network is silent.</li>
+<li><strong>RECOVERY:</strong> New accepted arrivals return the monitor to HEALTHY. The recording can be replayed offline.</li>
+</ol>
+<p class="status-note"><strong>Important:</strong> HEALTHY describes recent receiver arrivals only. It does not prove sensor data freshness, safe navigation, robot health or reliable connectivity in the field.</p>
+</section>
+<section class="panel"><div><p class="eyebrow">Implementation</p><h2>What the code does</h2></div><div>
+<ul><li>Strict versioned JSON telemetry with bounded inputs and duplicate/out-of-order rejection.</li>
+<li>Deterministic synthetic scenarios for communication blackout and recovery.</li>
+<li>Streaming JSONL recordings and offline replay with different timeout settings.</li>
+<li>Optional ROS 2 Humble and Jazzy adapters, plus an experimental Rust validator and replay core.</li></ul>
+<p>No vehicle-command interface is included. ROS3-Limassol is an independent research prototype built around ROS 2, not an official ROS distribution or successor.</p>
+</div></section>
+<section class="panel"><div><p class="eyebrow">Research attribution</p><h2>Credits and manuscript</h2></div><div>
+<p><strong>Original project idea:</strong> <a href="https://www.researchgate.net/profile/Christos-Paparistodemou">Christos Paparistodemou</a>.</p>
+<p><strong>Project lead, implementation and paper author:</strong> <a href="https://github.com/n0711">Charalampos Nadiotis</a>.</p>
+<p><a href="https://github.com/n0711/ROS3-Limassol/blob/main/docs/papers/ROS3_Limassol_ResearchGate_No_Military_Use.pdf">Read the preliminary technical report (PDF) ↗</a></p>
+<p>The October 2026 manuscript is preliminary and not peer-reviewed. Its <a href="https://github.com/n0711/ROS3-Limassol/blob/main/docs/papers/MANUSCRIPT_LICENCE.md">Civilian-Use Licence</a> prohibits military use of that manuscript and adaptations; the separately licensed software has different terms.</p>
+</div></section>
+<section aria-labelledby="ros3-status-title">
+<p class="eyebrow">Evidence and limits</p>
+<h2 id="ros3-status-title">Current validation status</h2>
+<p>The project documents unit tests, synthetic ROS message recording and replay, and CI configurations for both ROS 2 distributions. The deterministic example transitions through WAITING, HEALTHY, STALE and HEALTHY. <strong>Physical vessel/robot measurements, network timing and field reliability are not yet established.</strong> Consult the repository's <a href="https://github.com/n0711/ROS3-Limassol/blob/main/robotics/ros3_limassol/docs/VALIDATION.md">validation record</a> and <a href="https://github.com/n0711/ROS3-Limassol/actions">CI runs</a> for the dated evidence.</p>
+<p><a href="https://github.com/n0711/ROS3-Limassol#run-the-prototype">Run the reproducible experiment from source ↗</a></p>
+</section>
+<section class="panel"><div><p class="eyebrow">Related independent projects</p><h2>Explore more PELAOS work</h2></div><div><p><a href="https://github.com/n0711/LearnTwin">LearnTwin</a> is a degree, study and PhD-planning workspace; <a href="https://cysk8clips.com">cysk8clips.com</a> is the Cyprus skateboarding archive and spot guide. They are separate from ROS3-Limassol.</p></div></section>
+"##.to_string(),
+        crumbs: vec![("ros3-limassol/", "ROS3-Limassol")],
+        extra_ld: vec![],
+        script: false,
+        noindex: false,
+    }
+}
 
 fn cultural_storytelling_map() -> Page {
     Page {
@@ -616,7 +669,7 @@ const FAVICON: &str = r##"<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1
 "##;
 
 fn pages() -> Vec<Page> {
-    vec![home(), research(), cultural_storytelling_map(), riotuner(), riotuner_testing(), riotuner_privacy(), site_privacy(), not_found()]
+    vec![home(), research(), ros3_limassol(), cultural_storytelling_map(), riotuner(), riotuner_testing(), riotuner_privacy(), site_privacy(), not_found()]
 }
 
 pub fn site() -> Vec<File> {
@@ -646,8 +699,9 @@ pub fn site() -> Vec<File> {
     files.push(File {
         path: "llms.txt".into(),
         contents: format!(
-            "# PelaosTech\n\n> Marine robotics research (deep-submergence ROV concept) and precision software (RioTuner, an instrument tuner).\n\n- [Research: pressure and navigation]({}): pressure at depth with NOAA sources, ROV vs AUV, navigation without GPS\n- [RioTuner]({}): offline Android instrument tuner, Google Play release in preparation, with synthetic benchmark results\n- [RioTuner privacy policy]({})\n",
+            "# PelaosTech\n\n> Marine robotics research (deep-submergence ROV concept) and precision software (RioTuner, an instrument tuner).\n\n- [Research: pressure and navigation]({}): pressure at depth with NOAA sources, ROV vs AUV, navigation without GPS\n- [ROS3-Limassol]({}): experimental receiver-level telemetry arrival-liveness monitoring, ROS 2 Humble/Jazzy adapters and deterministic synthetic blackout/recovery tests; physical field validation pending\n- [RioTuner]({}): offline Android instrument tuner, Google Play release in preparation, with synthetic benchmark results\n- [RioTuner privacy policy]({})\n",
             url("research/"),
+            url("ros3-limassol/"),
             url("riotuner/"),
             url("riotuner/privacy/")
         ),
@@ -714,6 +768,21 @@ mod tests {
         let summary = site().into_iter().find(|f| f.path == "llms.txt").unwrap().contents;
         assert!(summary.contains("synthetic benchmark results"));
         assert!(!summary.contains("measured accuracy"));
+        assert!(summary.contains("ROS3-Limassol"));
+    }
+
+    #[test]
+    fn ros3_has_verified_credits_and_field_caveat() {
+        let rendered = layout(&ros3_limassol());
+        assert!(rendered.contains("Christos Paparistodemou"));
+        assert!(rendered.contains("Charalampos Nadiotis"));
+        assert!(rendered.contains("Physical vessel/robot measurements"));
+        assert!(rendered.contains("not an official ROS distribution"));
+        assert!(rendered.contains("not peer-reviewed"));
+        let landing = layout(&home());
+        assert!(landing.contains(&format!("href=\"{}\"", href("ros3-limassol/"))));
+        let summary = site().into_iter().find(|f| f.path == "llms.txt").unwrap().contents;
+        assert!(summary.contains(&url("ros3-limassol/")));
     }
 
     #[test]
@@ -771,7 +840,7 @@ mod tests {
             assert!(c.contains("<link rel=\"canonical\" href=\"https://"), "{path}");
         }
         let sitemap = site().into_iter().find(|f| f.path == "sitemap.xml").unwrap().contents;
-        assert_eq!(sitemap.matches("<url>").count(), 7);
+        assert_eq!(sitemap.matches("<url>").count(), 8);
         assert!(!sitemap.contains("404"));
     }
 
