@@ -114,3 +114,9 @@ The complete source change for the separate team repository is preserved in
 [`integrations/narrify-place-names.patch`](integrations/narrify-place-names.patch).
 See [integration instructions and validation status](docs/NARRIFY_INTEGRATION.md).
 This patch is not applied to the PELAOS Rust/Dart site and is not deployed here.
+
+## Support this project
+
+If this project is useful to you, you can support its development with a one-off contribution via Revolut:
+
+**[revolut.me/nadiotis](https://revolut.me/nadiotis)**

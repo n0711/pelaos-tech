@@ -51,6 +51,8 @@ const GITHUB_PAGES_PRIVACY: &str = "https://docs.github.com/en/pages/getting-sta
 const CONTACT: &str = "https://github.com/n0711/pelaos-tech/issues";
 const LINKEDIN: &str = "https://www.linkedin.com/in/nadiotis/";
 const RESEARCHGATE: &str = "https://www.researchgate.net/profile/Charalampos-Nadiotis-2";
+/// Voluntary support link, also used by `.github/FUNDING.yml` in each repository.
+const REVOLUT: &str = "https://revolut.me/nadiotis";
 
 pub struct File {
     pub path: String,
@@ -253,7 +255,7 @@ fn layout(p: &Page) -> String {
 {body}
 </main>
 <footer>
-<a href="{research}">Research</a><a href="{riotuner}">RioTuner</a><a href="{privacy}">Website privacy</a><a href="{CONTACT}">Contact</a>
+<a href="{research}">Research</a><a href="{riotuner}">RioTuner</a><a href="{privacy}">Website privacy</a><a href="{CONTACT}">Contact</a><a href="{REVOLUT}">Support ↗</a>
 <p>© 2026 PelaosTech. Last updated <time datetime="{UPDATED}">25 October 2026</time>. Hosted on {hosting}.</p>
 </footer>
 </body>
@@ -292,6 +294,7 @@ fn home() -> Page {
 </section>
 <section class="panel"><div><p class="eyebrow">Research notebook</p><h2>Curiosity goes deeper.</h2></div><div><p>Marine robotics is my main research direction. I have published my ROV work on <a href="{RESEARCHGATE}">ResearchGate</a> and plan to take it further as doctoral research. The notes cover pressure, navigation and why operating underwater is hard. The deep-submergence vehicle is a concept, not a deployed product.</p><a href="{research}">Explore the deep-sea notes →</a></div></section>
 <section class="panel"><div><p class="eyebrow">The person behind PELAOS</p><h2>From Cyprus, with curiosity.</h2></div><div><p>I’m Charalampos Nadiotis, a robotics engineer and Computer Science student at Frederick University. I was previously a Robotics Engineer at ADDITESS, working across the full R&amp;D cycle of field robotics, from research and software to integration and field testing. This is my project portfolio: what is available, what is being tested and what I’m exploring next.</p><p><a href="https://github.com/n0711">GitHub</a> · <a href="{RESEARCHGATE}">ResearchGate</a> · <a href="{LINKEDIN}">Contact on LinkedIn</a></p></div></section>
+<section class="panel" id="support"><div><p class="eyebrow">Support</p><h2>Keep the projects going.</h2></div><div><p>The projects here are free and built in my own time. If one of them is useful to you, you can support further development with a one-off contribution via Revolut. Every contribution is voluntary and does not buy access, features or support.</p><a class="button primary" href="{REVOLUT}">Support via Revolut ↗</a></div></section>
 "##,
         research = href("research/"),
         riotuner = href("riotuner/"),
