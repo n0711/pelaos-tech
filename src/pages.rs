@@ -289,6 +289,7 @@ fn home() -> Page {
 <article class="card project"><span class="badge">Live · Community website</span><h3>cysk8clips</h3><p>Cyprus skateboarding clips, full parts, event stories and a public spot guide. A record of the people and places behind the scene.</p><a href="https://cysk8clips.com">Visit the skate archive ↗</a></article>
 <article class="card project"><span class="badge">OpenPELAOS · Team prototype</span><h3>Cultural Storytelling Map</h3><p>Narrify connects community stories with places. Co-developed by Charalampos Nadiotis, Hussain Jamil and Nikitas Savva.</p><a href="{narrify}">Explore Narrify →</a></article>
 <article class="card project"><span class="badge">Open source · Local planner</span><h3>LearnTwin</h3><p>Track degree progress, study tasks, thesis milestones and PhD applications. Records stay in your browser; export a backup to keep them.</p><a href="https://github.com/n0711/LearnTwin#start-the-planner">Try LearnTwin from source ↗</a></article>
+<article class="card project wide"><span class="badge">OpenPELAOS · ROS 2 Humble / Jazzy</span><h3>ROS3-Limassol</h3><p>Telemetry arrival-liveness monitoring for robots with intermittent connectivity. Record and replay blackouts, detect stale updates and study recovery using synthetic scenarios; physical field validation is pending. Original idea: Christos Paparistodemou. Project lead and manuscript author: Charalampos Nadiotis. This independent prototype is not an official ROS release.</p><a href="https://github.com/n0711/ROS3-Limassol">Read the ROS3-Limassol source ↗</a></article>
 <article class="card project wide"><span class="badge">Research code · In progress</span><h3>VERA-MOT</h3><p>Multi-object tracking for drone video. The question: can unreliable appearance embeddings be stopped from corrupting identity memory when the camera moves, targets shrink and vehicles hide behind each other? The detector and a frozen BoT-SORT baseline are done (held-out detector AP 50.1, tracker HOTA 43.3). ReID training and the VERA association method come next.</p><a href="https://github.com/n0711/vera-mot">Read the VERA-MOT source ↗</a></article>
 </div>
 </section>
@@ -303,7 +304,7 @@ fn home() -> Page {
     Page {
         slug: "",
         title: "PELAOS | Software, music & community projects",
-        description: "RioTuner, cysk8clips, Narrify, LearnTwin and VERA-MOT: PELAOS software and marine robotics research by Charalampos Nadiotis in Cyprus.",
+        description: "ROS3-Limassol telemetry monitoring, LearnTwin, cysk8clips, RioTuner and other OpenPELAOS software and robotics research by Charalampos Nadiotis in Cyprus.",
         body,
         crumbs: vec![],
         extra_ld: vec![],
