@@ -11,9 +11,13 @@ Existing publication: **https://n0711.github.io/pelaos-tech/** (GitHub Pages).
 | `.github/workflows/pages.yml` | | Tests and builds pull requests; deploys on every push to `main`. |
 | `vercel.json`, `scripts/build-vercel.sh` | Bash | Builds the same site for Vercel, with root-path links and production canonical URLs. |
 
+## Featured ROS3-Limassol project
+
+The portfolio links to [ROS3-Limassol](https://github.com/n0711/ROS3-Limassol), an OpenPELAOS research prototype for telemetry arrival-liveness monitoring using synthetic blackout/recovery scenarios and optional ROS 2 Humble/Jazzy adapters. The project credits **Christos Paparistodemou** for its original idea and **Charalampos Nadiotis** for implementation, project leadership and the manuscript. Physical robotic-platform validation remains pending. The prototype is not an official ROS distribution. LearnTwin and [cysk8clips.com](https://cysk8clips.com) remain separate portfolio projects.
+
 ## Pages
 
-- `/`: project portfolio with RioTuner, cysk8clips, Narrify, LearnTwin and VERA-MOT
+- `/`: project portfolio with RioTuner, cysk8clips.com, Narrify, LearnTwin, ROS3-Limassol and VERA-MOT
 - `/cultural-storytelling-map/`: Narrify team credits, source repository and a sourced place-name pilot
 - `/research/`: 0–500 m depth meter, seawater gauge pressure and viewport force, ROV vs AUV, navigation without GPS (NOAA sources). The meter is a calculator, not connected to a pressure sensor. Its range and initial depth are passed from Rust to Dart through data attributes.
 - `/riotuner/`: Google Play release in preparation, with synthetic benchmark results
