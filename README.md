@@ -7,7 +7,7 @@ Existing publication: **https://n0711.github.io/pelaos-tech/** (GitHub Pages).
 | Part | Language | Role |
 |---|---|---|
 | `src/` | Rust | Renders every page to complete HTML at build time: content, layout, JSON-LD, sitemap. The deployed site serves static files. |
-| `web/app.dart` | Dart | Compiled to `app.js`. Adds the live depth slider on /research/. Pages work fully without it. |
+| `web/app.dart` | Dart | Compiled to `app.js`. Adds the 0–500 m depth calculator on /research/, in 1 m steps. Pages work fully without it. |
 | `.github/workflows/pages.yml` | | Tests and builds pull requests; deploys on every push to `main`. |
 | `vercel.json`, `scripts/build-vercel.sh` | Bash | Builds the same site for Vercel, with root-path links and production canonical URLs. |
 
@@ -15,7 +15,7 @@ Existing publication: **https://n0711.github.io/pelaos-tech/** (GitHub Pages).
 
 - `/`: project portfolio with RioTuner, cysk8clips, Narrify, LearnTwin and VERA-MOT
 - `/cultural-storytelling-map/`: Narrify team credits, source repository and a sourced place-name pilot
-- `/research/`: pressure at depth, ROV vs AUV, navigation without GPS (NOAA sources)
+- `/research/`: 0–500 m depth meter, seawater gauge pressure and viewport force, ROV vs AUV, navigation without GPS (NOAA sources). The meter is a calculator, not connected to a pressure sensor. Its range and initial depth are passed from Rust to Dart through data attributes.
 - `/riotuner/`: Google Play release in preparation, with synthetic benchmark results
 - `/riotuner/testing/`: release status, physical-device testing preparation and useful feedback
 - `/riotuner/privacy/`: RioTuner privacy policy (the URL to enter in Google Play Console)

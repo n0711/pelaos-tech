@@ -15,7 +15,7 @@ const HOSTING: &str = match option_env!("PELAOS_HOSTING") {
     None => "github-pages",
 };
 /// Shown in the footer, JSON-LD `dateModified` and sitemap `lastmod`.
-pub const UPDATED: &str = "2026-10-24";
+pub const UPDATED: &str = "2026-10-25";
 
 pub fn validate_config() -> std::io::Result<()> {
     let invalid = || std::io::Error::new(std::io::ErrorKind::InvalidInput, "deployment needs an HTTPS site URL without a trailing slash, a matching base path, and github-pages or vercel hosting");
@@ -40,6 +40,9 @@ fn hosting_name() -> &'static str {
 /// Seawater density and standard gravity used for every pressure figure on the site.
 pub const RHO: f64 = 1025.0;
 pub const G: f64 = 9.80665;
+/// Range of the research-page calculator, not a vehicle or sensor depth rating.
+pub const MAX_DEPTH_M: u64 = 500;
+const INITIAL_DEPTH_M: u64 = 100;
 
 const NOAA_PRESSURE: &str = "https://oceanservice.noaa.gov/facts/pressure.html";
 const NOAA_AUV_ROV: &str = "https://oceanservice.noaa.gov/facts/auv-rov.html";
@@ -115,6 +118,11 @@ pub fn gauge_bar(h: f64) -> f64 {
 /// Force on a 10 x 10 cm window at depth `h`, in tonnes-force.
 pub fn window_tonnes(h: f64) -> f64 {
     RHO * h * 0.01 / 1000.0
+}
+
+/// Use the same half-up rounding as the browser, including 5.125 tonnes at 500 m.
+fn fixed2(value: f64) -> String {
+    format!("{:.2}", (value * 100.0).round() / 100.0)
 }
 
 const CSS: &str = r#"
@@ -246,7 +254,7 @@ fn layout(p: &Page) -> String {
 </main>
 <footer>
 <a href="{research}">Research</a><a href="{riotuner}">RioTuner</a><a href="{privacy}">Website privacy</a><a href="{CONTACT}">Contact</a>
-<p>© 2026 PelaosTech. Last updated <time datetime="{UPDATED}">24 October 2026</time>. Hosted on {hosting}.</p>
+<p>© 2026 PelaosTech. Last updated <time datetime="{UPDATED}">25 October 2026</time>. Hosted on {hosting}.</p>
 </footer>
 </body>
 </html>
@@ -352,20 +360,20 @@ fn cultural_storytelling_map() -> Page {
 }
 
 fn research() -> Page {
-    let rows = [10.0, 100.0, 1000.0, 2000.0, 4000.0, 6000.0, 11000.0]
+    let rows = [0.0, 10.0, 50.0, 100.0, 200.0, 300.0, 400.0, MAX_DEPTH_M as f64]
         .iter()
         .map(|&h| {
             format!(
-                "<tr><td>{} m</td><td>{:.0}</td><td>{:.1}</td></tr>",
+                "<tr><td>{} m</td><td>{}</td><td>{}</td></tr>",
                 group(h as u64),
-                gauge_bar(h),
-                window_tonnes(h)
+                fixed2(gauge_bar(h)),
+                fixed2(window_tonnes(h))
             )
         })
         .collect::<Vec<_>>()
         .join("\n");
-    let bar4000 = gauge_bar(4000.0);
-    let t4000 = window_tonnes(4000.0);
+    let max_bar = fixed2(gauge_bar(MAX_DEPTH_M as f64));
+    let max_tonnes = fixed2(window_tonnes(MAX_DEPTH_M as f64));
     let faq = [
         (
             "What is the difference between an ROV and an AUV?",
@@ -376,9 +384,9 @@ fn research() -> Page {
             "GPS does not work underwater, because the ocean absorbs the radio signals. Vehicles combine dead reckoning (inertial sensors, compass, depth and speed) with acoustic positioning against beacons or a surface vessel, and correct their position with GPS when they surface.".to_string(),
         ),
         (
-            "How much pressure is there at 4,000 metres?",
+            "How much pressure is there at 500 metres?",
             format!(
-                "About {bar4000:.0} bar above surface pressure, roughly 400 times the air pressure at sea level. On a 10 x 10 cm window that is a force of about {t4000:.0} tonnes."
+                "About {max_bar} bar above surface pressure in the constant-density seawater model. On a 10 x 10 cm window with surface pressure inside, that is a net force of about {max_tonnes} tonnes-force."
             ),
         ),
     ];
@@ -400,22 +408,22 @@ fn research() -> Page {
     );
     let body = format!(
         r#"
-<h1>Deep-sea robotics: the numbers</h1>
-<p class="lead">Why deep-sea vehicles are hard to build, in figures, with sources.</p>
+<h1>Marine robotics: depth to {MAX_DEPTH_M} m</h1>
+<p class="lead">Explore depth and pressure from the surface to {MAX_DEPTH_M} metres, with sources.</p>
 <p class="status-note">These notes support my research direction in marine robotics. My ROV work is published on <a href="{RESEARCHGATE}">ResearchGate</a>, and I plan to continue it at doctoral level.</p>
 
-<h2>Pressure</h2>
+<h2>PELAOS depth meter · 0–{MAX_DEPTH_M} m</h2>
 <p>NOAA: <q>For every 33 feet (10.06 meters) you go down, the pressure increases by one atmosphere.</q> (<a href="{NOAA_PRESSURE}">NOAA Ocean Service</a>)</p>
 <div class="card">
 <table>
-<caption class="muted">Pressure above surface pressure, and the force on a 10 × 10 cm viewport</caption>
-<thead><tr><th scope="col">Depth</th><th scope="col">Pressure (bar)</th><th scope="col">Force on window (tonnes)</th></tr></thead>
+<caption class="muted">0–{MAX_DEPTH_M} m: pressure above surface pressure, and net force on a 10 × 10 cm viewport with surface pressure inside</caption>
+<thead><tr><th scope="col">Depth</th><th scope="col">Gauge pressure (bar)</th><th scope="col">Force (tonnes-force)</th></tr></thead>
 <tbody>
 {rows}
 </tbody>
 </table>
-<div id="pressure-live" data-rho="{RHO}" data-g="{G}"></div>
-<p><small>Computed with seawater density {RHO} kg/m³ and g = {G} m/s². Real seawater gets slightly denser with depth, so true pressures are a little higher (about 1–2% at 4,000 m).</small></p>
+<div id="pressure-live" data-rho="{RHO}" data-g="{G}" data-max-depth="{MAX_DEPTH_M}" data-initial-depth="{INITIAL_DEPTH_M}"></div>
+<p id="pressure-model"><small>Calculated with p = ρgh, constant seawater density {RHO} kg/m³ and g = {G} m/s². This is a calculator, not a live sensor reading or a vehicle depth rating.</small></p>
 </div>
 
 <h2>Navigation without GPS</h2>
@@ -430,8 +438,8 @@ fn research() -> Page {
     );
     Page {
         slug: "research/",
-        title: "Deep-sea robotics: pressure and navigation | PelaosTech",
-        description: "Pressure at depth (about 402 bar at 4,000 m), ROV vs AUV, and how underwater robots navigate without GPS. Figures with NOAA sources.",
+        title: "Marine robotics: depth and pressure | PelaosTech",
+        description: "PELAOS depth meter from 0 to 500 m, seawater pressure and viewport force, ROV vs AUV, and underwater navigation. Figures with NOAA sources.",
         body,
         crumbs: vec![("research/", "Research")],
         extra_ld: vec![faq_ld],
@@ -765,8 +773,11 @@ mod tests {
 
     #[test]
     fn pressure_figures() {
-        assert!((gauge_bar(4000.0) - 402.1).abs() < 0.1);
-        assert!((window_tonnes(4000.0) - 41.0).abs() < 0.01);
+        assert_eq!(gauge_bar(0.0), 0.0);
+        assert_eq!(window_tonnes(0.0), 0.0);
+        assert!((gauge_bar(500.0) - 50.25908125).abs() < 1e-8);
+        assert!((window_tonnes(500.0) - 5.125).abs() < 1e-8);
+        assert_eq!(fixed2(window_tonnes(500.0)), "5.13");
         assert_eq!(group(11000), "11,000");
     }
 }
