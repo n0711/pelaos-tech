@@ -104,6 +104,9 @@ RioTuner remains **pre-release**. Synthetic benchmark results establish algorith
 - [Deployment settings and verification](docs/DEPLOYMENT.md)
 - [Commercial priorities and decision record](docs/PRODUCT_DECISIONS.md)
 - [Fixed-scope website service](docs/SERVICE_OFFER.md)
+- [Project map draft](docs/PROJECT_MAP.md)
+- [OpenPELAOS charter draft](docs/OPENPELAOS_CHARTER.md)
+- [Licence and attribution inventory](docs/LICENCE_INVENTORY.md)
 
 The Pages site is an informational portfolio. It has no checkout or sales form.
 Commercial offer documents live in the repository, not the generated Pages site.
