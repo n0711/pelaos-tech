@@ -322,6 +322,46 @@ fn home() -> Page {
 
 
 
+
+fn services() -> Page {
+    Page {
+        slug: "services/",
+        title: "Small Business Websites in Cyprus | PELAOS",
+        description: "PELAOS is preparing a one-page website pilot for small businesses in Cyprus, with responsive design, basic SEO, contact links and source handover.",
+        body: format!(r##"
+<section class="hero">
+<p class="eyebrow">PELAOS / Cyprus / Proposed website pilot</p>
+<h1>Small-business websites in Cyprus</h1>
+<p class="lead">A proposed fixed-scope website service for local businesses that need one clear page explaining what they do and how to get in touch.</p>
+<div class="actions"><a class="button primary" href="{LINKEDIN}">Ask about pilot availability ↗</a><a class="button" href="{home}">See PELAOS projects →</a></div>
+</section>
+<section aria-labelledby="scope-title">
+<h2 id="scope-title">What the one-page pilot would include</h2>
+<ul>
+<li>Responsive layout for phone and desktop.</li>
+<li>Sections for services, contact links and a location or service area supplied by the business.</li>
+<li>A descriptive HTML title, meta description and social-sharing metadata.</li>
+<li>One consolidated review round, source handover and basic editing instructions.</li>
+</ul>
+<p>Search-friendly content and metadata help search engines understand a page, but do not guarantee rankings, traffic or enquiries.</p>
+</section>
+<section aria-labelledby="inputs-title">
+<h2 id="inputs-title">What we would need from a client</h2>
+<p>Final approved business text, permission to use any images and brand assets, preferred contact details and the agreed hosting arrangement. Copywriting, translation, domains, hosting subscriptions, booking systems and ongoing maintenance would require separate agreement.</p>
+</section>
+<section aria-labelledby="status-title">
+<h2 id="status-title">Pilot status and next step</h2>
+<p>This is an early service proposal, not a live ordering or payment page. Scope, schedule, availability, price, taxes and cancellation terms must be confirmed in a written quote before any work or payment. No lead form, tracking or checkout is used here.</p>
+<p>To discuss a potential pilot, <a href="{LINKEDIN}">contact PELAOS on LinkedIn</a>. For a sample of current engineering and software work, explore the <a href="{research}">marine robotics research notes</a>.</p>
+</section>
+"##, home = href(""), research = href("research/")),
+        crumbs: vec![("services/", "Website services")],
+        extra_ld: vec![],
+        script: false,
+        noindex: false,
+    }
+}
+
 fn ros3_limassol() -> Page {
     Page {
         slug: "ros3-limassol/",
@@ -675,7 +715,7 @@ const FAVICON: &str = r##"<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1
 "##;
 
 fn pages() -> Vec<Page> {
-    vec![home(), research(), ros3_limassol(), cultural_storytelling_map(), riotuner(), riotuner_testing(), riotuner_privacy(), site_privacy(), not_found()]
+    vec![home(), services(), research(), ros3_limassol(), cultural_storytelling_map(), riotuner(), riotuner_testing(), riotuner_privacy(), site_privacy(), not_found()]
 }
 
 pub fn site() -> Vec<File> {
@@ -847,8 +887,30 @@ mod tests {
             assert!(c.contains("<link rel=\"canonical\" href=\"https://"), "{path}");
         }
         let sitemap = site().into_iter().find(|f| f.path == "sitemap.xml").unwrap().contents;
-        assert_eq!(sitemap.matches("<url>").count(), 8);
+        assert_eq!(sitemap.matches("<url>").count(), pages().iter().filter(|p| !p.noindex).count());
         assert!(!sitemap.contains("404"));
+    }
+
+    #[test]
+    fn seo_pages_are_unique_and_sitemap_is_consistent() {
+        let pages = pages();
+        let mut titles = std::collections::HashSet::new();
+        let mut descriptions = std::collections::HashSet::new();
+        let sitemap = site().into_iter().find(|f| f.path == "sitemap.xml").unwrap().contents;
+        for page in &pages {
+            assert!(titles.insert(page.title), "duplicate page title: {}", page.title);
+            assert!(descriptions.insert(page.description), "duplicate page description: {}", page.description);
+            let expected = format!("<loc>{}</loc>", url(page.slug));
+            assert_eq!(sitemap.contains(&expected), !page.noindex, "sitemap mismatch: {}", page.slug);
+            let rendered = layout(page);
+            assert!(rendered.contains(r#"<meta property="og:locale" content="en_GB">"#));
+            assert!(rendered.contains(r#"<meta name="twitter:title" content=""#));
+            assert!(rendered.contains(r#"<meta name="twitter:description" content=""#));
+        }
+        let proposed = layout(&services());
+        assert!(proposed.contains("Small-business websites in Cyprus"));
+        assert!(proposed.contains("not a live ordering or payment page"));
+        assert!(layout(&home()).contains(&href("services/")));
     }
 
     #[test]
