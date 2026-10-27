@@ -15,7 +15,7 @@ const HOSTING: &str = match option_env!("PELAOS_HOSTING") {
     None => "github-pages",
 };
 /// Shown in the footer, JSON-LD `dateModified` and sitemap `lastmod`.
-pub const UPDATED: &str = "2026-10-25";
+pub const UPDATED: &str = "2026-10-27";
 
 pub fn validate_config() -> std::io::Result<()> {
     let invalid = || std::io::Error::new(std::io::ErrorKind::InvalidInput, "deployment needs an HTTPS site URL without a trailing slash, a matching base path, and github-pages or vercel hosting");
@@ -176,7 +176,7 @@ h2{letter-spacing:-.025em}.lead{max-width:680px!important;font-size:21px;line-he
 
 fn layout(p: &Page) -> String {
     let canonical = url(p.slug);
-    let nav = [("", "Home"), ("research/", "Research"), ("ros3-limassol/", "ROS3"), ("riotuner/", "RioTuner")]
+    let nav = [("", "Home"), ("services/", "Websites"), ("research/", "Research"), ("ros3-limassol/", "ROS3"), ("riotuner/", "RioTuner")]
         .iter()
         .map(|(slug, label)| {
             let current = if *slug == p.slug { " aria-current=\"page\"" } else { "" };
@@ -240,11 +240,14 @@ fn layout(p: &Page) -> String {
 <link rel="icon" href="{BASE}/favicon.svg" type="image/svg+xml">
 <meta name="color-scheme" content="light dark">
 <meta property="og:type" content="website">
+<meta property="og:locale" content="en_GB">
 <meta property="og:site_name" content="PelaosTech">
 <meta property="og:title" content="{title}">
 <meta property="og:description" content="{desc}">
 <meta property="og:url" content="{canonical}">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="{title}">
+<meta name="twitter:description" content="{desc}">
 <style>{css}</style>
 <script type="application/ld+json">{ld}</script>
 {script}</head>
@@ -255,8 +258,8 @@ fn layout(p: &Page) -> String {
 {body}
 </main>
 <footer>
-<a href="{research}">Research</a><a href="{riotuner}">RioTuner</a><a href="{privacy}">Website privacy</a><a href="{CONTACT}">Contact</a><a href="{REVOLUT}">Support ↗</a>
-<p>© 2026 PelaosTech. Last updated <time datetime="{UPDATED}">25 October 2026</time>. Hosted on {hosting}.</p>
+<a href="{services}">Websites</a><a href="{research}">Research</a><a href="{riotuner}">RioTuner</a><a href="{privacy}">Website privacy</a><a href="{CONTACT}">Contact</a><a href="{REVOLUT}">Support ↗</a>
+<p>© 2026 PelaosTech. Last updated <time datetime="{UPDATED}">27 October 2026</time>. Hosted on {hosting}.</p>
 </footer>
 </body>
 </html>
@@ -265,6 +268,7 @@ fn layout(p: &Page) -> String {
         desc = esc(p.description),
         css = CSS.trim(),
         home = href(""),
+        services = href("services/"),
         research = href("research/"),
         riotuner = href("riotuner/"),
         privacy = href("privacy/"),
@@ -278,9 +282,9 @@ fn home() -> Page {
         r##"
 <section class="hero">
 <p class="eyebrow">PELAOS / Independent software &amp; research / Cyprus</p>
-<h1>Useful software.<br>Built with a purpose.</h1>
-<p class="lead">Independent and team projects by Charalampos Nadiotis, connecting music, learning and local culture with practical engineering.</p>
-<div class="actions"><a class="button primary" href="#projects">Explore the projects ↓</a><a class="button" href="{LINKEDIN}">Meet the maker ↗</a></div>
+<h1>Software products and robotics research from Cyprus.</h1>
+<p class="lead">PELAOS builds independent software projects and explores marine robotics. Discover apps, open research and a proposed small-business website pilot.</p>
+<div class="actions"><a class="button primary" href="#projects">Explore the projects ↓</a><a class="button" href="{services}">Website pilot →</a></div>
 </section>
 <section id="projects" aria-labelledby="project-heading">
 <p class="eyebrow">Selected projects</p><h2 id="project-heading">Different interests. Things you can use.</h2>
@@ -293,19 +297,21 @@ fn home() -> Page {
 <article class="card project wide"><span class="badge">Research code · In progress</span><h3>VERA-MOT</h3><p>Multi-object tracking for drone video. The question: can unreliable appearance embeddings be stopped from corrupting identity memory when the camera moves, targets shrink and vehicles hide behind each other? The detector and a frozen BoT-SORT baseline are done (held-out detector AP 50.1, tracker HOTA 43.3). ReID training and the VERA association method come next.</p><a href="https://github.com/n0711/vera-mot">Read the VERA-MOT source ↗</a></article>
 </div>
 </section>
+<section class="panel"><div><p class="eyebrow">Website pilot / Cyprus</p><h2>A clear website for a small business.</h2></div><div><p>PELAOS is preparing a fixed-scope, one-page website pilot with responsive design, contact links, basic search metadata and source handover. It is a proposal rather than an open booking service.</p><a href="{services}">Read the website pilot scope →</a></div></section>
 <section class="panel"><div><p class="eyebrow">Research notebook</p><h2>Curiosity goes deeper.</h2></div><div><p>Marine robotics is my main research direction. I have published my ROV work on <a href="{RESEARCHGATE}">ResearchGate</a> and plan to take it further as doctoral research. The notes cover pressure, navigation and why operating underwater is hard. The deep-submergence vehicle is a concept, not a deployed product.</p><a href="{research}">Explore the deep-sea notes →</a></div></section>
 <section class="panel"><div><p class="eyebrow">The person behind PELAOS</p><h2>From Cyprus, with curiosity.</h2></div><div><p>I’m Charalampos Nadiotis, a robotics engineer and Computer Science student at Frederick University. I was previously a Robotics Engineer at ADDITESS, working across the full R&amp;D cycle of field robotics, from research and software to integration and field testing. This is my project portfolio: what is available, what is being tested and what I’m exploring next.</p><p><a href="https://github.com/n0711">GitHub</a> · <a href="{RESEARCHGATE}">ResearchGate</a> · <a href="{LINKEDIN}">Contact on LinkedIn</a></p></div></section>
 <section class="panel" id="support"><div><p class="eyebrow">Support</p><h2>Keep the projects going.</h2></div><div><p>The projects here are free and built in my own time. If one of them is useful to you, you can support further development with a one-off contribution via Revolut. Every contribution is voluntary and does not buy access, features or support.</p><a class="button primary" href="{REVOLUT}">Support via Revolut ↗</a></div></section>
 "##,
         research = href("research/"),
         riotuner = href("riotuner/"),
+        services = href("services/"),
         narrify = href("cultural-storytelling-map/"),
         ros3 = href("ros3-limassol/"),
     );
     Page {
         slug: "",
-        title: "PELAOS | Software, music & community projects",
-        description: "ROS3-Limassol telemetry monitoring, LearnTwin, cysk8clips, RioTuner and other OpenPELAOS software and robotics research by Charalampos Nadiotis in Cyprus.",
+        title: "PELAOS Tech | Software & Robotics Research in Cyprus",
+        description: "Explore PELAOS software and marine robotics research in Cyprus: RioTuner, ROS3-Limassol, Narrify, LearnTwin and a small-business website pilot.",
         body,
         crumbs: vec![],
         extra_ld: vec![],
@@ -694,7 +700,8 @@ pub fn site() -> Vec<File> {
             "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n{urls}\n</urlset>\n"
         ),
     });
-    // Crawlers read these files at the domain root, including root-path Vercel builds.
+    // robots.txt is effective at the domain root (root-path Vercel builds). GitHub Pages
+    // project URLs place this file in a subdirectory: there it is informational only.
     files.push(File { path: "robots.txt".into(), contents: format!("User-agent: *\nAllow: /\nSitemap: {SITE}/sitemap.xml\n") });
     files.push(File {
         path: "llms.txt".into(),
