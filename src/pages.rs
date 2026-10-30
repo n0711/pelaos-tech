@@ -15,7 +15,7 @@ const HOSTING: &str = match option_env!("PELAOS_HOSTING") {
     None => "github-pages",
 };
 /// Shown in the footer, JSON-LD `dateModified` and sitemap `lastmod`.
-pub const UPDATED: &str = "2026-10-27";
+pub const UPDATED: &str = "2026-10-30";
 
 pub fn validate_config() -> std::io::Result<()> {
     let invalid = || std::io::Error::new(std::io::ErrorKind::InvalidInput, "deployment needs an HTTPS site URL without a trailing slash, a matching base path, and github-pages or vercel hosting");
@@ -259,7 +259,7 @@ fn layout(p: &Page) -> String {
 </main>
 <footer>
 <a href="{services}">Websites</a><a href="{research}">Research</a><a href="{riotuner}">RioTuner</a><a href="{privacy}">Website privacy</a><a href="{CONTACT}">Contact</a><a href="{REVOLUT}">Support ↗</a>
-<p>© 2026 PelaosTech. Last updated <time datetime="{UPDATED}">27 October 2026</time>. Hosted on {hosting}.</p>
+<p>© 2026 PelaosTech. Last updated <time datetime="{UPDATED}">30 October 2026</time>. Hosted on {hosting}.</p>
 </footer>
 </body>
 </html>
@@ -532,6 +532,21 @@ fn research() -> Page {
 <h2>Navigation without GPS</h2>
 <p><q>GPS does not work underwater</q>, so a submerged vehicle's position estimate drifts until it can surface for a new fix (<a href="{NOAA_NAVIGATION}">NOAA Ocean Exploration</a>). Deep vehicles therefore combine dead reckoning (inertial sensors, compass, depth and speed) with acoustic positioning, where sound pulses between the vehicle and beacons or a surface vessel give its range and bearing.</p>
 
+
+<section aria-labelledby="complexity-research">
+<p class="eyebrow">Computer science / Complexity theory / Research note</p>
+<h2 id="complexity-research">P versus NP: a research question</h2>
+<p><strong>Research interest:</strong> Charalampos Nadiotis (30 October 2026) is investigating the proposition P = NP. This is a personal research direction, not an established mathematical result or an independently verified proof.</p>
+<p><strong>Definitions:</strong> P is the class of decision problems solvable by a deterministic algorithm in polynomial time. NP is the class of decision problems whose proposed solutions can be verified in polynomial time. Whether P equals NP remains an open problem.</p>
+<div class="card">
+<span class="badge">Unverified research proposition</span>
+<h3>What would constitute a proof?</h3>
+<p>To establish P = NP, a rigorous polynomial-time algorithm for any NP-complete decision problem, together with a proof of correctness and polynomial running-time bound, would suffice. Numerical experiments, benchmark results, or an unsupported assertion of equality do not resolve the problem.</p>
+<p>A complete manuscript, independently checkable argument, and expert scrutiny are required before any solution claim can be reported as verified.</p>
+</div>
+<p><strong>Primary reference:</strong> <a href="https://www.claymath.org/millennium/p-vs-np/">Clay Mathematics Institute — P vs NP</a>. <a href="https://www.scottaaronson.com/papers/pnp.pdf">Background survey: Scott Aaronson, P versus NP</a>.</p>
+</section>
+
 <h2>FAQ</h2>
 <dl>
 {faq_html}
@@ -541,8 +556,8 @@ fn research() -> Page {
     );
     Page {
         slug: "research/",
-        title: "Marine robotics: depth and pressure | PelaosTech",
-        description: "PELAOS depth meter from 0 to 500 m, seawater pressure and viewport force, ROV vs AUV, and underwater navigation. Figures with NOAA sources.",
+        title: "Marine robotics and P vs NP research | PelaosTech",
+        description: "PELAOS research on marine robotics, underwater pressure and navigation, plus an explicitly unverified P versus NP complexity-theory research proposition.",
         body,
         crumbs: vec![("research/", "Research")],
         extra_ld: vec![faq_ld],
