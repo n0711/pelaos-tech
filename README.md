@@ -13,7 +13,7 @@ Existing publication: **https://n0711.github.io/pelaos-tech/** (GitHub Pages).
 
 ## Featured ROS3-Limassol project
 
-The portfolio links to [ROS3-Limassol](https://github.com/n0711/ROS3-Limassol), an OpenPELAOS research prototype for telemetry arrival-liveness monitoring using synthetic blackout/recovery scenarios and optional ROS 2 Humble/Jazzy adapters. The project credits **Christos Paparistodemou** for its original idea and **Charalampos Nadiotis** for implementation, project leadership and the manuscript. Physical robotic-platform validation remains pending. The prototype is not an official ROS distribution. LearnTwin and [cysk8clips.com](https://cysk8clips.com) remain separate portfolio projects.
+The portfolio links to [ROS3-Limassol](https://github.com/n0711/ROS3-Limassol), an OpenPELAOS research prototype for telemetry arrival-liveness monitoring with synthetic recording/replay, ArduPilot Rover SITL over localhost, optional ROS 2 Humble/Jazzy adapters and a limited Raspberry Pi–Arduino USB disconnection bench result dated 2 November 2026. The USB result is physical-interface evidence only; flight-controller, radio-link, robotic-platform and field validation remain pending. The project credits **Christos Paparistodemou** for its original idea and **Charalampos Nadiotis** for implementation, project leadership and the manuscript. The prototype is not an official ROS distribution. LearnTwin and [cysk8clips.com](https://cysk8clips.com) remain separate portfolio projects.
 
 ## Pages
 

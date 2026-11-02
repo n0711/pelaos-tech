@@ -15,7 +15,7 @@ const HOSTING: &str = match option_env!("PELAOS_HOSTING") {
     None => "github-pages",
 };
 /// Shown in the footer, JSON-LD `dateModified` and sitemap `lastmod`.
-pub const UPDATED: &str = "2026-10-30";
+pub const UPDATED: &str = "2026-11-02";
 
 pub fn validate_config() -> std::io::Result<()> {
     let invalid = || std::io::Error::new(std::io::ErrorKind::InvalidInput, "deployment needs an HTTPS site URL without a trailing slash, a matching base path, and github-pages or vercel hosting");
@@ -259,7 +259,7 @@ fn layout(p: &Page) -> String {
 </main>
 <footer>
 <a href="{services}">Websites</a><a href="{research}">Research</a><a href="{riotuner}">RioTuner</a><a href="{privacy}">Website privacy</a><a href="{CONTACT}">Contact</a><a href="{REVOLUT}">Support ↗</a>
-<p>© 2026 PelaosTech. Last updated <time datetime="{UPDATED}">30 October 2026</time>. Hosted on {hosting}.</p>
+<p>© 2026 PelaosTech. Last updated <time datetime="{UPDATED}">2 November 2026</time>. Hosted on {hosting}.</p>
 </footer>
 </body>
 </html>
@@ -293,7 +293,7 @@ fn home() -> Page {
 <article class="card project"><span class="badge">Live · Community website</span><h3>cysk8clips</h3><p>Cyprus skateboarding clips, full parts, event stories and a public spot guide. A record of the people and places behind the scene.</p><a href="https://cysk8clips.com">Visit the skate archive ↗</a></article>
 <article class="card project"><span class="badge">OpenPELAOS · Team prototype</span><h3>Cultural Storytelling Map</h3><p>Narrify connects community stories with places. Co-developed by Charalampos Nadiotis, Hussain Jamil and Nikitas Savva.</p><a href="{narrify}">Explore Narrify →</a></article>
 <article class="card project"><span class="badge">Open source · Local planner</span><h3>LearnTwin</h3><p>Track degree progress, study tasks, thesis milestones and PhD applications. Records stay in your browser; export a backup to keep them.</p><a href="https://github.com/n0711/LearnTwin#start-the-planner">Try LearnTwin from source ↗</a></article>
-<article class="card project wide"><span class="badge">OpenPELAOS · ROS 2 Humble / Jazzy</span><h3>ROS3-Limassol</h3><p>Telemetry arrival-liveness monitoring for robots with intermittent connectivity. Record and replay blackouts, detect stale updates and study recovery using synthetic scenarios; physical field validation is pending. Original idea: Christos Paparistodemou. Project lead and manuscript author: Charalampos Nadiotis. This independent prototype is not an official ROS release.</p><a href="{ros3}">Explore ROS3 research →</a></article>
+<article class="card project wide"><span class="badge">OpenPELAOS · ROS 2 Humble / Jazzy</span><h3>ROS3-Limassol</h3><p>Telemetry arrival-liveness monitoring for robots with intermittent connectivity. Evidence now includes synthetic replay, ArduPilot Rover SITL over localhost and a limited Raspberry Pi–Arduino USB disconnection bench test. Flight-controller, radio-link, vessel/robot and field validation remain pending. Original idea: Christos Paparistodemou. Project lead and manuscript author: Charalampos Nadiotis. This independent prototype is not an official ROS release.</p><a href="{ros3}">Explore ROS3 research →</a></article>
 <article class="card project wide"><span class="badge">Research code · In progress</span><h3>VERA-MOT</h3><p>Multi-object tracking for drone video. The question: can unreliable appearance embeddings be stopped from corrupting identity memory when the camera moves, targets shrink and vehicles hide behind each other? The detector and a frozen BoT-SORT baseline are done (held-out detector AP 50.1, tracker HOTA 43.3). ReID training and the VERA association method come next.</p><a href="https://github.com/n0711/vera-mot">Read the VERA-MOT source ↗</a></article>
 </div>
 </section>
@@ -401,7 +401,12 @@ fn ros3_limassol() -> Page {
 <section aria-labelledby="ros3-status-title">
 <p class="eyebrow">Evidence and limits</p>
 <h2 id="ros3-status-title">Current validation status</h2>
-<p>The project documents unit tests, synthetic ROS message recording and replay, and CI configurations for both ROS 2 distributions. The deterministic example transitions through WAITING, HEALTHY, STALE and HEALTHY. <strong>Physical vessel/robot measurements, network timing and field reliability are not yet established.</strong> Consult the repository's <a href="https://github.com/n0711/ROS3-Limassol/blob/main/robotics/ros3_limassol/docs/VALIDATION.md">validation record</a> and <a href="https://github.com/n0711/ROS3-Limassol/actions">CI runs</a> for the dated evidence.</p>
+<ul>
+<li><strong>Simulation / loopback:</strong> <a href="https://github.com/n0711/ROS3-Limassol/pull/32">PR #32, merged 27 October 2026</a>, reports Rover 4.6.3 SITL blackout and recovery over localhost. This is simulated-autopilot evidence, not a physical link.</li>
+<li><strong>Physical USB bench:</strong> <a href="https://github.com/n0711/ROS3-Limassol/pull/58">PR #58, merged 2 November 2026</a>, records a Raspberry Pi 3B receiving Arduino heartbeat streams over USB. Disconnecting the Mega produced STALE after 2.42 s; reopening the port returned HEALTHY after 0.95 s while the Nano remained HEALTHY.</li>
+<li><strong>Replay coverage:</strong> <a href="https://github.com/n0711/ROS3-Limassol/pull/70">PR #70, merged 2 November 2026</a>, strengthens exact synthetic multi-monitor replay regression coverage. Passing CI does not establish physical timing or field reliability.</li>
+</ul>
+<p>The USB result is physical-interface evidence only: it did not include MAVLink, a flight controller, a radio, a vessel or robot in operation. Its recordings are identified by checksums but are not archived in the repository. <strong>Flight-controller integration, radio-link behaviour, physical vessel/robot measurements and field reliability are not yet established.</strong> Consult the repository's <a href="https://github.com/n0711/ROS3-Limassol/blob/main/robotics/ros3_limassol/docs/VALIDATION.md">validation record</a>, <a href="https://github.com/n0711/ROS3-Limassol/blob/main/docs/hardware/ARDUINO_USB_VALIDATION_2026-11-02.md">USB bench record</a> and <a href="https://github.com/n0711/ROS3-Limassol/actions">CI runs</a> for the dated evidence.</p>
 <p><a href="https://github.com/n0711/ROS3-Limassol#run-the-prototype">Run the reproducible experiment from source ↗</a></p>
 </section>
 <section class="panel"><div><p class="eyebrow">Related independent projects</p><h2>Explore more PELAOS work</h2></div><div><p><a href="https://github.com/n0711/LearnTwin">LearnTwin</a> is a degree, study and PhD-planning workspace; <a href="https://cysk8clips.com">cysk8clips.com</a> is the Cyprus skateboarding archive and spot guide. They are separate from ROS3-Limassol.</p></div></section>
@@ -463,6 +468,7 @@ fn cultural_storytelling_map() -> Page {
 }
 
 fn research() -> Page {
+    let ros3 = href("ros3-limassol/");
     let rows = [0.0, 10.0, 50.0, 100.0, 200.0, 300.0, 400.0, MAX_DEPTH_M as f64]
         .iter()
         .map(|&h| {
@@ -514,6 +520,13 @@ fn research() -> Page {
 <h1>Marine robotics: depth to {MAX_DEPTH_M} m</h1>
 <p class="lead">Explore depth and pressure from the surface to {MAX_DEPTH_M} metres, with sources.</p>
 <p class="status-note">These notes support my research direction in marine robotics. My ROV work is published on <a href="{RESEARCHGATE}">ResearchGate</a>, and I plan to continue it at doctoral level.</p>
+
+<section aria-labelledby="ros3-research-update">
+<p class="eyebrow">OpenPELAOS / Evidence update / 2 November 2026</p>
+<h2 id="ros3-research-update">ROS3-Limassol validation boundary</h2>
+<p>ROS3-Limassol now has synthetic recording/replay evidence, ArduPilot Rover SITL blackout tests over localhost, and one limited Raspberry Pi–Arduino USB disconnection/recovery bench result. The USB test is a physical-interface check, not evidence for MAVLink, a flight controller, a radio link, a deployed vessel or field reliability.</p>
+<p><a href="{ros3}">Read the dated results and remaining gaps →</a></p>
+</section>
 
 <h2>PELAOS depth meter · 0–{MAX_DEPTH_M} m</h2>
 <p>NOAA: <q>For every 33 feet (10.06 meters) you go down, the pressure increases by one atmosphere.</q> (<a href="{NOAA_PRESSURE}">NOAA Ocean Service</a>)</p>
@@ -761,7 +774,7 @@ pub fn site() -> Vec<File> {
     files.push(File {
         path: "llms.txt".into(),
         contents: format!(
-            "# PelaosTech\n\n> Marine robotics research (deep-submergence ROV concept) and precision software (RioTuner, an instrument tuner).\n\n- [Research: pressure and navigation]({}): pressure at depth with NOAA sources, ROV vs AUV, navigation without GPS\n- [ROS3-Limassol]({}): experimental receiver-level telemetry arrival-liveness monitoring, ROS 2 Humble/Jazzy adapters and deterministic synthetic blackout/recovery tests; physical field validation pending\n- [RioTuner]({}): offline Android instrument tuner, Google Play release in preparation, with synthetic benchmark results\n- [RioTuner privacy policy]({})\n",
+            "# PelaosTech\n\n> Marine robotics research (deep-submergence ROV concept) and precision software (RioTuner, an instrument tuner).\n\n- [Research: pressure and navigation]({}): pressure at depth with NOAA sources, ROV vs AUV, navigation without GPS\n- [ROS3-Limassol]({}): receiver-arrival liveness evidence from synthetic replay, Rover SITL over localhost and a limited Raspberry Pi–Arduino USB bench test; flight-controller, radio-link and field validation pending\n- [RioTuner]({}): offline Android instrument tuner, Google Play release in preparation, with synthetic benchmark results\n- [RioTuner privacy policy]({})\n",
             url("research/"),
             url("ros3-limassol/"),
             url("riotuner/"),
@@ -838,7 +851,8 @@ mod tests {
         let rendered = layout(&ros3_limassol());
         assert!(rendered.contains("Christos Paparistodemou"));
         assert!(rendered.contains("Charalampos Nadiotis"));
-        assert!(rendered.contains("Physical vessel/robot measurements"));
+        assert!(rendered.contains("physical vessel/robot measurements"));
+        assert!(rendered.contains("USB result is physical-interface evidence only"));
         assert!(rendered.contains("not an official ROS distribution"));
         assert!(rendered.contains("not peer-reviewed"));
         let landing = layout(&home());
