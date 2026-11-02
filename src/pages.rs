@@ -170,6 +170,7 @@ h2{letter-spacing:-.025em}.lead{max-width:680px!important;font-size:21px;line-he
 .badge{display:inline-flex;border:1px solid var(--line);border-radius:30px;padding:4px 10px;font-size:12px;font-weight:650;color:var(--muted)}
 .panel{display:grid;grid-template-columns:1fr 1fr;gap:32px;border-top:1px solid var(--line);padding:32px 0;margin-top:48px}
 .panel h2{margin-top:0}.table-scroll{overflow-x:auto}.status-note{border-left:3px solid var(--accent);padding:8px 18px;margin:24px 0;color:var(--muted)}
+.evidence-table th,.evidence-table td{text-align:left;vertical-align:top}.evidence-table th:nth-child(2),.evidence-table td:nth-child(2){white-space:nowrap}
 @media(max-width:720px){header,main,footer{padding-left:18px;padding-right:18px}.project-grid,.panel{grid-template-columns:1fr}.hero{padding:8px 0 28px}.lead{font-size:18px}.project{padding:22px}nav a{padding:0 8px}table{font-size:14px}}
 
 "#;
@@ -366,7 +367,7 @@ fn ros3_limassol() -> Page {
     Page {
         slug: "ros3-limassol/",
         title: "ROS3-Limassol | OpenPELAOS Robotics Research",
-        description: "Explore ROS3-Limassol: ROS 2 telemetry-liveness recording and replay, communication blackouts, research credits and validation limits.",
+        description: "ROS3-Limassol evidence: synthetic replay, Rover SITL loopback and a limited USB bench test, with radio-link and field validation gaps.",
         body: r##"
 <section class="hero">
 <p class="eyebrow">OpenPELAOS / Robotics research / Experimental</p>
@@ -401,14 +402,23 @@ fn ros3_limassol() -> Page {
 <section aria-labelledby="ros3-status-title">
 <p class="eyebrow">Evidence and limits</p>
 <h2 id="ros3-status-title">Current validation status</h2>
-<ul>
-<li><strong>Simulation / loopback:</strong> <a href="https://github.com/n0711/ROS3-Limassol/pull/32">PR #32, merged 27 October 2026</a>, reports Rover 4.6.3 SITL blackout and recovery over localhost. This is simulated-autopilot evidence, not a physical link.</li>
-<li><strong>Physical USB bench:</strong> <a href="https://github.com/n0711/ROS3-Limassol/pull/58">PR #58, merged 2 November 2026</a>, records a Raspberry Pi 3B receiving Arduino heartbeat streams over USB. Disconnecting the Mega produced STALE after 2.42 s; reopening the port returned HEALTHY after 0.95 s while the Nano remained HEALTHY.</li>
-<li><strong>Replay coverage:</strong> <a href="https://github.com/n0711/ROS3-Limassol/pull/70">PR #70, merged 2 November 2026</a>, strengthens exact synthetic multi-monitor replay regression coverage. Passing CI does not establish physical timing or field reliability.</li>
-</ul>
+<div class="table-scroll"><table class="evidence-table">
+<caption class="muted">Evidence available as of 2 November 2026</caption>
+<thead><tr><th scope="col">Layer</th><th scope="col">Status</th><th scope="col">What the evidence establishes</th></tr></thead>
+<tbody>
+<tr><td>Synthetic recording/replay</td><td>Tested</td><td><a href="https://github.com/n0711/ROS3-Limassol/pull/70">PR #70</a>: exact generated multi-monitor replay regression coverage</td></tr>
+<tr><td>Rover SITL over localhost</td><td>Tested</td><td><a href="https://github.com/n0711/ROS3-Limassol/pull/32">PR #32</a>: simulated ArduPilot blackout detection and recovery; no physical link</td></tr>
+<tr><td>Raspberry Pi–Arduino USB</td><td>Limited bench</td><td><a href="https://github.com/n0711/ROS3-Limassol/pull/58">PR #58</a>: one physical USB disconnect/reconnect run; no MAVLink, flight controller or radio</td></tr>
+<tr><td>Companion + flight controller + radio</td><td>Not tested</td><td>No repository evidence yet</td></tr>
+<tr><td>Vessel/robot field operation</td><td>Not tested</td><td>No repository evidence yet</td></tr>
+</tbody></table></div>
 <p>The USB result is physical-interface evidence only: it did not include MAVLink, a flight controller, a radio, a vessel or robot in operation. Its recordings are identified by checksums but are not archived in the repository. <strong>Flight-controller integration, radio-link behaviour, physical vessel/robot measurements and field reliability are not yet established.</strong> Consult the repository's <a href="https://github.com/n0711/ROS3-Limassol/blob/main/robotics/ros3_limassol/docs/VALIDATION.md">validation record</a>, <a href="https://github.com/n0711/ROS3-Limassol/blob/main/docs/hardware/ARDUINO_USB_VALIDATION_2026-11-02.md">USB bench record</a> and <a href="https://github.com/n0711/ROS3-Limassol/actions">CI runs</a> for the dated evidence.</p>
 <p><a href="https://github.com/n0711/ROS3-Limassol#run-the-prototype">Run the reproducible experiment from source ↗</a></p>
 </section>
+<section class="panel"><div><p class="eyebrow">Next validation gates</p><h2>What must happen before a field claim</h2></div><div>
+<ol><li>Archive raw recordings, manifests, hashes and environment metadata so the reported runs can be independently checked.</li><li>Complete the planned three-Rover SITL isolation test over separate and shared loopback links.</li><li>Validate signed MAVLink through a companion computer, flight controller and physical radio bench before any vessel or robot deployment.</li></ol>
+<p>Each result must retain its own scope; passing one gate does not imply that a later gate has passed.</p>
+</div></section>
 <section class="panel"><div><p class="eyebrow">Related independent projects</p><h2>Explore more PELAOS work</h2></div><div><p><a href="https://github.com/n0711/LearnTwin">LearnTwin</a> is a degree, study and PhD-planning workspace; <a href="https://cysk8clips.com">cysk8clips.com</a> is the Cyprus skateboarding archive and spot guide. They are separate from ROS3-Limassol.</p></div></section>
 "##.to_string(),
         crumbs: vec![("ros3-limassol/", "ROS3-Limassol")],
@@ -853,6 +863,8 @@ mod tests {
         assert!(rendered.contains("Charalampos Nadiotis"));
         assert!(rendered.contains("physical vessel/robot measurements"));
         assert!(rendered.contains("USB result is physical-interface evidence only"));
+        assert!(rendered.contains("Companion + flight controller + radio"));
+        assert!(rendered.contains("No repository evidence yet"));
         assert!(rendered.contains("not an official ROS distribution"));
         assert!(rendered.contains("not peer-reviewed"));
         let landing = layout(&home());
