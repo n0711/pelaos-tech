@@ -11,6 +11,10 @@ Existing publication: **https://n0711.github.io/pelaos-tech/** (GitHub Pages).
 | `.github/workflows/pages.yml` | | Tests and builds pull requests; deploys on every push to `main`. |
 | `vercel.json`, `scripts/build-vercel.sh` | Bash | Builds the same site for Vercel, with root-path links and production canonical URLs. |
 
+## VERA-MOT research manuscript (3 November 2026)
+
+The new [VERA-MOT research page](https://n0711.github.io/pelaos-tech/vera-mot/) links to the [XeLaTeX manuscript source](https://github.com/n0711/vera-mot/blob/main/docs/papers/VERA_MOT_Implementation_Note.tex), its [compiled PDF](https://github.com/n0711/vera-mot/blob/main/docs/papers/VERA_MOT_Implementation_Note.pdf), and the [M4.6 checkpoint](https://github.com/n0711/vera-mot/blob/main/docs/checkpoints/M4_6_REID_2026-11-03.md). The manuscript is a preliminary working implementation note, not peer-reviewed or a real-vehicle quantitative performance study. The source's gated matching and memory protection passed synthetic regression checks; identity-annotated real vehicle evaluation is still outstanding. GitHub Pages publication should be verified after the merged workflow reports success.
+
 ## Featured ROS3-Limassol project
 
 The portfolio links to [ROS3-Limassol](https://github.com/n0711/ROS3-Limassol), an OpenPELAOS research prototype for telemetry arrival-liveness monitoring with synthetic recording/replay, ArduPilot Rover SITL over localhost, optional ROS 2 Humble/Jazzy adapters and a limited Raspberry Pi–Arduino USB disconnection bench result dated 2 November 2026. The USB result is physical-interface evidence only; flight-controller, radio-link, robotic-platform and field validation remain pending. The project credits **Christos Paparistodemou** for its original idea and **Charalampos Nadiotis** for implementation, project leadership and the manuscript. The prototype is not an official ROS distribution. LearnTwin and [cysk8clips.com](https://cysk8clips.com) remain separate portfolio projects.
@@ -20,8 +24,9 @@ The portfolio links to [ROS3-Limassol](https://github.com/n0711/ROS3-Limassol), 
 - `/`: project portfolio with RioTuner, cysk8clips.com, Narrify, LearnTwin, ROS3-Limassol and VERA-MOT
 - `/services/`: proposed one-page website pilot for Cyprus small businesses; scope and availability are not yet confirmed
 - `/ros3-limassol/`: ROS3-Limassol receiver-level telemetry-liveness research, original idea and author credits, synthetic experiment states, GitHub sources, manuscript licence and explicit field-validation limits
+- `/vera-mot/`: M4.6 reliability-gated appearance ReID implementation study with GitHub XeLaTeX manuscript (PDF and source), protected appearance memory, synthetic CI evidence, and explicit real-vehicle benchmark limitations
 - `/cultural-storytelling-map/`: Narrify team credits, source repository and a sourced place-name pilot
-- `/research/`: 0–500 m depth meter, seawater gauge pressure and viewport force, ROV vs AUV, navigation without GPS (NOAA sources). The meter is a calculator, not connected to a pressure sensor. Its range and initial depth are passed from Rust to Dart through data attributes.
+- `/research/`: 0–500 m depth meter, seawater gauge pressure and viewport force, ROV vs AUV, navigation without GPS (NOAA sources), plus a link to the VERA-MOT implementation note. The meter is a calculator, not connected to a pressure sensor. Its range and initial depth are passed from Rust to Dart through data attributes.
 - `/riotuner/`: Google Play release in preparation, with synthetic benchmark results
 - `/riotuner/testing/`: release status, physical-device testing preparation and useful feedback
 - `/riotuner/privacy/`: RioTuner privacy policy (the URL to enter in Google Play Console)
