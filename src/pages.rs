@@ -852,9 +852,10 @@ pub fn site() -> Vec<File> {
     files.push(File {
         path: "llms.txt".into(),
         contents: format!(
-            "# PelaosTech\n\n> Marine robotics research (deep-submergence ROV concept) and precision software (RioTuner, an instrument tuner).\n\n- [Research: pressure and navigation]({}): pressure at depth with NOAA sources, ROV vs AUV, navigation without GPS\n- [ROS3-Limassol]({}): receiver-arrival liveness evidence from synthetic replay, Rover SITL over localhost and a limited Raspberry Pi–Arduino USB bench test; flight-controller, radio-link and field validation pending\n- [RioTuner]({}): offline Android instrument tuner, Google Play release in preparation, with synthetic benchmark results\n- [RioTuner privacy policy]({})\n",
+            "# PelaosTech\n\n> Marine robotics research (deep-submergence ROV concept) and precision software (RioTuner, an instrument tuner).\n\n- [Research: pressure and navigation]({}): pressure at depth with NOAA sources, ROV vs AUV, navigation without GPS\n- [ROS3-Limassol]({}): receiver-arrival liveness evidence from synthetic replay, Rover SITL over localhost and a limited Raspberry Pi–Arduino USB bench test; flight-controller, radio-link and field validation pending\n- [VERA-MOT]({}): quality-gated appearance matching verified only on synthetic pinned-tracker tests; vehicle identity performance remains unmeasured\n- [RioTuner]({}): offline Android instrument tuner, Google Play release in preparation, with synthetic benchmark results\n- [RioTuner privacy policy]({})\n",
             url("research/"),
             url("ros3-limassol/"),
+            url("vera-mot/"),
             url("riotuner/"),
             url("riotuner/privacy/")
         ),
@@ -939,6 +940,22 @@ mod tests {
         assert!(landing.contains(&format!("href=\"{}\"", href("ros3-limassol/"))));
         let summary = site().into_iter().find(|f| f.path == "llms.txt").unwrap().contents;
         assert!(summary.contains(&url("ros3-limassol/")));
+    }
+
+    #[test]
+    fn vera_mot_research_page_links_working_paper_and_limits() {
+        let rendered = layout(&vera_mot());
+        assert!(rendered.contains("not a peer-reviewed paper"));
+        assert!(rendered.contains("Vehicle identity benchmark"));
+        assert!(rendered.contains("Not established"));
+        assert!(rendered.contains("VERA_MOT_Implementation_Note.tex"));
+        assert!(rendered.contains("VERA_MOT_Implementation_Note.pdf"));
+        assert!(rendered.contains("does not detect occlusion"));
+        assert!(rendered.contains("not been uploaded to ResearchGate"));
+        assert!(layout(&home()).contains(&format!("href=\"{}\"", href("vera-mot/"))));
+        assert!(layout(&research()).contains(&format!("href=\"{}\"", href("vera-mot/"))));
+        let sitemap = site().into_iter().find(|f| f.path == "sitemap.xml").unwrap().contents;
+        assert!(sitemap.contains(&format!("<loc>{}</loc>", url("vera-mot/"))));
     }
 
     #[test]
