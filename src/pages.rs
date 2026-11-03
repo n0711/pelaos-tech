@@ -15,7 +15,7 @@ const HOSTING: &str = match option_env!("PELAOS_HOSTING") {
     None => "github-pages",
 };
 /// Shown in the footer, JSON-LD `dateModified` and sitemap `lastmod`.
-pub const UPDATED: &str = "2026-11-02";
+pub const UPDATED: &str = "2026-11-03";
 
 pub fn validate_config() -> std::io::Result<()> {
     let invalid = || std::io::Error::new(std::io::ErrorKind::InvalidInput, "deployment needs an HTTPS site URL without a trailing slash, a matching base path, and github-pages or vercel hosting");
@@ -177,7 +177,7 @@ h2{letter-spacing:-.025em}.lead{max-width:680px!important;font-size:21px;line-he
 
 fn layout(p: &Page) -> String {
     let canonical = url(p.slug);
-    let nav = [("", "Home"), ("services/", "Websites"), ("research/", "Research"), ("ros3-limassol/", "ROS3"), ("riotuner/", "RioTuner")]
+    let nav = [("", "Home"), ("services/", "Websites"), ("research/", "Research"), ("vera-mot/", "VERA-MOT"), ("ros3-limassol/", "ROS3"), ("riotuner/", "RioTuner")]
         .iter()
         .map(|(slug, label)| {
             let current = if *slug == p.slug { " aria-current=\"page\"" } else { "" };
@@ -260,7 +260,7 @@ fn layout(p: &Page) -> String {
 </main>
 <footer>
 <a href="{services}">Websites</a><a href="{research}">Research</a><a href="{riotuner}">RioTuner</a><a href="{privacy}">Website privacy</a><a href="{CONTACT}">Contact</a><a href="{REVOLUT}">Support ↗</a>
-<p>© 2026 PelaosTech. Last updated <time datetime="{UPDATED}">2 November 2026</time>. Hosted on {hosting}.</p>
+<p>© 2026 PelaosTech. Last updated <time datetime="{UPDATED}">3 November 2026</time>. Hosted on {hosting}.</p>
 </footer>
 </body>
 </html>
@@ -295,7 +295,7 @@ fn home() -> Page {
 <article class="card project"><span class="badge">OpenPELAOS · Team prototype</span><h3>Cultural Storytelling Map</h3><p>Narrify connects community stories with places. Co-developed by Charalampos Nadiotis, Hussain Jamil and Nikitas Savva.</p><a href="{narrify}">Explore Narrify →</a></article>
 <article class="card project"><span class="badge">Open source · Local planner</span><h3>LearnTwin</h3><p>Track degree progress, study tasks, thesis milestones and PhD applications. Records stay in your browser; export a backup to keep them.</p><a href="https://github.com/n0711/LearnTwin#start-the-planner">Try LearnTwin from source ↗</a></article>
 <article class="card project wide"><span class="badge">OpenPELAOS · ROS 2 Humble / Jazzy</span><h3>ROS3-Limassol</h3><p>Telemetry arrival-liveness monitoring for robots with intermittent connectivity. Evidence now includes synthetic replay, ArduPilot Rover SITL over localhost and a limited Raspberry Pi–Arduino USB disconnection bench test. Flight-controller, radio-link, vessel/robot and field validation remain pending. Original idea: Christos Paparistodemou. Project lead and manuscript author: Charalampos Nadiotis. This independent prototype is not an official ROS release.</p><a href="{ros3}">Explore ROS3 research →</a></article>
-<article class="card project wide"><span class="badge">Research code · In progress</span><h3>VERA-MOT</h3><p>Multi-object tracking for drone video. The question: can unreliable appearance embeddings be stopped from corrupting identity memory when the camera moves, targets shrink and vehicles hide behind each other? The detector and a frozen BoT-SORT baseline are done (held-out detector AP 50.1, tracker HOTA 43.3). ReID training and the VERA association method come next.</p><a href="https://github.com/n0711/vera-mot">Read the VERA-MOT source ↗</a></article>
+<article class="card project wide"><span class="badge">Open research · Synthetic verification</span><h3>VERA-MOT</h3><p>Quality-gated appearance association for multi-object tracking in drone video. An opt-in BoT-SORT integration now protects stored identity features against low-quality crops in synthetic tests. The implementation note is available in XeLaTeX and PDF; real vehicle identity evaluation remains unverified.</p><a href="{vera}">Read the VERA-MOT research note →</a></article>
 </div>
 </section>
 <section class="panel"><div><p class="eyebrow">Website pilot / Cyprus</p><h2>A clear website for a small business.</h2></div><div><p>PELAOS is preparing a fixed-scope, one-page website pilot with responsive design, contact links, basic search metadata and source handover. It is a proposal rather than an open booking service.</p><a href="{services}">Read the website pilot scope →</a></div></section>
@@ -308,6 +308,7 @@ fn home() -> Page {
         services = href("services/"),
         narrify = href("cultural-storytelling-map/"),
         ros3 = href("ros3-limassol/"),
+        vera = href("vera-mot/"),
     );
     Page {
         slug: "",
@@ -357,6 +358,65 @@ fn services() -> Page {
 </section>
 "##, home = href(""), research = href("research/")),
         crumbs: vec![("services/", "Website services")],
+        extra_ld: vec![],
+        script: false,
+        noindex: false,
+    }
+}
+
+fn vera_mot() -> Page {
+    Page {
+        slug: "vera-mot/",
+        title: "VERA-MOT ReID Research | PELAOS",
+        description: "VERA-MOT research on quality-gated vehicle appearance matching and protected feature memory: open source, synthetic tests and validation limits.",
+        body: r##"
+<section class="hero">
+<p class="eyebrow">PELAOS / Computer vision research / 3 November 2026</p>
+<h1>VERA-MOT: reliability-gated vehicle tracking</h1>
+<p class="lead">Can low-quality appearance observations be prevented from corrupting the identity memory of a multi-object tracker?</p>
+<p class="status-note"><strong>Preliminary implementation study:</strong> The current results establish synthetic code and pinned-tracker behaviour, not improved vehicle tracking accuracy. The manuscript is a working technical note, not a peer-reviewed paper or a validated vehicle benchmark.</p>
+<div class="actions">
+<a class="button primary" href="https://github.com/n0711/vera-mot/blob/main/docs/papers/VERA_MOT_Implementation_Note.pdf">Read the XeLaTeX-built paper (PDF) ↗</a>
+<a class="button" href="https://github.com/n0711/vera-mot/blob/main/docs/papers/VERA_MOT_Implementation_Note.tex">View editable XeLaTeX source ↗</a>
+<a class="button" href="https://github.com/n0711/vera-mot">Explore source repository ↗</a>
+</div>
+</section>
+<section aria-labelledby="vera-method-title">
+<p class="eyebrow">Mechanism / M4.6 research checkpoint</p>
+<h2 id="vera-method-title">How reliability-gated ReID works</h2>
+<ol>
+<li>Receive a video frame and detections with bounding-box coordinates and scores.</li>
+<li>Compute an appearance descriptor for each selected crop, alongside a provisional quality score from crop area, sharpness and in-frame extent.</li>
+<li>When the image-quality score is low, exclude that descriptor from appearance association and persistent identity-feature updates.</li>
+<li>Keep the tracker's geometric and motion association route available; accepted observations may update appearance memory again.</li>
+</ol>
+<p>The implementation uses an opt-in patch to a pinned BoT-SORT revision. The quality measure is an uncalibrated heuristic, not a probability of correct identity; in-frame extent does not detect occlusion behind another object. Appearance descriptors are still computed before gating, so reduced inference time is not claimed.</p>
+</section>
+<section aria-labelledby="vera-evidence-title">
+<p class="eyebrow">Evidence / Verified 3 November 2026</p>
+<h2 id="vera-evidence-title">What has actually been tested?</h2>
+<div class="table-scroll"><table class="evidence-table">
+<caption class="muted">Synthetic and code-level tests only; no new real-vehicle evaluation</caption>
+<thead><tr><th scope="col">Check</th><th scope="col">Verified scope</th></tr></thead>
+<tbody>
+<tr><td>CPU unit tests</td><td>121 passed; five integration tests deselected in the recorded GitHub CI job</td></tr>
+<tr><td>Pinned BoT-SORT integration</td><td>Four passed synthetic integration tests; protected appearance memory and missing-feature handling checked</td></tr>
+<tr><td>Opt-in compatibility patches</td><td>Patch applicability and repeated local installer behaviour verified in CI</td></tr>
+<tr><td>Vehicle identity benchmark</td><td>Not established. No new IDF1, HOTA, association accuracy, identity-switch or runtime improvement is claimed</td></tr>
+</tbody></table></div>
+<p>The earlier no-ReID tracking metrics are archival repository summaries; they were not regenerated here and cannot be compared to a missing real-vehicle VERA run. <a href="https://github.com/n0711/vera-mot/blob/main/docs/checkpoints/M4_6_REID_2026-11-03.md">Read the dated checkpoint and evidence limits ↗</a>.</p>
+</section>
+<section class="panel"><div><p class="eyebrow">Publication status</p><h2>Working technical note, not peer reviewed</h2></div><div>
+<p><strong>Author:</strong> Charalampos Nadiotis. The five-page paper describes the mathematical gate, source integration, testing constraints, reproducibility, threats to validity and a prospective evaluation protocol.</p>
+<p>The XeLaTeX source and PDF are hosted on GitHub. The note has not been uploaded to ResearchGate as an empirical preprint.</p>
+<p><a href="https://github.com/n0711/vera-mot/blob/main/docs/VERA_REID_RELIABILITY.md">Implementation and test protocol ↗</a></p>
+</div></section>
+<section class="panel"><div><p class="eyebrow">Next experiment</p><h2>What would validate the hypothesis?</h2></div><div>
+<p>Use identity-annotated vehicle sequences, fixed detections and identical tracker settings to compare no ReID, ungated appearance matching and VERA-gated appearance matching. Record identity switches, IDF1, AssA, HOTA, false rejection and latency by sequence with full input provenance.</p>
+<p>Until then, the implementation is open and testable but the proposed tracking benefit remains an open empirical question.</p>
+</div></section>
+"##.to_string(),
+        crumbs: vec![("vera-mot/", "VERA-MOT")],
         extra_ld: vec![],
         script: false,
         noindex: false,
@@ -479,6 +539,7 @@ fn cultural_storytelling_map() -> Page {
 
 fn research() -> Page {
     let ros3 = href("ros3-limassol/");
+    let vera = href("vera-mot/");
     let rows = [0.0, 10.0, 50.0, 100.0, 200.0, 300.0, 400.0, MAX_DEPTH_M as f64]
         .iter()
         .map(|&h| {
@@ -536,6 +597,13 @@ fn research() -> Page {
 <h2 id="ros3-research-update">ROS3-Limassol validation boundary</h2>
 <p>ROS3-Limassol now has synthetic recording/replay evidence, ArduPilot Rover SITL blackout tests over localhost, and one limited Raspberry Pi–Arduino USB disconnection/recovery bench result. The USB test is a physical-interface check, not evidence for MAVLink, a flight controller, a radio link, a deployed vessel or field reliability.</p>
 <p><a href="{ros3}">Read the dated results and remaining gaps →</a></p>
+</section>
+
+<section aria-labelledby="vera-research-update">
+<p class="eyebrow">Computer vision / VERA-MOT / 3 November 2026</p>
+<h2 id="vera-research-update">Reliability-gated ReID and protected appearance memory</h2>
+<p>An opt-in tracking prototype passed synthetic regression and pinned BoT-SORT integration tests. Its image-quality gate excludes low-quality descriptors from appearance-memory updates while preserving motion and geometric association. No improved tracking metrics have yet been measured on annotated vehicles.</p>
+<p><a href="{vera}">Read the XeLaTeX paper, code and validation limits →</a></p>
 </section>
 
 <h2>PELAOS depth meter · 0–{MAX_DEPTH_M} m</h2>
@@ -753,7 +821,7 @@ const FAVICON: &str = r##"<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1
 "##;
 
 fn pages() -> Vec<Page> {
-    vec![home(), services(), research(), ros3_limassol(), cultural_storytelling_map(), riotuner(), riotuner_testing(), riotuner_privacy(), site_privacy(), not_found()]
+    vec![home(), services(), research(), vera_mot(), ros3_limassol(), cultural_storytelling_map(), riotuner(), riotuner_testing(), riotuner_privacy(), site_privacy(), not_found()]
 }
 
 pub fn site() -> Vec<File> {
@@ -784,9 +852,10 @@ pub fn site() -> Vec<File> {
     files.push(File {
         path: "llms.txt".into(),
         contents: format!(
-            "# PelaosTech\n\n> Marine robotics research (deep-submergence ROV concept) and precision software (RioTuner, an instrument tuner).\n\n- [Research: pressure and navigation]({}): pressure at depth with NOAA sources, ROV vs AUV, navigation without GPS\n- [ROS3-Limassol]({}): receiver-arrival liveness evidence from synthetic replay, Rover SITL over localhost and a limited Raspberry Pi–Arduino USB bench test; flight-controller, radio-link and field validation pending\n- [RioTuner]({}): offline Android instrument tuner, Google Play release in preparation, with synthetic benchmark results\n- [RioTuner privacy policy]({})\n",
+            "# PelaosTech\n\n> Marine robotics research (deep-submergence ROV concept) and precision software (RioTuner, an instrument tuner).\n\n- [Research: pressure and navigation]({}): pressure at depth with NOAA sources, ROV vs AUV, navigation without GPS\n- [ROS3-Limassol]({}): receiver-arrival liveness evidence from synthetic replay, Rover SITL over localhost and a limited Raspberry Pi–Arduino USB bench test; flight-controller, radio-link and field validation pending\n- [VERA-MOT]({}): quality-gated appearance matching verified only on synthetic pinned-tracker tests; vehicle identity performance remains unmeasured\n- [RioTuner]({}): offline Android instrument tuner, Google Play release in preparation, with synthetic benchmark results\n- [RioTuner privacy policy]({})\n",
             url("research/"),
             url("ros3-limassol/"),
+            url("vera-mot/"),
             url("riotuner/"),
             url("riotuner/privacy/")
         ),
@@ -871,6 +940,22 @@ mod tests {
         assert!(landing.contains(&format!("href=\"{}\"", href("ros3-limassol/"))));
         let summary = site().into_iter().find(|f| f.path == "llms.txt").unwrap().contents;
         assert!(summary.contains(&url("ros3-limassol/")));
+    }
+
+    #[test]
+    fn vera_mot_research_page_links_working_paper_and_limits() {
+        let rendered = layout(&vera_mot());
+        assert!(rendered.contains("not a peer-reviewed paper"));
+        assert!(rendered.contains("Vehicle identity benchmark"));
+        assert!(rendered.contains("Not established"));
+        assert!(rendered.contains("VERA_MOT_Implementation_Note.tex"));
+        assert!(rendered.contains("VERA_MOT_Implementation_Note.pdf"));
+        assert!(rendered.contains("does not detect occlusion"));
+        assert!(rendered.contains("not been uploaded to ResearchGate"));
+        assert!(layout(&home()).contains(&format!("href=\"{}\"", href("vera-mot/"))));
+        assert!(layout(&research()).contains(&format!("href=\"{}\"", href("vera-mot/"))));
+        let sitemap = site().into_iter().find(|f| f.path == "sitemap.xml").unwrap().contents;
+        assert!(sitemap.contains(&format!("<loc>{}</loc>", url("vera-mot/"))));
     }
 
     #[test]
