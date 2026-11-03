@@ -1,0 +1,33 @@
+name: Ubuntu 22.04 portable security smoke checks
+
+on:
+  pull_request:
+    paths:
+      - "tests/security/ubuntu_2204_portable_check.py"
+      - ".github/workflows/ubuntu22-portable-boundaries.yml"
+      - "docs/UBUNTU_2204_AI_AGENT_SECURITY.md"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  portable-boundaries:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 10
+    steps:
+      - name: Checkout without persisted token
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Read-only host inventory and portable isolation checks
+        run: |
+          sudo -n python3 tests/security/ubuntu_2204_portable_check.py | tee ubuntu22_smoke_results.json
+          python3 -c 'import json; x=json.load(open("ubuntu22_smoke_results.json")); assert x["pass"], "Portable controls failed"'
+      - name: Preserve test evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ubuntu22-portable-smoke-evidence
+          path: ubuntu22_smoke_results.json
+          if-no-files-found: warn
