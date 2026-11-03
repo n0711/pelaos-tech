@@ -283,8 +283,8 @@ fn home() -> Page {
         r##"
 <section class="hero">
 <p class="eyebrow">PELAOS / Independent software &amp; research / Cyprus</p>
-<h1>Software products and robotics research from Cyprus.</h1>
-<p class="lead">PELAOS builds independent software projects and explores marine robotics. Discover apps, open research and a proposed small-business website pilot.</p>
+<h1>Independent software, AI and open research from Cyprus.</h1>
+<p class="lead">Explore original software, computer vision, distributed systems and mathematical research, alongside practical applications and an early website pilot.</p>
 <div class="actions"><a class="button primary" href="#projects">Explore the projects ↓</a><a class="button" href="{services}">Website pilot →</a></div>
 </section>
 <section id="projects" aria-labelledby="project-heading">
@@ -299,8 +299,8 @@ fn home() -> Page {
 </div>
 </section>
 <section class="panel"><div><p class="eyebrow">Website pilot / Cyprus</p><h2>A clear website for a small business.</h2></div><div><p>PELAOS is preparing a fixed-scope, one-page website pilot with responsive design, contact links, basic search metadata and source handover. It is a proposal rather than an open booking service.</p><a href="{services}">Read the website pilot scope →</a></div></section>
-<section class="panel"><div><p class="eyebrow">Research notebook</p><h2>Curiosity goes deeper.</h2></div><div><p>Marine robotics is my main research direction. I have published my ROV work on <a href="{RESEARCHGATE}">ResearchGate</a> and plan to take it further as doctoral research. The notes cover pressure, navigation and why operating underwater is hard. The deep-submergence vehicle is a concept, not a deployed product.</p><a href="{research}">Explore the deep-sea notes →</a></div></section>
-<section class="panel"><div><p class="eyebrow">The person behind PELAOS</p><h2>From Cyprus, with curiosity.</h2></div><div><p>I’m Charalampos Nadiotis, a robotics engineer and Computer Science student at Frederick University. I was previously a Robotics Engineer at ADDITESS, working across the full R&amp;D cycle of field robotics, from research and software to integration and field testing. This is my project portfolio: what is available, what is being tested and what I’m exploring next.</p><p><a href="https://github.com/n0711">GitHub</a> · <a href="{RESEARCHGATE}">ResearchGate</a> · <a href="{LINKEDIN}">Contact on LinkedIn</a></p></div></section>
+<section class="panel"><div><p class="eyebrow">Research notebook</p><h2>Algorithms, AI and experimental systems.</h2></div><div><p>Follow ongoing work on P versus NP (an open question, not a claimed proof), reliability-gated vehicle tracking and ROS3 telemetry monitoring. Additional marine engineering notes cover underwater pressure and navigation; experimental limits are stated for each project.</p><a href="{research}">Browse all research notes →</a></div></section>
+<section class="panel"><div><p class="eyebrow">The person behind PELAOS</p><h2>From Cyprus, with curiosity.</h2></div><div><p>I’m Charalampos Nadiotis, a robotics engineer and Computer Science student at Frederick University. This is my project portfolio: what is available, what is being tested and what I’m exploring next.</p><p><a href="https://github.com/n0711">GitHub</a> · <a href="{RESEARCHGATE}">ResearchGate</a> · <a href="{LINKEDIN}">Contact on LinkedIn</a></p></div></section>
 <section class="panel" id="support"><div><p class="eyebrow">Support</p><h2>Keep the projects going.</h2></div><div><p>The projects here are free and built in my own time. If one of them is useful to you, you can support further development with a one-off contribution via Revolut. Every contribution is voluntary and does not buy access, features or support.</p><a class="button primary" href="{REVOLUT}">Support via Revolut ↗</a></div></section>
 "##,
         research = href("research/"),
@@ -312,8 +312,8 @@ fn home() -> Page {
     );
     Page {
         slug: "",
-        title: "PELAOS Tech | Software & Robotics Research in Cyprus",
-        description: "Explore PELAOS software and marine robotics research in Cyprus: RioTuner, ROS3-Limassol, Narrify, LearnTwin and a small-business website pilot.",
+        title: "PELAOS Tech | Software, AI and Computer Science Research",
+        description: "Independent software, AI and computer science research from PELAOS: VERA-MOT, ROS3-Limassol, RioTuner, Narrify, LearnTwin and more.",
         body,
         crumbs: vec![],
         extra_ld: vec![],
@@ -354,7 +354,7 @@ fn services() -> Page {
 <section aria-labelledby="status-title">
 <h2 id="status-title">Pilot status and next step</h2>
 <p>This is an early service proposal, not a live ordering or payment page. Scope, schedule, availability, price, taxes and cancellation terms must be confirmed in a written quote before any work or payment. No lead form, tracking or checkout is used here.</p>
-<p>To discuss a potential pilot, <a href="{LINKEDIN}">contact PELAOS on LinkedIn</a>. For a sample of current engineering and software work, explore the <a href="{research}">marine robotics research notes</a>.</p>
+<p>To discuss a potential pilot, <a href="{LINKEDIN}">contact PELAOS on LinkedIn</a>. For a sample of current engineering and software work, explore the <a href="{research}">computer science and AI research notes</a>.</p>
 </section>
 "##, home = href(""), research = href("research/")),
         crumbs: vec![("services/", "Website services")],
@@ -588,15 +588,20 @@ fn research() -> Page {
     );
     let body = format!(
         r#"
-<h1>Marine robotics: depth to {MAX_DEPTH_M} m</h1>
-<p class="lead">Explore depth and pressure from the surface to {MAX_DEPTH_M} metres, with sources.</p>
-<p class="status-note">These notes support my research direction in marine robotics. My ROV work is published on <a href="{RESEARCHGATE}">ResearchGate</a>, and I plan to continue it at doctoral level.</p>
-
-<section aria-labelledby="ros3-research-update">
-<p class="eyebrow">OpenPELAOS / Evidence update / 2 November 2026</p>
-<h2 id="ros3-research-update">ROS3-Limassol validation boundary</h2>
-<p>ROS3-Limassol now has synthetic recording/replay evidence, ArduPilot Rover SITL blackout tests over localhost, and one limited Raspberry Pi–Arduino USB disconnection/recovery bench result. The USB test is a physical-interface check, not evidence for MAVLink, a flight controller, a radio link, a deployed vessel or field reliability.</p>
-<p><a href="{ros3}">Read the dated results and remaining gaps →</a></p>
+<h1>Computer science, AI and open research</h1>
+<p class="lead">Explore reproducible experiments in algorithms, computer vision and distributed robotics software. Each project separates established evidence from open questions.</p>
+<section aria-labelledby="complexity-research">
+<p class="eyebrow">Computer science / Complexity theory / Research note</p>
+<h2 id="complexity-research">P versus NP: a research question</h2>
+<p><strong>Research interest:</strong> Charalampos Nadiotis (30 October 2026) is investigating the proposition P = NP. This is a personal research direction, not an established mathematical result or an independently verified proof.</p>
+<p><strong>Definitions:</strong> P is the class of decision problems solvable by a deterministic algorithm in polynomial time. NP is the class of decision problems whose proposed solutions can be verified in polynomial time. Whether P equals NP remains an open problem.</p>
+<div class="card">
+<span class="badge">Unverified research proposition</span>
+<h3>What would constitute a proof?</h3>
+<p>To establish P = NP, a rigorous polynomial-time algorithm for any NP-complete decision problem, together with a proof of correctness and polynomial running-time bound, would suffice. Numerical experiments, benchmark results, or an unsupported assertion of equality do not resolve the problem.</p>
+<p>A complete manuscript, independently checkable argument, and expert scrutiny are required before any solution claim can be reported as verified.</p>
+</div>
+<p><strong>Primary reference:</strong> <a href="https://www.claymath.org/millennium/p-vs-np/">Clay Mathematics Institute — P vs NP</a>. <a href="https://www.scottaaronson.com/papers/pnp.pdf">Background survey: Scott Aaronson, P versus NP</a>.</p>
 </section>
 
 <section aria-labelledby="vera-research-update">
@@ -606,6 +611,17 @@ fn research() -> Page {
 <p><a href="{vera}">Read the XeLaTeX paper, code and validation limits →</a></p>
 </section>
 
+<section aria-labelledby="ros3-research-update">
+<p class="eyebrow">OpenPELAOS / Evidence update / 2 November 2026</p>
+<h2 id="ros3-research-update">ROS3-Limassol validation boundary</h2>
+<p>ROS3-Limassol now has synthetic recording/replay evidence, ArduPilot Rover SITL blackout tests over localhost, and one limited Raspberry Pi–Arduino USB disconnection/recovery bench result. The USB test is a physical-interface check, not evidence for MAVLink, a flight controller, a radio link, a deployed vessel or field reliability.</p>
+<p><a href="{ros3}">Read the dated results and remaining gaps →</a></p>
+</section>
+
+<section aria-labelledby="marine-research">
+<p class="eyebrow">Additional research / Marine robotics</p>
+<h2 id="marine-research">Underwater systems: depth and navigation</h2>
+<p>Explore the depth and pressure model from the surface to {MAX_DEPTH_M} metres. My related ROV research is linked on <a href="{RESEARCHGATE}">ResearchGate</a>; the calculator does not establish a deployed sensor or pressure-rated vehicle.</p>
 <h2>PELAOS depth meter · 0–{MAX_DEPTH_M} m</h2>
 <p>NOAA: <q>For every 33 feet (10.06 meters) you go down, the pressure increases by one atmosphere.</q> (<a href="{NOAA_PRESSURE}">NOAA Ocean Service</a>)</p>
 <div class="card">
@@ -624,18 +640,6 @@ fn research() -> Page {
 <p><q>GPS does not work underwater</q>, so a submerged vehicle's position estimate drifts until it can surface for a new fix (<a href="{NOAA_NAVIGATION}">NOAA Ocean Exploration</a>). Deep vehicles therefore combine dead reckoning (inertial sensors, compass, depth and speed) with acoustic positioning, where sound pulses between the vehicle and beacons or a surface vessel give its range and bearing.</p>
 
 
-<section aria-labelledby="complexity-research">
-<p class="eyebrow">Computer science / Complexity theory / Research note</p>
-<h2 id="complexity-research">P versus NP: a research question</h2>
-<p><strong>Research interest:</strong> Charalampos Nadiotis (30 October 2026) is investigating the proposition P = NP. This is a personal research direction, not an established mathematical result or an independently verified proof.</p>
-<p><strong>Definitions:</strong> P is the class of decision problems solvable by a deterministic algorithm in polynomial time. NP is the class of decision problems whose proposed solutions can be verified in polynomial time. Whether P equals NP remains an open problem.</p>
-<div class="card">
-<span class="badge">Unverified research proposition</span>
-<h3>What would constitute a proof?</h3>
-<p>To establish P = NP, a rigorous polynomial-time algorithm for any NP-complete decision problem, together with a proof of correctness and polynomial running-time bound, would suffice. Numerical experiments, benchmark results, or an unsupported assertion of equality do not resolve the problem.</p>
-<p>A complete manuscript, independently checkable argument, and expert scrutiny are required before any solution claim can be reported as verified.</p>
-</div>
-<p><strong>Primary reference:</strong> <a href="https://www.claymath.org/millennium/p-vs-np/">Clay Mathematics Institute — P vs NP</a>. <a href="https://www.scottaaronson.com/papers/pnp.pdf">Background survey: Scott Aaronson, P versus NP</a>.</p>
 </section>
 
 <h2>FAQ</h2>
@@ -647,8 +651,8 @@ fn research() -> Page {
     );
     Page {
         slug: "research/",
-        title: "Marine robotics and P vs NP research | PelaosTech",
-        description: "PELAOS research on marine robotics, underwater pressure and navigation, plus an explicitly unverified P versus NP complexity-theory research proposition.",
+        title: "Computer Science, AI and Open Research | PelaosTech",
+        description: "Explore PELAOS research in algorithms, P versus NP, VERA-MOT computer vision and ROS3 distributed robotics software, plus underwater engineering notes.",
         body,
         crumbs: vec![("research/", "Research")],
         extra_ld: vec![faq_ld],
@@ -852,7 +856,7 @@ pub fn site() -> Vec<File> {
     files.push(File {
         path: "llms.txt".into(),
         contents: format!(
-            "# PelaosTech\n\n> Marine robotics research (deep-submergence ROV concept) and precision software (RioTuner, an instrument tuner).\n\n- [Research: pressure and navigation]({}): pressure at depth with NOAA sources, ROV vs AUV, navigation without GPS\n- [ROS3-Limassol]({}): receiver-arrival liveness evidence from synthetic replay, Rover SITL over localhost and a limited Raspberry Pi–Arduino USB bench test; flight-controller, radio-link and field validation pending\n- [VERA-MOT]({}): quality-gated appearance matching verified only on synthetic pinned-tracker tests; vehicle identity performance remains unmeasured\n- [RioTuner]({}): offline Android instrument tuner, Google Play release in preparation, with synthetic benchmark results\n- [RioTuner privacy policy]({})\n",
+            "# PelaosTech\n\n> Independent software, computer science, AI and open research, including RioTuner, VERA-MOT and ROS3-Limassol.\n\n- [Research: algorithms, AI and robotics]({}): P versus NP (unverified), VERA-MOT, ROS3-Limassol, plus sourced underwater pressure and navigation notes\n- [ROS3-Limassol]({}): receiver-arrival liveness evidence from synthetic replay, Rover SITL over localhost and a limited Raspberry Pi–Arduino USB bench test; flight-controller, radio-link and field validation pending\n- [VERA-MOT]({}): quality-gated appearance matching verified only on synthetic pinned-tracker tests; vehicle identity performance remains unmeasured\n- [RioTuner]({}): offline Android instrument tuner, Google Play release in preparation, with synthetic benchmark results\n- [RioTuner privacy policy]({})\n",
             url("research/"),
             url("ros3-limassol/"),
             url("vera-mot/"),
