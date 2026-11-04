@@ -35,24 +35,36 @@ jobs:
           git -C "$UPSTREAM" fetch --depth 1 origin 3bb202e5e4df7fd7e0b59486acf7d0f1e03244c4
           git -C "$UPSTREAM" checkout --detach FETCH_HEAD
           test "$(git -C "$UPSTREAM" rev-parse HEAD)" = "3bb202e5e4df7fd7e0b59486acf7d0f1e03244c4"
+      - name: Install pinned-upstream documentation requirements
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install --disable-pip-version-check -r "$RUNNER_TEMP/ubuntu-security-upstream/requirements.txt"
+      - name: Build unchanged upstream to record warning baseline
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m sphinx -b dirhtml \
+            -c "$RUNNER_TEMP/ubuntu-security-upstream" \
+            -d "$RUNNER_TEMP/ubuntu-security-baseline-doctrees" \
+            -j 2 \
+            -w "$RUNNER_TEMP/ubuntu-security-baseline-warnings.txt" \
+            -D llms_txt_enabled=0 \
+            "$RUNNER_TEMP/ubuntu-security-upstream" \
+            "$RUNNER_TEMP/ubuntu-security-baseline-site"
       - name: Insert the proposed page and reference in a temporary checkout
         shell: bash
         run: |
           set -euo pipefail
           python tests/security/check_ubuntu_security_sphinx.py prepare \
             --repo "$GITHUB_WORKSPACE" --upstream "$RUNNER_TEMP/ubuntu-security-upstream"
-      - name: Install pinned-upstream documentation requirements
-        shell: bash
-        run: |
-          set -euo pipefail
-          python -m pip install --disable-pip-version-check -r "$RUNNER_TEMP/ubuntu-security-upstream/requirements.txt"
-      - name: Build with Canonical upstream Sphinx configuration
+      - name: Build modified upstream using Canonical Sphinx configuration
         shell: bash
         run: |
           set -euo pipefail
           python -m sphinx -b dirhtml \
             -c "$RUNNER_TEMP/ubuntu-security-upstream" \
-            -d "$RUNNER_TEMP/ubuntu-security-doctrees" \
+            -d "$RUNNER_TEMP/ubuntu-security-proposal-doctrees" \
             -j 2 \
             -w "$RUNNER_TEMP/ubuntu-security-sphinx-warnings.txt" \
             -D llms_txt_enabled=0 \
@@ -66,11 +78,14 @@ jobs:
             --repo "$GITHUB_WORKSPACE" \
             --upstream "$RUNNER_TEMP/ubuntu-security-upstream" \
             --html "$RUNNER_TEMP/ubuntu-security-site" \
-            --warnings "$RUNNER_TEMP/ubuntu-security-sphinx-warnings.txt"
+            --warnings "$RUNNER_TEMP/ubuntu-security-sphinx-warnings.txt" \
+            --baseline-warnings "$RUNNER_TEMP/ubuntu-security-baseline-warnings.txt"
       - name: Upload Sphinx warning evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: ubuntu-security-sphinx-warnings
-          path: ${{ runner.temp }}/ubuntu-security-sphinx-warnings.txt
+          name: ubuntu-security-sphinx-warning-comparison
+          path: |
+            ${{ runner.temp }}/ubuntu-security-baseline-warnings.txt
+            ${{ runner.temp }}/ubuntu-security-sphinx-warnings.txt
           if-no-files-found: ignore
