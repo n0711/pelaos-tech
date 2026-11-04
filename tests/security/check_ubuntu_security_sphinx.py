@@ -40,7 +40,16 @@ def prepare(repo: Path, upstream: Path) -> None:
     print("Prepared proposal inside pinned temporary upstream checkout")
 
 
-def verify(upstream: Path, html: Path, warnings: Path) -> None:
+def relevant_warnings(path: Path) -> set[str]:
+    if not path.is_file():
+        raise RuntimeError("Sphinx warning record is missing: " + str(path))
+    return {
+        line.strip() for line in path.read_text(encoding="utf-8").splitlines()
+        if "WARNING:" in line or "ERROR:" in line
+    }
+
+
+def verify(upstream: Path, html: Path, warnings: Path, baseline_warnings: Path) -> None:
     page = html / "common-mistakes" / "ai-coding-agents" / "index.html"
     if not page.is_file():
         raise RuntimeError("Expected generated page not found: " + str(page))
@@ -52,19 +61,25 @@ def verify(upstream: Path, html: Path, warnings: Path) -> None:
     ):
         if required not in content:
             raise RuntimeError("Generated HTML is missing: " + required)
+    navigation = html / "common-mistakes" / "index.html"
+    if not navigation.is_file() or "ai-coding-agents" not in navigation.read_text(encoding="utf-8"):
+        raise RuntimeError("Proposed document is missing from generated common-mistakes navigation")
     if not (upstream / REL).is_file():
         raise RuntimeError("Source document absent after build")
-    recorded = warnings.read_text(encoding="utf-8") if warnings.is_file() else ""
-    related = [
-        line for line in recorded.splitlines()
-        if ("ai-coding-agents" in line or "common-mistakes/index.rst" in line)
-        and ("WARNING:" in line or "ERROR:" in line)
-    ]
-    if related:
-        raise RuntimeError("Sphinx warnings affecting the proposal:\n" + "\n".join(related))
-    print("PASS: proposed page built, expected content present, no page/index warnings")
-    if recorded.strip():
-        print("NOTE: upstream reported unrelated warnings, inspect workflow artifact", file=sys.stderr)
+    original = relevant_warnings(baseline_warnings)
+    modified = relevant_warnings(warnings)
+    introduced = modified - original
+    if introduced:
+        raise RuntimeError(
+            "New Sphinx warnings after adding the proposal:\n" +
+            "\n".join(sorted(introduced))
+        )
+    print(
+        "PASS: proposed page built and linked, "
+        f"no new Sphinx warnings (upstream baseline {len(original)}, proposal {len(modified)})"
+    )
+    if original:
+        print("NOTE: existing upstream warnings are preserved as baseline evidence", file=sys.stderr)
 
 
 def main() -> None:
@@ -74,13 +89,17 @@ def main() -> None:
     parser.add_argument("--upstream", required=True, type=Path)
     parser.add_argument("--html", type=Path)
     parser.add_argument("--warnings", type=Path)
+    parser.add_argument("--baseline-warnings", type=Path)
     args = parser.parse_args()
     if args.action == "prepare":
         prepare(args.repo.resolve(), args.upstream.resolve())
     else:
-        if args.html is None or args.warnings is None:
-            parser.error("--html and --warnings required for verify")
-        verify(args.upstream.resolve(), args.html.resolve(), args.warnings.resolve())
+        if args.html is None or args.warnings is None or args.baseline_warnings is None:
+            parser.error("--html, --warnings and --baseline-warnings required for verify")
+        verify(
+            args.upstream.resolve(), args.html.resolve(),
+            args.warnings.resolve(), args.baseline_warnings.resolve()
+        )
 
 
 if __name__ == "__main__":
