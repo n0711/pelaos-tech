@@ -1,0 +1,76 @@
+name: Ubuntu Security upstream Sphinx compatibility
+
+on:
+  pull_request:
+    paths:
+      - "integrations/ubuntu-security-documentation/**"
+      - "tests/security/check_ubuntu_security_sphinx.py"
+      - ".github/workflows/ubuntu-security-docs-sphinx.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  upstream-sphinx:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 20
+    steps:
+      - name: Checkout proposal without persisted credentials
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Install Python for the upstream Sphinx environment
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Fetch fixed upstream source without executing arbitrary branches
+        shell: bash
+        run: |
+          set -euo pipefail
+          UPSTREAM="$RUNNER_TEMP/ubuntu-security-upstream"
+          mkdir -p "$UPSTREAM"
+          git -C "$UPSTREAM" init -q
+          git -C "$UPSTREAM" remote add origin https://github.com/canonical/ubuntu-security-documentation.git
+          git -C "$UPSTREAM" fetch --depth 1 origin 3bb202e5e4df7fd7e0b59486acf7d0f1e03244c4
+          git -C "$UPSTREAM" checkout --detach FETCH_HEAD
+          test "$(git -C "$UPSTREAM" rev-parse HEAD)" = "3bb202e5e4df7fd7e0b59486acf7d0f1e03244c4"
+      - name: Insert the proposed page and reference in a temporary checkout
+        shell: bash
+        run: |
+          set -euo pipefail
+          python tests/security/check_ubuntu_security_sphinx.py prepare \
+            --repo "$GITHUB_WORKSPACE" --upstream "$RUNNER_TEMP/ubuntu-security-upstream"
+      - name: Install pinned-upstream documentation requirements
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install --disable-pip-version-check -r "$RUNNER_TEMP/ubuntu-security-upstream/requirements.txt"
+      - name: Build with Canonical upstream Sphinx configuration
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m sphinx -b dirhtml \
+            -c "$RUNNER_TEMP/ubuntu-security-upstream" \
+            -d "$RUNNER_TEMP/ubuntu-security-doctrees" \
+            -j 2 \
+            -w "$RUNNER_TEMP/ubuntu-security-sphinx-warnings.txt" \
+            -D llms_txt_enabled=0 \
+            "$RUNNER_TEMP/ubuntu-security-upstream" \
+            "$RUNNER_TEMP/ubuntu-security-site"
+      - name: Verify generated page and proposal-specific warnings
+        shell: bash
+        run: |
+          set -euo pipefail
+          python tests/security/check_ubuntu_security_sphinx.py verify \
+            --repo "$GITHUB_WORKSPACE" \
+            --upstream "$RUNNER_TEMP/ubuntu-security-upstream" \
+            --html "$RUNNER_TEMP/ubuntu-security-site" \
+            --warnings "$RUNNER_TEMP/ubuntu-security-sphinx-warnings.txt"
+      - name: Upload Sphinx warning evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ubuntu-security-sphinx-warnings
+          path: ${{ runner.temp }}/ubuntu-security-sphinx-warnings.txt
+          if-no-files-found: ignore
