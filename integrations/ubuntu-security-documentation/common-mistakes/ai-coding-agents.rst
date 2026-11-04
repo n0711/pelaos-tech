@@ -59,15 +59,16 @@ network destinations or tools are contained. User-namespace and network-namespac
 availability alone do not constitute a full sandbox. Repeat tests under the
 specific documented enforcement policy on a representative 22.04 host.
 
-The PELAOS Tech smoke-test record was executed on Debian 13, not Jammy.
-It is not evidence of AppArmor confinement on Ubuntu 22.04.
+A synthetic test on a particular Ubuntu 22.04 runner can demonstrate
+that a specified policy denied specific file operations for the tested
+process. Such a result is not proof that an untested AI agent is confined,
+or that the same policy works across different kernels and installations.
 
 Sources and related guidance
 ============================
 
 * https://documentation.ubuntu.com/security/security-features/security-features-overview/
 * https://documentation.ubuntu.com/security/security-features/privilege-restriction/snap-confinement/
-* https://github.com/n0711/pelaos-tech/blob/docs/ubuntu-2204-ai-agent-security-20261103/docs/UBUNTU_2204_AI_AGENT_SMOKE_RESULTS_2026-11-03.md
 * :doc:`../security-features/privilege-restriction/apparmor`
 * :doc:`disabling-apparmor`
 * :doc:`deb-download-untrusted`
