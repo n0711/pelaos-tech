@@ -66,12 +66,15 @@ For a specific AI-agent snap, inspect its published confinement separately using
 | --- | --- | --- |
 | Documentation references match Canonical's release comparison | Canonical documentation | Source-checked |
 | Strict, classic and devmode Snap semantics are accurate | Canonical Snap confinement documentation | Source-checked |
-| Read-only commands run on a clean Ubuntu 22.04 VM | Jammy VM | **Not executed** |
-| Agent cannot read a canary file outside allowed workspace | Jammy VM with configured confinement | **Not executed** |
-| Agent cannot write outside approved workspace | Jammy VM with configured confinement | **Not executed** |
-| Agent cannot reach prohibited network endpoint when egress is restricted | Jammy VM with configured policy | **Not executed** |
-| AppArmor profile loads on Jammy with relevant kernel | Jammy VM | **Not executed** |
-| CI fails on unexpected privilege increase | Dedicated test harness | **Not implemented** |
+| Read-only commands run on an Ubuntu 22.04 CI runner | GitHub-hosted Ubuntu 22.04.5, Azure kernel 6.8 | **PASS**, runner inventory only; native GA VM not tested |
+| Benign test process cannot read an owned synthetic canary under AppArmor | Same UID 65534, enforced test profile | **PASS**, CI 2026-11-04; real agent not tested |
+| Benign test process cannot write to synthetic outside-workspace file | Same UID 65534, enforced test profile | **PASS**, CI 2026-11-04; not a full filesystem sandbox |
+| Agent cannot reach prohibited external network endpoint when egress is restricted | Native Jammy VM with network policy | **Not executed**; separate seccomp loopback check passed |
+| Test AppArmor policy loads on the Ubuntu 22.04 CI runner | GitHub-hosted Jammy, `/proc/self/attr/current` | **PASS**, enforcing label verified and profile unloaded |
+| Production agent profile on Jammy GA/HWE flavors | Native Jammy VM and agent runtime | **Not implemented or tested** |
+| CI fails on unexpected privilege increase | Dedicated negative-regression scenario | **Not demonstrated**, though checks fail if results mismatch |
+
+**2026-11-04 update:** The bounded, same-UID AppArmor CI test passed on a GitHub-hosted Ubuntu 22.04.5 runner: baseline synthetic read/outside write were allowed, the process under its own enforcing AppArmor label denied both, and the workspace write remained allowed. The test profile was unloaded. See [dated evidence](UBUNTU_2204_APPARMOR_RESULTS_2026-11-04.md) and [successful CI run](https://github.com/n0711/pelaos-tech/actions/runs/41779982817). The sample test policy is not a deployable agent profile.
 
 A successful documentation review or synthetic test is not evidence of a sandbox escape being prevented on a real Ubuntu host.
 
