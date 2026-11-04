@@ -20,10 +20,40 @@ import sys
 import tempfile
 
 CHILD = r"""
-import json, os, pathlib, socket, subprocess, sys
+import ctypes, errno, json, os, pathlib, socket, subprocess, sys
 root = pathlib.Path(sys.argv[1])
 version = sys.argv[2]
+network_mode = sys.argv[3]
 exe = root / "opencode"
+
+def apply_network_seccomp():
+    lib = ctypes.CDLL("libseccomp.so.2")
+    lib.seccomp_init.argtypes = [ctypes.c_uint32]
+    lib.seccomp_init.restype = ctypes.c_void_p
+    lib.seccomp_syscall_resolve_name.argtypes = [ctypes.c_char_p]
+    lib.seccomp_syscall_resolve_name.restype = ctypes.c_int
+    lib.seccomp_rule_add.argtypes = [ctypes.c_void_p, ctypes.c_uint32, ctypes.c_int, ctypes.c_uint]
+    lib.seccomp_rule_add.restype = ctypes.c_int
+    lib.seccomp_load.argtypes = [ctypes.c_void_p]
+    lib.seccomp_load.restype = ctypes.c_int
+    lib.seccomp_release.argtypes = [ctypes.c_void_p]
+    ctx = lib.seccomp_init(0x7fff0000)
+    if not ctx:
+        raise RuntimeError("Could not initialize seccomp policy")
+    try:
+        for name in (b"socket", b"connect"):
+            number = lib.seccomp_syscall_resolve_name(name)
+            if number < 0 or lib.seccomp_rule_add(ctx, 0x00050000 | errno.EPERM, number, 0):
+                raise RuntimeError("Failed to install seccomp rule for " + repr(name))
+        if lib.seccomp_load(ctx):
+            raise RuntimeError("Failed to load seccomp policy")
+    finally:
+        lib.seccomp_release(ctx)
+
+if network_mode == "seccomp":
+    apply_network_seccomp()
+elif network_mode != "baseline":
+    raise RuntimeError("Unexpected network mode")
 
 def observe(operation):
     try:
@@ -44,6 +74,7 @@ p = subprocess.run(
 )
 result = {
     "uid": os.geteuid(),
+    "network_policy": network_mode,
     "label": pathlib.Path("/proc/self/attr/current").read_text().strip(),
     "cli_exit": p.returncode,
     "cli_version": (p.stdout + p.stderr).strip()[:240],
@@ -61,7 +92,7 @@ def run(command: list[str], *, env=None, timeout=25):
     return subprocess.run(command, text=True, capture_output=True, timeout=timeout, env=env)
 
 
-def probe(prefix: list[str], root: Path, version: str, uid: int):
+def probe(prefix: list[str], root: Path, version: str, uid: int, *, network_filter=False):
     # The subprocess receives no CI token, real home directory or model credentials.
     clean_env = {
         "PATH": "/usr/bin:/bin",
@@ -72,7 +103,8 @@ def probe(prefix: list[str], root: Path, version: str, uid: int):
         "LANG": "C.UTF-8",
         "NO_COLOR": "1",
     }
-    p = run([*prefix, sys.executable, "-c", CHILD, str(root), version], env=clean_env)
+    p = run([*prefix, sys.executable, "-c", CHILD, str(root), version,
+             "seccomp" if network_filter else "baseline"], env=clean_env)
     if p.returncode:
         raise RuntimeError("Probe crashed: " + p.stderr[-600:])
     data = json.loads(p.stdout)
@@ -88,10 +120,11 @@ def main():
     args = parser.parse_args()
 
     report = {
-        "suite": "OpenCode pinned release binary CLI AppArmor smoke test",
+        "suite": "OpenCode pinned release binary CLI AppArmor and seccomp smoke test",
         "version_requested": args.version,
         "kernel": platform.release(),
-        "claim_limit": "CLI --version and synthetic probes only, not an agent/session isolation proof",
+        "claim_limit": "CLI --version, AppArmor file canaries and seccomp socket/connect syscalls only, not an agent/session isolation proof",
+        "network_note": "Initial AppArmor-only test allowed AF_INET socket creation. This revision checks seccomp enforcement separately.",
         "status": "FAIL",
     }
     try:
@@ -170,7 +203,6 @@ profile {profile_name} flags=(attach_disconnected) {{
   {target} rw,
   deny {canary} r,
   deny {root}/outside/** w,
-  deny network,
 }}
 """
             policy = root / "test-profile.apparmor"
@@ -183,7 +215,7 @@ profile {profile_name} flags=(attach_disconnected) {{
                 loaded = True
                 confined = probe(
                     [*prefix, "aa-exec", "-p", profile_name, "--"],
-                    root, args.version, user.pw_uid,
+                    root, args.version, user.pw_uid, network_filter=True,
                 )
                 report["confined"] = confined
                 expected = {
@@ -192,6 +224,7 @@ profile {profile_name} flags=(attach_disconnected) {{
                     "outside_write": "DENIED",
                     "workspace_write": "ALLOWED",
                     "ipv4_socket": "DENIED",
+                    "network_policy": "seccomp",
                     "cli_version_matches": True,
                 }
                 report["assertions"] = {
