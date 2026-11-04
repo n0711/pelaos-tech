@@ -5,6 +5,7 @@ on:
     paths:
       - "tests/security/ubuntu_2204_portable_check.py"
       - "tests/security/ubuntu_2204_apparmor_check.py"
+      - "tests/security/ubuntu_2204_apparmor_regressions.py"
       - ".github/workflows/ubuntu22-portable-boundaries.yml"
       - "docs/UBUNTU_2204_AI_AGENT_SECURITY.md"
       - "docs/UBUNTU_2204_AI_AGENT_SMOKE_RESULTS_2026-11-03.md"
@@ -34,6 +35,12 @@ jobs:
           set -euo pipefail
           sudo -n python3 tests/security/ubuntu_2204_apparmor_check.py | tee ubuntu22_apparmor_results.json
           python3 -c 'import json; x=json.load(open("ubuntu22_apparmor_results.json")); assert x["result"] == "PASS" and x["profile_unloaded"], "AppArmor test or cleanup failed"'
+      - name: Check same-UID symlink traversal and shell exec boundaries
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo -n python3 tests/security/ubuntu_2204_apparmor_regressions.py | tee ubuntu22_apparmor_regressions.json
+          python3 -c 'import json; x=json.load(open("ubuntu22_apparmor_regressions.json")); assert x["status"] == "PASS" and x["fixture_unloaded"] and all(x["checks"].values()), "AppArmor regressions failed"'
       - name: Preserve bounded test evidence
         if: always()
         uses: actions/upload-artifact@v4
@@ -42,4 +49,5 @@ jobs:
           path: |
             ubuntu22_smoke_results.json
             ubuntu22_apparmor_results.json
+            ubuntu22_apparmor_regressions.json
           if-no-files-found: warn
