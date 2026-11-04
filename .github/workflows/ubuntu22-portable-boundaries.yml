@@ -1,18 +1,20 @@
-name: Ubuntu 22.04 portable security smoke checks
+name: Ubuntu 22.04 portable and AppArmor security checks
 
 on:
   pull_request:
     paths:
       - "tests/security/ubuntu_2204_portable_check.py"
+      - "tests/security/ubuntu_2204_apparmor_check.py"
       - ".github/workflows/ubuntu22-portable-boundaries.yml"
       - "docs/UBUNTU_2204_AI_AGENT_SECURITY.md"
+      - "docs/UBUNTU_2204_AI_AGENT_SMOKE_RESULTS_2026-11-03.md"
   workflow_dispatch:
 
 permissions:
   contents: read
 
 jobs:
-  portable-boundaries:
+  jammy-boundaries:
     runs-on: ubuntu-22.04
     timeout-minutes: 10
     steps:
@@ -20,14 +22,24 @@ jobs:
         uses: actions/checkout@v4
         with:
           persist-credentials: false
-      - name: Read-only host inventory and portable isolation checks
+      - name: Check portable Unix DAC and seccomp boundaries
+        shell: bash
         run: |
+          set -euo pipefail
           sudo -n python3 tests/security/ubuntu_2204_portable_check.py | tee ubuntu22_smoke_results.json
           python3 -c 'import json; x=json.load(open("ubuntu22_smoke_results.json")); assert x["pass"], "Portable controls failed"'
-      - name: Preserve test evidence
+      - name: Check enforced AppArmor policy against same-UID canaries
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo -n python3 tests/security/ubuntu_2204_apparmor_check.py | tee ubuntu22_apparmor_results.json
+          python3 -c 'import json; x=json.load(open("ubuntu22_apparmor_results.json")); assert x["result"] == "PASS" and x["profile_unloaded"], "AppArmor test or cleanup failed"'
+      - name: Preserve bounded test evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: ubuntu22-portable-smoke-evidence
-          path: ubuntu22_smoke_results.json
+          name: ubuntu22-boundary-smoke-evidence
+          path: |
+            ubuntu22_smoke_results.json
+            ubuntu22_apparmor_results.json
           if-no-files-found: warn
