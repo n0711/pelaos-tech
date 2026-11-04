@@ -47,7 +47,7 @@ jobs:
           python -m sphinx -b dirhtml \
             -c "$RUNNER_TEMP/ubuntu-security-upstream" \
             -d "$RUNNER_TEMP/ubuntu-security-baseline-doctrees" \
-            -j 2 \
+            -j 1 \
             -w "$RUNNER_TEMP/ubuntu-security-baseline-warnings.txt" \
             -D llms_txt_enabled=0 \
             "$RUNNER_TEMP/ubuntu-security-upstream" \
@@ -65,7 +65,7 @@ jobs:
           python -m sphinx -b dirhtml \
             -c "$RUNNER_TEMP/ubuntu-security-upstream" \
             -d "$RUNNER_TEMP/ubuntu-security-proposal-doctrees" \
-            -j 2 \
+            -j 1 \
             -w "$RUNNER_TEMP/ubuntu-security-sphinx-warnings.txt" \
             -D llms_txt_enabled=0 \
             "$RUNNER_TEMP/ubuntu-security-upstream" \
