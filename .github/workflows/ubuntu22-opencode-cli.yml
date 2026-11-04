@@ -1,0 +1,66 @@
+name: Ubuntu 22.04 OpenCode pinned CLI AppArmor smoke test
+
+on:
+  pull_request:
+    paths:
+      - "tests/security/ubuntu_2204_opencode_cli_smoke.py"
+      - ".github/workflows/ubuntu22-opencode-cli.yml"
+      - "docs/UBUNTU_2204_OPENCODE_CLI_EVIDENCE.md"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  pinned-cli:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 12
+    steps:
+      - name: Checkout test sources without persisted credentials
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Download and verify exact OpenCode release archive
+        shell: bash
+        run: |
+          set -euo pipefail
+          archive="$RUNNER_TEMP/opencode-linux-x64-baseline.tar.gz"
+          curl --fail --silent --show-error --location --retry 2 \
+            --proto '=https' --tlsv1.2 \
+            "https://github.com/anomalyco/opencode/releases/download/v1.19.5/opencode-linux-x64-baseline.tar.gz" \
+            --output "$archive"
+          echo "17c200fd4b2289954cc01552559f9b6d03ec157b2ddfb5eb54144f491656333d  $archive" | sha256sum --check
+          python3 - "$archive" "$RUNNER_TEMP/opencode-release-binary" <<'PY'
+          import os
+          from pathlib import Path
+          import shutil
+          import sys
+          import tarfile
+          source, target = Path(sys.argv[1]), Path(sys.argv[2])
+          with tarfile.open(source, "r:gz") as tar:
+              files = [item for item in tar.getmembers() if item.isfile() and Path(item.name).name == "opencode"]
+              if len(files) != 1:
+                  raise RuntimeError("Expected exactly one OpenCode executable in the verified archive")
+              member = files[0]
+              if member.name not in ("opencode", "./opencode"):
+                  raise RuntimeError("Unexpected executable path in release archive")
+              with tar.extractfile(member) as stream, target.open("wb") as output:
+                  shutil.copyfileobj(stream, output)
+          os.chmod(target, 0o755)
+          print("Release archive SHA256 verified, single expected executable extracted")
+          PY
+      - name: Run version and synthetic AppArmor deny/allow checks
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo -n python3 tests/security/ubuntu_2204_opencode_cli_smoke.py \
+            --archive-binary "$RUNNER_TEMP/opencode-release-binary" \
+            --version "1.19.5" | tee opencode_cli_results.json
+          python3 -c 'import json; x=json.load(open("opencode_cli_results.json")); assert x["status"] == "PASS" and x["profile_unloaded"] and all(x["assertions"].values())'
+      - name: Upload bounded evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: jammy-opencode-cli-smoke-results
+          path: opencode_cli_results.json
+          if-no-files-found: warn
