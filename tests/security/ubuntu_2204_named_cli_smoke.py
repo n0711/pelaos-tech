@@ -184,13 +184,14 @@ def main() -> int:
             raise RuntimeError("Pinned npm installation missing")
 
         user = pwd.getpwnam("nobody")
-        # Codex intentionally rejects helper creation inside the system /tmp.
-        # Place disposable fixtures in the GitHub-hosted runner home instead.
-        runner_home = Path("/home/runner")
-        if not runner_home.is_dir():
-            raise RuntimeError("Missing disposable GitHub runner home")
+        # Codex rejects an agent home inside /tmp; /home/runner is not
+        # traversable by UID 65534 on GitHub-hosted runners. Use a synthetic
+        # fixture under /var/tmp, which is accessible to the dedicated UID.
+        fixture_parent = Path("/var/tmp")
+        if not fixture_parent.is_dir():
+            raise RuntimeError("Missing disposable runner fixture parent")
         with tempfile.TemporaryDirectory(
-            prefix="pelaos-agent-cli-", dir=runner_home
+            prefix="pelaos-agent-cli-", dir=fixture_parent
         ) as temp:
             root = Path(temp)
             root.chmod(0o755)
@@ -254,8 +255,8 @@ profile {profile_name} flags=(attach_disconnected) {{
   /dev/** rw,
   /run/** r,
   /opt/** mr,
-  /home/ r,
-  /home/runner/ r,
+  /var/ r,
+  /var/tmp/ r,
   {node_path} ix,
   {root}/ r,
   {application}/ r,
