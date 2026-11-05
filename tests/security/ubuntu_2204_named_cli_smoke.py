@@ -85,14 +85,21 @@ socket_before = observe(socket_probe)
 filter_network()
 socket_after = observe(socket_probe)
 
-p = subprocess.run([str(cli), "--version"], capture_output=True, text=True,
-                   cwd=root / "work", timeout=30, check=False)
-text = (p.stdout + p.stderr).strip()
+cwd_observed = observe(lambda: os.chdir(root / "work"))
+try:
+    p = subprocess.run([str(cli), "--version"], capture_output=True, text=True,
+                       timeout=30, check=False)
+    cli_exit = p.returncode
+    text = (p.stdout + p.stderr).strip()
+except OSError as exc:
+    cli_exit = -1
+    text = "OSERROR_%s: %s" % (exc.errno, str(exc)[:120])
 result = {
     "uid": os.geteuid(),
     "label": Path("/proc/self/attr/current").read_text().strip(),
-    "cli_exit": p.returncode,
-    "cli_version_matches": p.returncode == 0 and version in text,
+    "cwd_access": cwd_observed,
+    "cli_exit": cli_exit,
+    "cli_version_matches": cli_exit == 0 and version in text,
     "cli_output_excerpt": text[:180],
     "canary_direct_read": observe(lambda: (root / "protected" / "synthetic.txt").read_text()),
     "canary_symlink_read": observe(lambda: (root / "work" / "canary-link").read_text()),
@@ -215,6 +222,7 @@ def main() -> int:
             required_baseline = {
                 "uid": user.pw_uid,
                 "label": "unconfined",
+                "cwd_access": "ALLOWED",
                 "cli_version_matches": True,
                 "canary_direct_read": "ALLOWED",
                 "canary_symlink_read": "ALLOWED",
@@ -277,6 +285,7 @@ profile {profile_name} flags=(attach_disconnected) {{
                 expected = {
                     "uid": user.pw_uid,
                     "label": profile_name + " (enforce)",
+                    "cwd_access": "ALLOWED",
                     "cli_version_matches": True,
                     "canary_direct_read": "DENIED",
                     "canary_symlink_read": "DENIED",
