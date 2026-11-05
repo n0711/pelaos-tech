@@ -1127,7 +1127,9 @@ mod tests {
 
     #[test]
     fn internal_links_resolve() {
-        let files: Vec<String> = site().into_iter().map(|f| f.path).collect();
+        let mut files: Vec<String> = site().into_iter().map(|f| f.path).collect();
+        // The generator writes binary PNG assets directly alongside text pages.
+        files.extend(["icon-192.png".to_string(), "icon-512.png".to_string()]);
         for (path, c) in html() {
             for part in c.split("href=\"").skip(1) {
                 let link = &part[..part.find('"').unwrap()];
