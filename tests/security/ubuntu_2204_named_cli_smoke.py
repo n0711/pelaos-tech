@@ -160,7 +160,7 @@ def main() -> int:
         "kernel": platform.release(),
         "limitations": (
             "CLI --version only; no login, LLM prompts, model tool execution, "
-            provider APIs, real secrets, production policy, network egress proof, "
+            "provider APIs, real secrets, production policy, network egress proof, "
             "native Jammy kernel or Snap validation"
         ),
         "status": "FAIL",
