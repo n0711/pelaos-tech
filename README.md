@@ -64,6 +64,12 @@ Checked against the [GitHub Pages docs](https://docs.github.com/en/pages) on 18 
 | Custom workflow: `pages: write` + `id-token: write`, `github-pages` environment | Granted only to the deploy job. The build job only reads. Actions are pinned to release commits. |
 | GitHub Terms of Service and Acceptable Use Policies | Original content with cited sources. |
 
+## Android-first portfolio PWA
+
+The portfolio now includes a mobile navigation layout, install manifest, launcher icons and a scoped service worker. The website remains the source of truth; no native Android package or Play Store listing is claimed. Once the deployment is verified, users of compatible Android browsers can install the website from the browser menu, without downloading an APK from this repository.
+
+See [mobile installation, verification and future Google Play path](docs/ANDROID_PWA.md). iPhone and App Store packaging are deliberately deferred.
+
 ## Build locally
 
 Needs a stable Rust toolchain and the Dart SDK 3.5 or newer. Neither the Rust
