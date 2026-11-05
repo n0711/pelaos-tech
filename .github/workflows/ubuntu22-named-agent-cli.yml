@@ -1,0 +1,78 @@
+name: Ubuntu 22.04 pinned Claude and Codex CLI smoke
+
+on:
+  pull_request:
+    paths:
+      - "tests/security/ubuntu_2204_named_cli_smoke.py"
+      - ".github/workflows/ubuntu22-named-agent-cli.yml"
+      - "docs/UBUNTU_2204_NAMED_CLI_EVIDENCE.md"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  pinned-named-cli:
+    name: "${{ matrix.agent }} CLI version and AppArmor"
+    runs-on: ubuntu-22.04
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - agent: claude
+            npm_package: "@anthropic-ai/claude-code@2.1.311"
+            version: "2.1.311"
+          - agent: codex
+            npm_package: "@openai/codex@0.166.0"
+            version: "0.166.0"
+    steps:
+      - name: Checkout without persisted repository credentials
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Use explicit Node.js major
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Install pinned CLI in disposable, unprivileged directory
+        shell: bash
+        env:
+          NPM_PACKAGE: "${{ matrix.npm_package }}"
+          AGENT: "${{ matrix.agent }}"
+        run: |
+          set -euo pipefail
+          test ! -n "${ANTHROPIC_API_KEY:-}"
+          test ! -n "${OPENAI_API_KEY:-}"
+          test ! -n "${GITHUB_TOKEN:-}"
+          mkdir -p "$RUNNER_TEMP/pelaos-agent-npm"
+          npm install --no-audit --no-fund --no-save --prefix "$RUNNER_TEMP/pelaos-agent-npm" "$NPM_PACKAGE"
+          test -x "$RUNNER_TEMP/pelaos-agent-npm/node_modules/.bin/$AGENT"
+          npm ls --prefix "$RUNNER_TEMP/pelaos-agent-npm" --depth 0
+      - name: Verify actual CLI version with synthetic same-UID AppArmor controls
+        shell: bash
+        env:
+          AGENT: "${{ matrix.agent }}"
+          VERSION: "${{ matrix.version }}"
+        run: |
+          set -euo pipefail
+          sudo -n python3 tests/security/ubuntu_2204_named_cli_smoke.py \
+            --agent "$AGENT" \
+            --version "$VERSION" \
+            --npm-prefix "$RUNNER_TEMP/pelaos-agent-npm" \
+            --node-bin "$(command -v node)" | tee "jammy-${AGENT}-cli-results.json"
+          python3 - "$AGENT" <<'PY'
+          import json
+          import sys
+          data = json.load(open(f"jammy-{sys.argv[1]}-cli-results.json", encoding="utf-8"))
+          assert data["status"] == "PASS", data.get("error", data.get("assertions"))
+          assert data["profile_unloaded"] is True
+          assert all(data["assertions"].values())
+          PY
+      - name: Archive bounded JSON evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: "jammy-${{ matrix.agent }}-cli-evidence"
+          path: "jammy-${{ matrix.agent }}-cli-results.json"
+          if-no-files-found: warn
