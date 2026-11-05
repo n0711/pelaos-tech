@@ -844,7 +844,7 @@ fn not_found() -> Page {
 const FAVICON: &str = r##"<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 108 108"><rect width="108" height="108" rx="24" fill="#070C18"/><path d="M31.9 56.4A25 25 0 0 1 76.1 56.4" fill="none" stroke="#39D0F2" stroke-width="5" stroke-linecap="round"/><path d="M54 68V38" stroke="#E9EEF7" stroke-width="4.5" stroke-linecap="round"/><circle cx="54" cy="68" r="5" fill="#E9EEF7"/></svg>
 "##;
 
-const MANIFEST: &str = r#"{
+const MANIFEST: &str = r##"{
   "id": "__BASE__/",
   "name": "PelaosTech - Software and Research",
   "short_name": "PelaosTech",
@@ -859,7 +859,7 @@ const MANIFEST: &str = r#"{
     {"src": "__BASE__/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable"}
   ]
 }
-"#;
+"##;
 
 // Registration stays external: the site CSP does not permit inline scripts.
 const PWA_REGISTRATION: &str = r#"if ('serviceWorker' in navigator && window.isSecureContext) {
