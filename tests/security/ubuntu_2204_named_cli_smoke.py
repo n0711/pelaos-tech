@@ -246,6 +246,8 @@ profile {profile_name} flags=(attach_disconnected) {{
   /dev/** rw,
   /run/** r,
   /opt/** mr,
+  /home/ r,
+  /home/runner/ r,
   {node_path} ix,
   {root}/ r,
   {application}/ r,
