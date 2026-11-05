@@ -57,7 +57,7 @@ def filter_network():
     if not context:
         raise RuntimeError("seccomp_init failed")
     try:
-        for name in (b"socket", b"socketpair", b"connect"):
+        for name in (b"socket", b"connect"):
             number = lib.seccomp_syscall_resolve_name(name)
             if number < 0 or lib.seccomp_rule_add(
                 context, 0x00050000 | errno.EPERM, number, 0
@@ -160,7 +160,7 @@ def main() -> int:
         "kernel": platform.release(),
         "limitations": (
             "CLI --version only; no login, LLM prompts, model tool execution, "
-            "provider APIs, real secrets, production policy, network egress proof, "
+            provider APIs, real secrets, production policy, network egress proof, "
             "native Jammy kernel or Snap validation"
         ),
         "status": "FAIL",
