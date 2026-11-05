@@ -45,3 +45,4 @@ cargo run --release --locked -- dist
 "$dart_bin" analyze --fatal-infos web/app.dart
 "$dart_bin" compile js -O2 --csp -o dist/app.js web/app.dart
 rm -f dist/app.js.deps dist/app.js.map
+python3 scripts/check-pwa.py dist

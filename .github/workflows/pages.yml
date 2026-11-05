@@ -38,6 +38,8 @@ jobs:
           dart analyze --fatal-infos web/app.dart
           dart compile js -O2 --csp -o dist/app.js web/app.dart
           rm -f dist/app.js.deps dist/app.js.map
+      - name: Validate mobile PWA assets and metadata
+        run: python3 scripts/check-pwa.py dist
       - uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6.0.0
       - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
         with:

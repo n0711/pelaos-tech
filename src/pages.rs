@@ -15,7 +15,7 @@ const HOSTING: &str = match option_env!("PELAOS_HOSTING") {
     None => "github-pages",
 };
 /// Shown in the footer, JSON-LD `dateModified` and sitemap `lastmod`.
-pub const UPDATED: &str = "2026-11-03";
+pub const UPDATED: &str = "2026-11-05";
 
 pub fn validate_config() -> std::io::Result<()> {
     let invalid = || std::io::Error::new(std::io::ErrorKind::InvalidInput, "deployment needs an HTTPS site URL without a trailing slash, a matching base path, and github-pages or vercel hosting");
@@ -171,7 +171,22 @@ h2{letter-spacing:-.025em}.lead{max-width:680px!important;font-size:21px;line-he
 .panel{display:grid;grid-template-columns:1fr 1fr;gap:32px;border-top:1px solid var(--line);padding:32px 0;margin-top:48px}
 .panel h2{margin-top:0}.table-scroll{overflow-x:auto}.status-note{border-left:3px solid var(--accent);padding:8px 18px;margin:24px 0;color:var(--muted)}
 .evidence-table th,.evidence-table td{text-align:left;vertical-align:top}.evidence-table th:nth-child(2),.evidence-table td:nth-child(2){white-space:nowrap}
-@media(max-width:720px){header,main,footer{padding-left:18px;padding-right:18px}.project-grid,.panel{grid-template-columns:1fr}.hero{padding:8px 0 28px}.lead{font-size:18px}.project{padding:22px}nav a{padding:0 8px}table{font-size:14px}}
+html{scroll-padding-top:12px}
+body{overflow-wrap:break-word}
+main,.project,.panel>*{min-width:0}
+nav{display:flex;align-items:center;flex-wrap:wrap}
+nav a{white-space:nowrap}
+@media(max-width:720px){
+header,main,footer{padding-left:18px;padding-right:18px}
+header{display:block;padding-top:14px;padding-bottom:8px}
+.brand{display:inline-block;margin-bottom:8px}
+nav{display:flex;flex-wrap:nowrap;gap:4px;max-width:100%;overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:thin;-webkit-overflow-scrolling:touch;padding-bottom:5px}
+nav a{flex:0 0 auto;padding:0 12px}
+.project-grid,.panel{grid-template-columns:1fr}
+.hero{padding:8px 0 28px}.lead{font-size:18px}.project{padding:22px}
+table{font-size:14px}
+h1{overflow-wrap:anywhere}
+}
 
 "#;
 
@@ -239,6 +254,10 @@ fn layout(p: &Page) -> String {
 <meta name="description" content="{desc}">
 {robots}<link rel="canonical" href="{canonical}">
 <link rel="icon" href="{BASE}/favicon.svg" type="image/svg+xml">
+<link rel="manifest" href="{BASE}/manifest.webmanifest">
+<link rel="apple-touch-icon" href="{BASE}/icon-192.png">
+<meta name="theme-color" content="#070c18">
+<meta name="apple-mobile-web-app-title" content="PelaosTech">
 <meta name="color-scheme" content="light dark">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="en_GB">
@@ -251,7 +270,8 @@ fn layout(p: &Page) -> String {
 <meta name="twitter:description" content="{desc}">
 <style>{css}</style>
 <script type="application/ld+json">{ld}</script>
-{script}</head>
+{script}<script src="{BASE}/pwa.js" defer></script>
+</head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
 <header><a class="brand" href="{home}">PelaosTech</a><nav aria-label="Main">{nav}</nav></header>
@@ -260,7 +280,7 @@ fn layout(p: &Page) -> String {
 </main>
 <footer>
 <a href="{services}">Websites</a><a href="{research}">Research</a><a href="{riotuner}">RioTuner</a><a href="{privacy}">Website privacy</a><a href="{CONTACT}">Contact</a><a href="{REVOLUT}">Support ↗</a>
-<p>© 2026 PelaosTech. Last updated <time datetime="{UPDATED}">3 November 2026</time>. Hosted on {hosting}.</p>
+<p>© 2026 PelaosTech. Last updated <time datetime="{UPDATED}">5 November 2026</time>. Hosted on {hosting}.</p>
 </footer>
 </body>
 </html>
@@ -824,6 +844,93 @@ fn not_found() -> Page {
 const FAVICON: &str = r##"<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 108 108"><rect width="108" height="108" rx="24" fill="#070C18"/><path d="M31.9 56.4A25 25 0 0 1 76.1 56.4" fill="none" stroke="#39D0F2" stroke-width="5" stroke-linecap="round"/><path d="M54 68V38" stroke="#E9EEF7" stroke-width="4.5" stroke-linecap="round"/><circle cx="54" cy="68" r="5" fill="#E9EEF7"/></svg>
 "##;
 
+const MANIFEST: &str = r##"{
+  "id": "__BASE__/",
+  "name": "PelaosTech - Software and Research",
+  "short_name": "PelaosTech",
+  "description": "Independent software, computer science, AI and research projects.",
+  "start_url": "__BASE__/",
+  "scope": "__BASE__/",
+  "display": "standalone",
+  "background_color": "#070c18",
+  "theme_color": "#070c18",
+  "icons": [
+    {"src": "__BASE__/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any"},
+    {"src": "__BASE__/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable"}
+  ]
+}
+"##;
+
+// Registration stays external: the site CSP does not permit inline scripts.
+const PWA_REGISTRATION: &str = r#"if ('serviceWorker' in navigator && window.isSecureContext) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('__BASE__/sw.js', { scope: '__BASE__/' })
+      .catch(() => { /* Online pages remain fully usable. */ });
+  });
+}
+"#;
+
+// Cache only this portfolio's public, same-origin pages and assets.
+// Network-first navigation avoids hiding newly published research behind stale HTML.
+const SERVICE_WORKER: &str = r#"const VERSION = 'pelaos-pwa-20261105';
+const BASE = '__BASE__/';
+const PRECACHE = [
+  '', 'services/', 'research/', 'vera-mot/', 'ros3-limassol/',
+  'cultural-storytelling-map/', 'riotuner/', 'riotuner/testing/',
+  'riotuner/privacy/', 'privacy/', 'app.js', 'pwa.js',
+  'favicon.svg', 'icon-192.png', 'icon-512.png', 'manifest.webmanifest'
+].map(path => BASE + path);
+
+self.addEventListener('install', event => {
+  event.waitUntil(
+    caches.open(VERSION)
+      .then(cache => cache.addAll(PRECACHE))
+      .then(() => self.skipWaiting())
+  );
+});
+
+self.addEventListener('activate', event => {
+  event.waitUntil(
+    caches.keys()
+      .then(keys => Promise.all(keys
+        .filter(key => key.startsWith('pelaos-pwa-') && key !== VERSION)
+        .map(key => caches.delete(key))))
+      .then(() => self.clients.claim())
+  );
+});
+
+self.addEventListener('fetch', event => {
+  const request = event.request;
+  if (request.method !== 'GET') return;
+  const url = new URL(request.url);
+  if (url.origin !== self.location.origin || !url.pathname.startsWith(BASE)) return;
+  if (request.mode === 'navigate') {
+    event.respondWith(
+      fetch(request)
+        .then(response => {
+          if (response.ok) {
+            const copy = response.clone();
+            event.waitUntil(caches.open(VERSION).then(cache => cache.put(request, copy)));
+          }
+          return response;
+        })
+        .catch(async () => (await caches.match(request, { ignoreSearch: true }))
+          || (await caches.match(BASE)))
+    );
+    return;
+  }
+  event.respondWith(
+    caches.match(request).then(cached => cached || fetch(request).then(response => {
+      if (response.ok && response.type === 'basic') {
+        const copy = response.clone();
+        event.waitUntil(caches.open(VERSION).then(cache => cache.put(request, copy)));
+      }
+      return response;
+    }))
+  );
+});
+"#;
+
 fn pages() -> Vec<Page> {
     vec![home(), services(), research(), vera_mot(), ros3_limassol(), cultural_storytelling_map(), riotuner(), riotuner_testing(), riotuner_privacy(), site_privacy(), not_found()]
 }
@@ -865,6 +972,9 @@ pub fn site() -> Vec<File> {
         ),
     });
     files.push(File { path: "favicon.svg".into(), contents: FAVICON.to_string() });
+    files.push(File { path: "manifest.webmanifest".into(), contents: MANIFEST.replace("__BASE__", BASE) });
+    files.push(File { path: "pwa.js".into(), contents: PWA_REGISTRATION.replace("__BASE__", BASE) });
+    files.push(File { path: "sw.js".into(), contents: SERVICE_WORKER.replace("__BASE__", BASE) });
     files
 }
 
@@ -890,6 +1000,26 @@ mod tests {
         }
         let privacy = site_privacy().body;
         assert_eq!(privacy.contains("https://vercel.com/legal/privacy-notice"), HOSTING == "vercel");
+    }
+
+    #[test]
+    fn pwa_assets_use_the_site_base_and_remain_external_scripts() {
+        let files = site();
+        let manifest = &files.iter().find(|f| f.path == "manifest.webmanifest").unwrap().contents;
+        let registration = &files.iter().find(|f| f.path == "pwa.js").unwrap().contents;
+        let worker = &files.iter().find(|f| f.path == "sw.js").unwrap().contents;
+        assert!(manifest.contains(&format!(r#""start_url": "{BASE}/""#)));
+        assert!(manifest.contains(&format!(r#""scope": "{BASE}/""#)));
+        assert!(manifest.contains(&format!("{BASE}/icon-192.png")));
+        assert!(manifest.contains(&format!("{BASE}/icon-512.png")));
+        assert!(registration.contains(&format!("{BASE}/sw.js")));
+        assert!(worker.contains(&format!("const BASE = '{BASE}/'")));
+        assert!(worker.contains("url.origin !== self.location.origin"));
+        for page in pages() {
+            let document = layout(&page);
+            assert!(document.contains(&format!(r#"rel="manifest" href="{BASE}/manifest.webmanifest""#)));
+            assert!(document.contains(&format!(r#"src="{BASE}/pwa.js""#)));
+        }
     }
 
     #[test]
@@ -997,7 +1127,9 @@ mod tests {
 
     #[test]
     fn internal_links_resolve() {
-        let files: Vec<String> = site().into_iter().map(|f| f.path).collect();
+        let mut files: Vec<String> = site().into_iter().map(|f| f.path).collect();
+        // The generator writes binary PNG assets directly alongside text pages.
+        files.extend(["icon-192.png".to_string(), "icon-512.png".to_string()]);
         for (path, c) in html() {
             for part in c.split("href=\"").skip(1) {
                 let link = &part[..part.find('"').unwrap()];

@@ -85,6 +85,10 @@ pub fn write_site(out: &Path, files: &[File]) -> io::Result<()> {
             fs::create_dir_all(path.parent().unwrap())?;
             fs::write(path, &file.contents)?;
         }
+        // Native launcher icons are small, precompressed PNGs tracked as source assets.
+        // Ship them for both GitHub Pages and root-domain deployments.
+        fs::write(stage.join("icon-192.png"), include_bytes!("../assets/icon-192.png"))?;
+        fs::write(stage.join("icon-512.png"), include_bytes!("../assets/icon-512.png"))?;
         fs::write(stage.join(MARKER), SIGNATURE)
     })();
     if let Err(e) = staged {
@@ -159,6 +163,8 @@ mod tests {
         write_site(&out, &[file("nested/index.html", "new")]).unwrap();
         assert!(!out.join("old.html").exists());
         assert_eq!(fs::read_to_string(out.join("nested/index.html")).unwrap(), "new");
+        assert_eq!(&fs::read(out.join("icon-192.png")).unwrap()[16..24], &[0, 0, 0, 192, 0, 0, 0, 192]);
+        assert_eq!(&fs::read(out.join("icon-512.png")).unwrap()[16..24], &[0, 0, 2, 0, 0, 0, 2, 0]);
     }
     #[test]
     fn failed_staging_preserves_previous_build() {
