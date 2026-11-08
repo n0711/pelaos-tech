@@ -22,7 +22,7 @@ The portfolio links to [ROS3-Limassol](https://github.com/n0711/ROS3-Limassol), 
 ## Pages
 
 - `/`: project portfolio with RioTuner, cysk8clips.com, Narrify, LearnTwin, ROS3-Limassol and VERA-MOT
-- `/services/`: proposed one-page website pilot for Cyprus small businesses; scope and availability are not yet confirmed
+- `/services/`: proposed custom website pilot for small businesses worldwide; scope and availability are not yet confirmed
 - `/ros3-limassol/`: ROS3-Limassol receiver-level telemetry-liveness research, original idea and author credits, synthetic experiment states, GitHub sources, manuscript licence and explicit field-validation limits
 - `/vera-mot/`: M4.6 reliability-gated appearance ReID implementation study with GitHub XeLaTeX manuscript (PDF and source), protected appearance memory, synthetic CI evidence, and explicit real-vehicle benchmark limitations
 - `/cultural-storytelling-map/`: Narrify team credits, source repository and a sourced place-name pilot

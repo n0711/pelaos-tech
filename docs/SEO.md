@@ -7,7 +7,7 @@ Last reviewed: 27 October 2026. This is a repository-level plan, **not evidence 
 | Canonical path | Primary reader intent | Truthful content focus |
 | --- | --- | --- |
 | `/` | PELAOS / PelaosTech, software projects Cyprus | Independent software projects and robotics research portfolio |
-| `/services/` | small business website development Cyprus; one-page website Cyprus | Proposed fixed-scope pilot; no open booking, payment or ranking guarantees |
+| `/services/` | custom websites for small businesses; remote website development worldwide | Proposed fixed-scope pilot; no open booking, payment or ranking guarantees |
 | `/research/` | marine robotics depth calculator; underwater pressure | 0–500 m illustrative calculator with NOAA sources; not sensor-derived |
 | `/ros3-limassol/` | ROS3-Limassol telemetry; ROS 2 intermittent connectivity | Receiver-arrival evidence and synthetic validation limits |
 | `/riotuner/` | offline instrument tuner Android; bouzouki tuner | Pre-release app; synthetic benchmarks only |

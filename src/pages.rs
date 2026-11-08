@@ -354,7 +354,7 @@ fn home() -> Page {
 <article class="card project wide"><span class="badge">Open research · Synthetic verification</span><h3>VERA-MOT</h3><p>Quality-gated appearance association for multi-object tracking in drone video. An opt-in BoT-SORT integration now protects stored identity features against low-quality crops in synthetic tests. The implementation note is available in XeLaTeX and PDF; real vehicle identity evaluation remains unverified.</p><a href="{vera}">Read the VERA-MOT research note →</a></article>
 </div>
 </section>
-<section class="panel"><div><p class="eyebrow">Website pilot</p><h2>A clear website for a small business.</h2></div><div><p>PELAOS is preparing a one-page website pilot for small businesses worldwide, with responsive design, contact links, basic search metadata and source handover. It is a proposal rather than an open booking service.</p><a href="{services}">Read the website pilot scope →</a></div></section>
+<section class="panel"><div><p class="eyebrow">Website pilot</p><h2>A clear website for a small business.</h2></div><div><p>PELAOS is preparing a website pilot for small businesses worldwide, with responsive design, contact links, basic search metadata and source handover. It is a proposal rather than an open booking service.</p><a href="{services}">Read the website pilot scope →</a></div></section>
 <section class="panel"><div><p class="eyebrow">Research notebook</p><h2>Algorithms, AI and experimental systems.</h2></div><div><p>Follow ongoing work on P versus NP (an open question, not a claimed proof), reliability-gated vehicle tracking and ROS3 telemetry monitoring. Additional marine engineering notes cover underwater pressure and navigation; experimental limits are stated for each project.</p><a href="{research}">Browse all research notes →</a></div></section>
 <section class="panel"><div><p class="eyebrow">The person behind PELAOS</p><h2>From Cyprus, with curiosity.</h2></div><div><p>I’m Charalampos Nadiotis, a robotics engineer and Computer Science student at Frederick University. This is my project portfolio: what is available, what is being tested and what I’m exploring next.</p><p><a href="https://github.com/n0711">GitHub</a> · <a href="{RESEARCHGATE}">ResearchGate</a> · <a href="{LINKEDIN}">Contact on LinkedIn</a></p></div></section>
 <section class="panel" id="support"><div><p class="eyebrow">Support</p><h2>Keep the projects going.</h2></div><div><p>The projects here are free and built in my own time. If one of them is useful to you, you can support further development with a one-off contribution via Revolut. Every contribution is voluntary and does not buy access, features or support.</p><a class="button primary" href="{REVOLUT}">Support via Revolut ↗</a></div></section>
@@ -400,21 +400,21 @@ fn contact() -> Page {
 fn services() -> Page {
     Page {
         slug: "services/",
-        title: "One-Page Websites for Small Businesses | PELAOS Tech",
-        description: "PELAOS is preparing a one-page website pilot for small businesses worldwide, with responsive design, basic SEO, contact links and source handover.",
+        title: "Custom Websites for Small Businesses | PELAOS Tech",
+        description: "PELAOS is preparing a website pilot for small businesses worldwide, with responsive design, basic SEO, contact links and source handover.",
         body: format!(r##"
 <section class="hero">
 <p class="eyebrow">PELAOS Tech / Proposed website pilot</p>
-<h1>One-page websites for small businesses</h1>
-<p class="lead">We’re planning a remote website pilot for small businesses worldwide. One page gives customers your services, business details and a clear way to reach you.</p>
+<h1>Custom websites for small businesses</h1>
+<p class="lead">We’re planning a remote website pilot for small businesses worldwide. We’ll plan the pages and features around your business and what your customers need to do.</p>
 <div class="actions"><a class="button primary" href="{LINKEDIN}">Ask about pilot availability ↗</a><a class="button" href="{home}">See PELAOS projects →</a></div>
 </section>
 <section aria-labelledby="scope-title">
-<h2 id="scope-title">What the one-page pilot would include</h2>
+<h2 id="scope-title">What the website pilot would include</h2>
 <ul>
 <li>Responsive layout for phone and desktop.</li>
 <li>Sections for services, contact links and a location or service area supplied by the business.</li>
-<li>A descriptive HTML title, meta description and social-sharing metadata.</li>
+<li>A descriptive title, search description and sharing metadata for each page.</li>
 <li>One consolidated review round, source handover and basic editing instructions.</li>
 </ul>
 <p>Search-friendly content and metadata help search engines understand a page, but do not guarantee rankings, traffic or enquiries.</p>
@@ -1228,7 +1228,7 @@ mod tests {
             assert!(rendered.contains(r#"<meta name="twitter:description" content=""#));
         }
         let proposed = layout(&services());
-        assert!(proposed.contains("One-page websites for small businesses"));
+        assert!(proposed.contains("Custom websites for small businesses"));
         assert!(proposed.contains("not a live ordering or payment page"));
         assert!(layout(&home()).contains(&href("services/")));
     }

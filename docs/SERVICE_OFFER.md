@@ -1,8 +1,8 @@
-# PELAOS landing-page pilot
+# PELAOS website pilot
 
-Proposed offer for one small business. Price is a hypothesis to validate, not a market benchmark. This document is a quoting aid, not a checkout.
+Agree the pages and features with each business before quoting. The figures below illustrate a landing-page project. Price is a hypothesis to validate, not a market benchmark. This document is a quoting aid, not a checkout.
 
-**€250 project fee:** one responsive business page using the client's final text and images; services, location and contact links; title/description/social metadata; one revision; source handover and basic editing instructions.
+**Example €250 project fee:** a responsive landing page using the client's final text and images; services, location and contact links; title/description/social metadata; one revision; source handover and basic editing instructions.
 
 **Target delivery:** five working days after receiving the agreed deposit and complete content, subject to availability confirmed in the quote.
 
@@ -12,7 +12,7 @@ Proposed offer for one small business. Price is a hypothesis to validate, not a 
 
 ## Before accepting a deposit
 
-Confirm the client and decision maker, one-page content, permitted images, preferred contact channel, required language, deadline, revision scope and hosting arrangement. Check project fit and any existing professional obligations. Both parties keep a copy of the accepted scope.
+Confirm the client and decision maker, page list and content, permitted images, preferred contact channel, required language, deadline, revision scope and hosting arrangement. Check project fit and any existing professional obligations. Both parties keep a copy of the accepted scope.
 
 ## Delivery and acceptance
 
