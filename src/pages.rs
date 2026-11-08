@@ -14,7 +14,7 @@ const HOSTING: &str = match option_env!("PELAOS_HOSTING") {
     Some(value) => value,
     None => "github-pages",
 };
-/// Shown in the footer, JSON-LD `dateModified` and sitemap `lastmod`.
+/// Used in JSON-LD `dateModified` and sitemap `lastmod`.
 pub const UPDATED: &str = "2026-11-08";
 
 pub fn validate_config() -> std::io::Result<()> {
@@ -152,17 +152,25 @@ dt{font-weight:700;margin-top:16px}dd{margin:4px 0 0}
 #pressure-live{display:grid;gap:8px;margin-top:12px}
 #pressure-live input{width:100%;min-height:44px}
 small,.muted{color:var(--muted)}
-footer{border-top:2px solid var(--fg);margin-top:48px;background:var(--card);color:var(--fg)}
-.footer-inner{max-width:1080px;margin:auto;padding:28px 24px;font-size:12px;font-weight:750;letter-spacing:.1em;text-transform:uppercase}
-.footer-inner p{margin:4px 0}
-.footer-inner nav{display:block;overflow:visible;padding:0}
-.footer-inner ul{display:flex;flex-wrap:wrap;gap:0 18px;padding:0;margin:0 0 14px;list-style:none}
-.footer-inner a{color:inherit;text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:4px}
-.footer-inner nav a{display:inline-flex;align-items:center;padding:0;line-height:1.4}
-.footer-inner a:hover,.footer-inner a:focus-visible{color:var(--accent)}
-.footer-name{font-size:15px;letter-spacing:.16em}
-.footer-meta{color:var(--muted);letter-spacing:.04em}
-.footer-email{display:inline-block;text-transform:none;letter-spacing:normal}
+footer{margin-top:clamp(48px,7vw,96px);background:#eaf2f6;color:#142633;border-top:1px solid #c9dae4;--footer-secondary:#425968;--footer-line:#c0d2dc}
+@media(prefers-color-scheme:dark){footer{background:#101c23;color:#f4f8fa;border-color:#2b404d;--footer-secondary:#b1c4cf;--footer-line:#314651}}
+.footer-inner{max-width:1080px;margin:auto;padding:clamp(36px,5vw,68px) 24px 20px}
+.footer-grid{display:grid;grid-template-columns:minmax(210px,1.65fr) 1fr minmax(215px,1.15fr);gap:clamp(24px,5vw,72px)}
+.footer-brand img{display:block;width:clamp(160px,16vw,200px);height:auto}
+.footer-brand{display:inline-block}
+.footer-summary{max-width:25ch;margin:14px 0 0;color:var(--footer-secondary);font-size:15px}
+.footer-grid h2{margin:0 0 10px;font-size:16px;line-height:1.4;letter-spacing:normal}
+.footer-inner a{color:inherit;text-underline-offset:4px}
+.footer-links{display:grid;justify-items:start}
+.footer-links a,.footer-utility a{display:inline-flex;align-items:center;min-height:36px;text-decoration:none;font-size:15px}
+.footer-inner a:hover,.footer-inner a:focus-visible{text-decoration:underline}
+.footer-person{margin:0;font-weight:600}
+.footer-contact a[href^="mailto:"]{color:var(--accent);text-decoration:underline;overflow-wrap:anywhere}
+.footer-utility{border-top:1px solid var(--footer-line);margin-top:32px;padding-top:12px;display:flex;align-items:center;flex-wrap:wrap;gap:4px 18px;color:var(--footer-secondary);font-size:13px}
+.footer-utility small{margin-right:auto;color:inherit;font-size:inherit}
+.footer-utility a{font-size:13px}
+@media(max-width:780px){.footer-grid{grid-template-columns:1fr 1fr}.footer-identity{grid-column:1/-1}}
+@media(max-width:480px){.footer-grid{grid-template-columns:1fr;gap:24px}.footer-projects .footer-links{grid-template-columns:1fr 1fr}.footer-links a,.footer-utility a{min-height:44px}.footer-utility small{flex-basis:100%}}
 :focus-visible{outline:3px solid var(--accent);outline-offset:4px}
 header,main{max-width:1080px;padding-left:24px;padding-right:24px}
 main{padding-top:32px}main>p,main>ul,main>dl{max-width:780px}
@@ -296,15 +304,19 @@ fn layout(p: &Page) -> String {
 {body}
 </main>
 <footer><div class="footer-inner">
-<nav aria-label="Footer"><ul>
-<li><a href="{home}">Home</a></li><li><a href="{services}">Websites</a></li><li><a href="{research}">Research</a></li><li><a href="{riotuner}">RioTuner</a></li><li><a href="{BASE}/vera-mot/">VERA-MOT</a></li><li><a href="{BASE}/ros3-limassol/">ROS3-Limassol</a></li><li><a href="{BASE}/cultural-storytelling-map/">Narrify</a></li><li><a href="{BASE}/contact/">Contact</a></li><li><a href="{privacy}">Website privacy</a></li><li><a href="{REVOLUT}">Support ↗</a></li>
-</ul></nav>
-<p class="footer-name">PELAOS Tech</p>
-<p>Independent software and research from Cyprus.</p>
-<p>© 2026 Charalampos Nadiotis.</p>
-<p>Website by <a href="{LINKEDIN}">Charalampos Nadiotis on LinkedIn</a></p>
-<p><a class="footer-email" href="mailto:{EMAIL}">{EMAIL}</a></p>
-<p class="footer-meta">Last updated <time datetime="{UPDATED}">8 November 2026</time>. Hosted on {hosting}.</p>
+<div class="footer-grid">
+<div class="footer-identity">
+<a class="footer-brand" href="{home}"><picture><source media="(prefers-color-scheme: dark)" srcset="{BASE}/logo-dark.svg"><img src="{BASE}/logo.svg" width="200" height="99" alt="PELAOS Tech home"></picture></a>
+<p class="footer-summary">Independent software and research from Cyprus.</p>
+</div>
+<section class="footer-projects"><h2>Explore</h2><div class="footer-links">
+<a href="{services}">Websites</a><a href="{research}">Research</a><a href="{riotuner}">RioTuner</a><a href="{BASE}/vera-mot/">VERA-MOT</a><a href="{BASE}/ros3-limassol/">ROS3-Limassol</a><a href="{BASE}/cultural-storytelling-map/">Narrify</a>
+</div></section>
+<section class="footer-contact"><h2><a href="{BASE}/contact/">Contact</a></h2>
+<p class="footer-person">Charalampos Nadiotis</p><div class="footer-links">
+<a href="mailto:{EMAIL}">{EMAIL}</a><a href="{LINKEDIN}">LinkedIn ↗</a></div></section>
+</div>
+<div class="footer-utility"><small>© 2026 PELAOS Tech · Hosted on {hosting}.</small><a href="{privacy}">Website privacy</a><a href="{REVOLUT}">Support ↗</a></div>
 </div></footer>
 </body>
 </html>
