@@ -136,7 +136,7 @@ const CSS: &str = r#"
 body{margin:0;background:var(--bg);color:var(--fg);font:17px/1.6 Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
 a{color:var(--accent)}
 .skip{position:absolute;left:-999px}.skip:focus{left:16px;top:8px;background:var(--card);padding:8px}
-header,main,footer{max-width:760px;margin:0 auto;padding:0 16px}
+header,main{max-width:760px;margin:0 auto;padding:0 16px}
 header{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;padding-top:16px;padding-bottom:8px}
 .brand,.brand img{display:block}.brand img{width:112px;height:auto}
 nav a{display:inline-block;min-height:44px;line-height:44px;padding:0 10px;text-decoration:none}
@@ -152,10 +152,19 @@ dt{font-weight:700;margin-top:16px}dd{margin:4px 0 0}
 #pressure-live{display:grid;gap:8px;margin-top:12px}
 #pressure-live input{width:100%;min-height:44px}
 small,.muted{color:var(--muted)}
-footer{border-top:1px solid var(--line);margin-top:48px;padding-top:16px;padding-bottom:32px;font-size:15px;color:var(--muted)}
-footer a{display:inline-block;min-height:44px;line-height:44px;margin-right:12px}
+footer{border-top:2px solid var(--fg);margin-top:48px;background:var(--card);color:var(--fg)}
+.footer-inner{max-width:1080px;margin:auto;padding:28px 24px;font-size:12px;font-weight:750;letter-spacing:.1em;text-transform:uppercase}
+.footer-inner p{margin:4px 0}
+.footer-inner nav{display:block;overflow:visible;padding:0}
+.footer-inner ul{display:flex;flex-wrap:wrap;gap:0 18px;padding:0;margin:0 0 14px;list-style:none}
+.footer-inner a{color:inherit;text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:4px}
+.footer-inner nav a{display:inline-flex;align-items:center;padding:0;line-height:1.4}
+.footer-inner a:hover,.footer-inner a:focus-visible{color:var(--accent)}
+.footer-name{font-size:15px;letter-spacing:.16em}
+.footer-meta{color:var(--muted);letter-spacing:.04em}
+.footer-email{display:inline-block;text-transform:none;letter-spacing:normal}
 :focus-visible{outline:3px solid var(--accent);outline-offset:4px}
-header,main,footer{max-width:1080px;padding-left:24px;padding-right:24px}
+header,main{max-width:1080px;padding-left:24px;padding-right:24px}
 main{padding-top:32px}main>p,main>ul,main>dl{max-width:780px}
 header{border-bottom:1px solid var(--line);padding-top:20px;padding-bottom:20px}
 h1{font-size:clamp(36px,6.5vw,72px);letter-spacing:-.055em;line-height:1.04;max-width:850px}
@@ -179,7 +188,7 @@ main,.project,.panel>*{min-width:0}
 nav{display:flex;align-items:center;flex-wrap:wrap}
 nav a{white-space:nowrap}
 @media(max-width:720px){
-header,main,footer{padding-left:18px;padding-right:18px}
+header,main,.footer-inner{padding-left:18px;padding-right:18px}
 header{display:block;padding-top:14px;padding-bottom:8px}
 .brand{display:inline-block;margin-bottom:8px}
 nav{display:flex;flex-wrap:nowrap;gap:4px;max-width:100%;overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:thin;-webkit-overflow-scrolling:touch;padding-bottom:5px}
@@ -286,10 +295,17 @@ fn layout(p: &Page) -> String {
 <main id="main">
 {body}
 </main>
-<footer>
-<a href="{services}">Websites</a><a href="{research}">Research</a><a href="{riotuner}">RioTuner</a><a href="{privacy}">Website privacy</a><a href="{BASE}/contact/">Contact Charalampos Nadiotis</a><a href="{REVOLUT}">Support ↗</a>
-<p>© 2026 PelaosTech. Last updated <time datetime="{UPDATED}">8 November 2026</time>. Hosted on {hosting}.</p>
-</footer>
+<footer><div class="footer-inner">
+<nav aria-label="Footer"><ul>
+<li><a href="{home}">Home</a></li><li><a href="{services}">Websites</a></li><li><a href="{research}">Research</a></li><li><a href="{riotuner}">RioTuner</a></li><li><a href="{BASE}/vera-mot/">VERA-MOT</a></li><li><a href="{BASE}/ros3-limassol/">ROS3-Limassol</a></li><li><a href="{BASE}/cultural-storytelling-map/">Narrify</a></li><li><a href="{BASE}/contact/">Contact</a></li><li><a href="{privacy}">Website privacy</a></li><li><a href="{REVOLUT}">Support ↗</a></li>
+</ul></nav>
+<p class="footer-name">PELAOS Tech</p>
+<p>Independent software and research from Cyprus.</p>
+<p>© 2026 Charalampos Nadiotis.</p>
+<p>Website by <a href="{LINKEDIN}">Charalampos Nadiotis on LinkedIn</a></p>
+<p><a class="footer-email" href="mailto:{EMAIL}">{EMAIL}</a></p>
+<p class="footer-meta">Last updated <time datetime="{UPDATED}">8 November 2026</time>. Hosted on {hosting}.</p>
+</div></footer>
 </body>
 </html>
 "##,
