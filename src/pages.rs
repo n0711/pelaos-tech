@@ -15,7 +15,7 @@ const HOSTING: &str = match option_env!("PELAOS_HOSTING") {
     None => "github-pages",
 };
 /// Shown in the footer, JSON-LD `dateModified` and sitemap `lastmod`.
-pub const UPDATED: &str = "2026-11-05";
+pub const UPDATED: &str = "2026-11-08";
 
 pub fn validate_config() -> std::io::Result<()> {
     let invalid = || std::io::Error::new(std::io::ErrorKind::InvalidInput, "deployment needs an HTTPS site URL without a trailing slash, a matching base path, and github-pages or vercel hosting");
@@ -128,15 +128,16 @@ fn fixed2(value: f64) -> String {
 }
 
 const CSS: &str = r#"
-:root{--bg:#f6f8fb;--fg:#0b1424;--muted:#4a5870;--card:#fff;--line:#d7deea;--accent:#0a7ea4}
-@media (prefers-color-scheme:dark){:root{--bg:#070c18;--fg:#e9eef7;--muted:#9aa6bb;--card:#101829;--line:#26324a;--accent:#39d0f2}}
+@font-face{font-family:Inter;src:url('__BASE__/inter.woff') format('woff');font-weight:100 900;font-display:swap}
+:root{--bg:#f8fafb;--fg:#0b1424;--muted:#4a5870;--card:#fff;--line:#d7deea;--accent:#326887}
+@media (prefers-color-scheme:dark){:root{--bg:#070c18;--fg:#e9eef7;--muted:#9aa6bb;--card:#101829;--line:#26324a;--accent:#86bbd8}}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--fg);font:17px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+body{margin:0;background:var(--bg);color:var(--fg);font:17px/1.6 Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
 a{color:var(--accent)}
 .skip{position:absolute;left:-999px}.skip:focus{left:16px;top:8px;background:var(--card);padding:8px}
 header,main,footer{max-width:760px;margin:0 auto;padding:0 16px}
 header{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;padding-top:16px;padding-bottom:8px}
-.brand{font-weight:800;font-size:20px;text-decoration:none;color:var(--fg)}
+.brand,.brand img{display:block}.brand img{width:112px;height:auto}
 nav a{display:inline-block;min-height:44px;line-height:44px;padding:0 10px;text-decoration:none}
 nav a[aria-current]{font-weight:700;color:var(--fg)}
 h1{font-size:34px;line-height:1.2;margin:24px 0 8px}
@@ -274,20 +275,20 @@ fn layout(p: &Page) -> String {
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
-<header><a class="brand" href="{home}">PelaosTech</a><nav aria-label="Main">{nav}</nav></header>
+<header><a class="brand" href="{home}"><picture><source media="(prefers-color-scheme: dark)" srcset="{BASE}/logo-dark.svg"><img src="{BASE}/logo.svg" width="112" height="55" alt="PELAOS Tech home"></picture></a><nav aria-label="Main">{nav}</nav></header>
 <main id="main">
 {body}
 </main>
 <footer>
 <a href="{services}">Websites</a><a href="{research}">Research</a><a href="{riotuner}">RioTuner</a><a href="{privacy}">Website privacy</a><a href="{CONTACT}">Contact</a><a href="{REVOLUT}">Support ↗</a>
-<p>© 2026 PelaosTech. Last updated <time datetime="{UPDATED}">5 November 2026</time>. Hosted on {hosting}.</p>
+<p>© 2026 PelaosTech. Last updated <time datetime="{UPDATED}">8 November 2026</time>. Hosted on {hosting}.</p>
 </footer>
 </body>
 </html>
 "##,
         title = esc(p.title),
         desc = esc(p.description),
-        css = CSS.trim(),
+        css = CSS.trim().replace("__BASE__", BASE),
         home = href(""),
         services = href("services/"),
         research = href("research/"),
@@ -841,8 +842,7 @@ fn not_found() -> Page {
     }
 }
 
-const FAVICON: &str = r##"<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 108 108"><rect width="108" height="108" rx="24" fill="#070C18"/><path d="M31.9 56.4A25 25 0 0 1 76.1 56.4" fill="none" stroke="#39D0F2" stroke-width="5" stroke-linecap="round"/><path d="M54 68V38" stroke="#E9EEF7" stroke-width="4.5" stroke-linecap="round"/><circle cx="54" cy="68" r="5" fill="#E9EEF7"/></svg>
-"##;
+const FAVICON: &str = include_str!("../assets/favicon.svg");
 
 const MANIFEST: &str = r##"{
   "id": "__BASE__/",
@@ -872,13 +872,13 @@ const PWA_REGISTRATION: &str = r#"if ('serviceWorker' in navigator && window.isS
 
 // Cache only this portfolio's public, same-origin pages and assets.
 // Network-first navigation avoids hiding newly published research behind stale HTML.
-const SERVICE_WORKER: &str = r#"const VERSION = 'pelaos-pwa-20261105';
+const SERVICE_WORKER: &str = r#"const VERSION = 'pelaos-pwa-20261108';
 const BASE = '__BASE__/';
 const PRECACHE = [
   '', 'services/', 'research/', 'vera-mot/', 'ros3-limassol/',
   'cultural-storytelling-map/', 'riotuner/', 'riotuner/testing/',
   'riotuner/privacy/', 'privacy/', 'app.js', 'pwa.js',
-  'favicon.svg', 'icon-192.png', 'icon-512.png', 'manifest.webmanifest'
+  'logo.svg', 'logo-dark.svg', 'inter.woff', 'favicon.svg', 'icon-192.png', 'icon-512.png', 'manifest.webmanifest'
 ].map(path => BASE + path);
 
 self.addEventListener('install', event => {
@@ -971,6 +971,13 @@ pub fn site() -> Vec<File> {
             url("riotuner/privacy/")
         ),
     });
+    for (path, contents) in [
+        ("logo.svg", include_str!("../assets/logo.svg")),
+        ("logo-dark.svg", include_str!("../assets/logo-dark.svg")),
+        ("Inter-OFL.txt", include_str!("../assets/Inter-OFL.txt")),
+    ] {
+        files.push(File { path: path.into(), contents: contents.into() });
+    }
     files.push(File { path: "favicon.svg".into(), contents: FAVICON.to_string() });
     files.push(File { path: "manifest.webmanifest".into(), contents: MANIFEST.replace("__BASE__", BASE) });
     files.push(File { path: "pwa.js".into(), contents: PWA_REGISTRATION.replace("__BASE__", BASE) });
