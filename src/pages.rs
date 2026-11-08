@@ -48,7 +48,8 @@ const NOAA_PRESSURE: &str = "https://oceanservice.noaa.gov/facts/pressure.html";
 const NOAA_AUV_ROV: &str = "https://oceanservice.noaa.gov/facts/auv-rov.html";
 const NOAA_NAVIGATION: &str = "https://oceanexplorer.noaa.gov/expedition-feature/technology-development-partnerships-ex1904-logs-july29/";
 const GITHUB_PAGES_PRIVACY: &str = "https://docs.github.com/en/pages/getting-started-with-github-pages/what-is-github-pages";
-const CONTACT: &str = "https://github.com/n0711/pelaos-tech/issues";
+const ISSUES: &str = "https://github.com/n0711/pelaos-tech/issues";
+const EMAIL: &str = "nadiotis_c@outlook.com";
 const LINKEDIN: &str = "https://www.linkedin.com/in/nadiotis/";
 const RESEARCHGATE: &str = "https://www.researchgate.net/profile/Charalampos-Nadiotis-2";
 /// Voluntary support link, also used by `.github/FUNDING.yml` in each repository.
@@ -193,7 +194,7 @@ h1{overflow-wrap:anywhere}
 
 fn layout(p: &Page) -> String {
     let canonical = url(p.slug);
-    let nav = [("", "Home"), ("services/", "Websites"), ("research/", "Research"), ("vera-mot/", "VERA-MOT"), ("ros3-limassol/", "ROS3"), ("riotuner/", "RioTuner")]
+    let nav = [("", "Home"), ("services/", "Websites"), ("research/", "Research"), ("vera-mot/", "VERA-MOT"), ("ros3-limassol/", "ROS3"), ("riotuner/", "RioTuner"), ("contact/", "Contact")]
         .iter()
         .map(|(slug, label)| {
             let current = if *slug == p.slug { " aria-current=\"page\"" } else { "" };
@@ -218,26 +219,26 @@ fn layout(p: &Page) -> String {
         .collect::<Vec<_>>()
         .join(",");
     let mut graph = vec![
+        format!(r##"{{"@type":"Organization","@id":"{SITE}/#org","name":"PELAOS Tech","alternateName":"PelaosTech","url":"{SITE}/","logo":"{SITE}/icon-512.png","founder":{{"@id":"{SITE}/contact/#person"}}}}"##),
+        format!(r##"{{"@type":"Person","@id":"{SITE}/contact/#person","name":"Charalampos Nadiotis","url":"{SITE}/contact/","email":"{EMAIL}","sameAs":["{LINKEDIN}","{RESEARCHGATE}","https://github.com/n0711"]}}"##),
         format!(
-            "{{\"@type\":\"Organization\",\"@id\":{},\"name\":\"PelaosTech\",\"url\":{}}}",
-            js(&format!("{SITE}/#org")),
-            js(&url(""))
-        ),
-        format!(
-            "{{\"@type\":\"WebSite\",\"@id\":{},\"name\":\"PelaosTech\",\"url\":{},\"publisher\":{{\"@id\":{}}}}}",
+            "{{\"@type\":\"WebSite\",\"@id\":{},\"name\":\"PELAOS Tech\",\"url\":{},\"publisher\":{{\"@id\":{}}}}}",
             js(&format!("{SITE}/#site")),
             js(&url("")),
             js(&format!("{SITE}/#org"))
         ),
         format!(
-            "{{\"@type\":\"WebPage\",\"name\":{},\"url\":{},\"description\":{},\"dateModified\":\"{UPDATED}\",\"isPartOf\":{{\"@id\":{}}}}}",
+            "{{\"@type\":{},\"name\":{},\"url\":{},\"description\":{},\"dateModified\":\"{UPDATED}\",\"isPartOf\":{{\"@id\":{}}}}}",
+            js(if p.slug == "contact/" { "ContactPage" } else { "WebPage" }),
             js(p.title),
             js(&canonical),
             js(p.description),
             js(&format!("{SITE}/#site"))
         ),
-        format!("{{\"@type\":\"BreadcrumbList\",\"itemListElement\":[{crumb_ld}]}}"),
     ];
+    if !p.crumbs.is_empty() && !p.noindex {
+        graph.push(format!("{{\"@type\":\"BreadcrumbList\",\"itemListElement\":[{crumb_ld}]}}"));
+    }
     graph.extend(p.extra_ld.iter().cloned());
     let ld = format!("{{\"@context\":\"https://schema.org\",\"@graph\":[{}]}}", graph.join(","));
 
@@ -262,10 +263,16 @@ fn layout(p: &Page) -> String {
 <meta name="color-scheme" content="light dark">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="en_GB">
-<meta property="og:site_name" content="PelaosTech">
+<meta property="og:site_name" content="PELAOS Tech">
 <meta property="og:title" content="{title}">
 <meta property="og:description" content="{desc}">
 <meta property="og:url" content="{canonical}">
+<meta property="og:image" content="{SITE}/icon-512.png">
+<meta property="og:image:width" content="512">
+<meta property="og:image:height" content="512">
+<meta property="og:image:alt" content="PELAOS Tech brand mark">
+<meta name="twitter:image" content="{SITE}/icon-512.png">
+<meta name="twitter:image:alt" content="PELAOS Tech brand mark">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="{title}">
 <meta name="twitter:description" content="{desc}">
@@ -280,7 +287,7 @@ fn layout(p: &Page) -> String {
 {body}
 </main>
 <footer>
-<a href="{services}">Websites</a><a href="{research}">Research</a><a href="{riotuner}">RioTuner</a><a href="{privacy}">Website privacy</a><a href="{CONTACT}">Contact</a><a href="{REVOLUT}">Support ↗</a>
+<a href="{services}">Websites</a><a href="{research}">Research</a><a href="{riotuner}">RioTuner</a><a href="{privacy}">Website privacy</a><a href="{BASE}/contact/">Contact Charalampos Nadiotis</a><a href="{REVOLUT}">Support ↗</a>
 <p>© 2026 PelaosTech. Last updated <time datetime="{UPDATED}">8 November 2026</time>. Hosted on {hosting}.</p>
 </footer>
 </body>
@@ -309,7 +316,7 @@ fn home() -> Page {
 <div class="actions"><a class="button primary" href="#projects">Explore the projects ↓</a><a class="button" href="{services}">Website pilot →</a></div>
 </section>
 <section id="projects" aria-labelledby="project-heading">
-<p class="eyebrow">Selected projects</p><h2 id="project-heading">Different interests. Things you can use.</h2>
+<p class="eyebrow">Selected projects</p><h2 id="project-heading">Software and open-source projects</h2>
 <div class="project-grid">
 <article class="card project"><span class="badge">Android · Coming to Google Play</span><h3>RioTuner</h3><p>An offline instrument tuner with needle and strobe displays for guitar, bass, ukulele and bouzouki. Development is finished and the Google Play release is being prepared.</p><a href="{riotuner}">Explore RioTuner →</a></article>
 <article class="card project"><span class="badge">Live · Community website</span><h3>cysk8clips</h3><p>Cyprus skateboarding clips, full parts, event stories and a public spot guide. A record of the people and places behind the scene.</p><a href="https://cysk8clips.com">Visit the skate archive ↗</a></article>
@@ -333,8 +340,8 @@ fn home() -> Page {
     );
     Page {
         slug: "",
-        title: "PELAOS Tech | Software, AI and Computer Science Research",
-        description: "Independent software, AI and computer science research from PELAOS: VERA-MOT, ROS3-Limassol, RioTuner, Narrify, LearnTwin and more.",
+        title: "Charalampos Nadiotis | PELAOS Tech Software and AI Research",
+        description: "Explore software and AI research by Charalampos Nadiotis in Cyprus, including VERA-MOT vehicle tracking, ROS3-Limassol telemetry and the RioTuner Android tuner.",
         body,
         crumbs: vec![],
         extra_ld: vec![],
@@ -345,6 +352,22 @@ fn home() -> Page {
 
 
 
+
+fn contact() -> Page {
+    Page {
+        slug: "contact/",
+        title: "Contact Charalampos Nadiotis | PELAOS Tech",
+        description: "Contact Charalampos Nadiotis, founder of PELAOS Tech in Cyprus, by email or LinkedIn about software projects, website enquiries and research collaborations.",
+        body: format!(r#"<h1>Contact Charalampos Nadiotis</h1>
+<p class="lead">I’m the founder of PELAOS Tech in Cyprus. Get in touch about a software project, a small-business website or a research collaboration.</p>
+<address><p>Email: <a href="mailto:{EMAIL}">{EMAIL}</a></p>
+<p>LinkedIn: <a href="{LINKEDIN}" rel="me">Charalampos Nadiotis on LinkedIn</a></p></address>"#),
+        crumbs: vec![("contact/", "Contact")],
+        extra_ld: vec![],
+        script: false,
+        noindex: false,
+    }
+}
 
 fn services() -> Page {
     Page {
@@ -375,7 +398,7 @@ fn services() -> Page {
 <section aria-labelledby="status-title">
 <h2 id="status-title">Pilot status and next step</h2>
 <p>This is an early service proposal, not a live ordering or payment page. Scope, schedule, availability, price, taxes and cancellation terms must be confirmed in a written quote before any work or payment. No lead form, tracking or checkout is used here.</p>
-<p>To discuss a potential pilot, <a href="{LINKEDIN}">contact PELAOS on LinkedIn</a>. For a sample of current engineering and software work, explore the <a href="{research}">computer science and AI research notes</a>.</p>
+<p>To discuss a potential pilot, <a href="{BASE}/contact/">contact Charalampos Nadiotis at PELAOS Tech</a>. For a sample of current engineering and software work, explore the <a href="{research}">computer science and AI research notes</a>.</p>
 </section>
 "##, home = href(""), research = href("research/")),
         crumbs: vec![("services/", "Website services")],
@@ -388,7 +411,7 @@ fn services() -> Page {
 fn vera_mot() -> Page {
     Page {
         slug: "vera-mot/",
-        title: "VERA-MOT ReID Research | PELAOS",
+        title: "VERA-MOT Vehicle Re-identification in Drone Video | PELAOS",
         description: "VERA-MOT research on quality-gated vehicle appearance matching and protected feature memory: open source, synthetic tests and validation limits.",
         body: r##"
 <section class="hero">
@@ -447,7 +470,7 @@ fn vera_mot() -> Page {
 fn ros3_limassol() -> Page {
     Page {
         slug: "ros3-limassol/",
-        title: "ROS3-Limassol | OpenPELAOS Robotics Research",
+        title: "ROS3-Limassol Robot Telemetry Monitoring | OpenPELAOS",
         description: "ROS3-Limassol evidence: synthetic replay, Rover SITL loopback and a limited USB bench test, with radio-link and field validation gaps.",
         body: r##"
 <section class="hero">
@@ -729,7 +752,7 @@ fn riotuner() -> Page {
     );
     Page {
         slug: "riotuner/",
-        title: "RioTuner: precision guitar tuner | PelaosTech",
+        title: "RioTuner Offline Android Instrument Tuner | PELAOS Tech",
         description: "RioTuner: an offline Android tuner for guitar, bass, ukulele and bouzouki, coming to Google Play. Synthetic benchmark results inside.",
         body,
         crumbs: vec![("riotuner/", "RioTuner")],
@@ -754,7 +777,7 @@ fn riotuner_testing() -> Page {
 <h2>Useful feedback</h2>
 <p>Include app version, phone model, Android version, instrument, tuning, expected behaviour and what actually happened. Report crashes and permission problems as well as tuning behaviour.</p>
 <p>A comparison with another tuner is a usability check, not calibrated accuracy evidence. Quantitative accuracy claims need a documented reference and measurement setup.</p>
-<p><a class="button" href="{LINKEDIN}">Ask about testing on LinkedIn ↗</a> <a href="{CONTACT}">Report a non-sensitive issue</a></p>
+<p><a class="button" href="{LINKEDIN}">Ask about testing on LinkedIn ↗</a> <a href="{ISSUES}">Report a non-sensitive issue</a></p>
 <p class="muted">GitHub issues are public. Do not post contact details, private recordings, account information or device identifiers.</p>
 "#),
         crumbs: vec![("riotuner/", "RioTuner"), ("riotuner/testing/", "Testing")],
@@ -778,7 +801,7 @@ fn riotuner_privacy() -> Page {
 <h2>Changes</h2>
 <p>If this policy changes, the new version will be published at this address with a new date.</p>
 <h2>Contact</h2>
-<p>Questions about this policy: <a href="{CONTACT}">open an issue on GitHub</a>.</p>
+<p>Questions about this policy: <a href="{ISSUES}">open an issue on GitHub</a>.</p>
 "#
     );
     Page {
@@ -872,10 +895,10 @@ const PWA_REGISTRATION: &str = r#"if ('serviceWorker' in navigator && window.isS
 
 // Cache only this portfolio's public, same-origin pages and assets.
 // Network-first navigation avoids hiding newly published research behind stale HTML.
-const SERVICE_WORKER: &str = r#"const VERSION = 'pelaos-pwa-20261108';
+const SERVICE_WORKER: &str = r#"const VERSION = 'pelaos-pwa-20261108-contact';
 const BASE = '__BASE__/';
 const PRECACHE = [
-  '', 'services/', 'research/', 'vera-mot/', 'ros3-limassol/',
+  '', 'contact/', 'services/', 'research/', 'vera-mot/', 'ros3-limassol/',
   'cultural-storytelling-map/', 'riotuner/', 'riotuner/testing/',
   'riotuner/privacy/', 'privacy/', 'app.js', 'pwa.js',
   'logo.svg', 'logo-dark.svg', 'inter.woff', 'favicon.svg', 'icon-192.png', 'icon-512.png', 'manifest.webmanifest'
@@ -932,7 +955,7 @@ self.addEventListener('fetch', event => {
 "#;
 
 fn pages() -> Vec<Page> {
-    vec![home(), services(), research(), vera_mot(), ros3_limassol(), cultural_storytelling_map(), riotuner(), riotuner_testing(), riotuner_privacy(), site_privacy(), not_found()]
+    vec![home(), contact(), services(), research(), vera_mot(), ros3_limassol(), cultural_storytelling_map(), riotuner(), riotuner_testing(), riotuner_privacy(), site_privacy(), not_found()]
 }
 
 pub fn site() -> Vec<File> {
@@ -1144,7 +1167,7 @@ mod tests {
                     let target = if rest.is_empty() || rest.ends_with('/') { format!("{rest}index.html") } else { rest.to_string() };
                     assert!(files.contains(&target), "{path} links to missing {link}");
                 } else {
-                    assert!(link.starts_with("https://") || link.starts_with('#'), "{path}: unexpected link {link}");
+                    assert!(link.starts_with("https://") || link == format!("mailto:{EMAIL}") || link.starts_with('#'), "{path}: unexpected link {link}");
                 }
             }
         }

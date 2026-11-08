@@ -44,7 +44,7 @@ def main() -> None:
     assert f"'{base}sw.js'" in registration
     assert f"'{base}'" in registration
     assert "url.origin !== self.location.origin" in worker
-    for route in ("", "services/", "research/", "vera-mot/", "ros3-limassol/",
+    for route in ("", "contact/", "services/", "research/", "vera-mot/", "ros3-limassol/",
                   "cultural-storytelling-map/", "riotuner/", "riotuner/testing/",
                   "riotuner/privacy/", "privacy/"):
         html = (root / route / "index.html").read_text(encoding="utf-8")
@@ -52,7 +52,7 @@ def main() -> None:
         assert f'src="{base}pwa.js"' in html
         assert '<meta name="viewport"' in html
     assert (root / "app.js").is_file(), "Dart must compile before this check"
-    print(f"PWA validated: {base}, 10 routes, 2 PNG icons, worker and registration")
+    print(f"PWA validated: {base}, 11 routes, 2 PNG icons, worker and registration")
 
 if __name__ == "__main__":
     main()
