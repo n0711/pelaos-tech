@@ -9,7 +9,7 @@ match the stored type.
 
 No FIFO operations or control flow are changed.
 
-Signed-off-by: Charalampos Nadiotis <nadiotis_c@outlook.com>
+Assisted-by: ChatGPT:GPT-6
 ---
  samples/kfifo/bytestream-example.c | 4 ++--
  samples/kfifo/inttype-example.c    | 4 ++--
