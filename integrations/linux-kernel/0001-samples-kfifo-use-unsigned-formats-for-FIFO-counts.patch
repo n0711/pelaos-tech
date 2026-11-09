@@ -1,0 +1,53 @@
+From b3cfdefb64772e70c41b00d3967a9fa150e28adf Mon Sep 17 00:00:00 2001
+From: Charalampos Nadiotis <nadiotis_c@outlook.com>
+Date: Mon, 9 Nov 2026 18:48:11 +0000
+Subject: [PATCH] samples: kfifo: use unsigned formats for FIFO counts
+
+Both kfifo sample modules store the result of kfifo_in() and
+kfifo_out() in an unsigned int but print it using %d. Use %u to
+match the stored type.
+
+No FIFO operations or control flow are changed.
+
+Signed-off-by: Charalampos Nadiotis <nadiotis_c@outlook.com>
+---
+ samples/kfifo/bytestream-example.c | 4 ++--
+ samples/kfifo/inttype-example.c    | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/samples/kfifo/bytestream-example.c b/samples/kfifo/bytestream-example.c
+index 4ae29a1..35149de 100644
+--- a/samples/kfifo/bytestream-example.c
++++ b/samples/kfifo/bytestream-example.c
+@@ -73,10 +73,10 @@ static int __init testfunc(void)
+ 
+ 	/* get max of 2 elements from the fifo */
+ 	ret = kfifo_out(&test, buf, 2);
+-	printk(KERN_INFO "ret: %d\n", ret);
++	printk(KERN_INFO "ret: %u\n", ret);
+ 	/* and put it back to the end of the fifo */
+ 	ret = kfifo_in(&test, buf, ret);
+-	printk(KERN_INFO "ret: %d\n", ret);
++	printk(KERN_INFO "ret: %u\n", ret);
+ 
+ 	/* skip first element of the fifo */
+ 	printk(KERN_INFO "skip 1st element\n");
+diff --git a/samples/kfifo/inttype-example.c b/samples/kfifo/inttype-example.c
+index e4f9331..294f291 100644
+--- a/samples/kfifo/inttype-example.c
++++ b/samples/kfifo/inttype-example.c
+@@ -66,10 +66,10 @@ static int __init testfunc(void)
+ 
+ 	/* get max of 2 elements from the fifo */
+ 	ret = kfifo_out(&test, buf, 2);
+-	printk(KERN_INFO "ret: %d\n", ret);
++	printk(KERN_INFO "ret: %u\n", ret);
+ 	/* and put it back to the end of the fifo */
+ 	ret = kfifo_in(&test, buf, ret);
+-	printk(KERN_INFO "ret: %d\n", ret);
++	printk(KERN_INFO "ret: %u\n", ret);
+ 
+ 	/* skip first element of the fifo */
+ 	printk(KERN_INFO "skip 1st element\n");
+-- 
+2.47.3
