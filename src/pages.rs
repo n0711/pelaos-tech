@@ -272,7 +272,7 @@ fn layout(p: &Page) -> String {
 <title>{title}</title>
 <meta name="description" content="{desc}">
 {robots}<link rel="canonical" href="{canonical}">
-<link rel="icon" href="{BASE}/favicon.ico" sizes="16x16 32x32 48x48" type="image/x-icon">
+<link rel="icon" href="{BASE}/favicon-blue.ico" sizes="16x16 32x32 48x48" type="image/x-icon">
 <link rel="manifest" href="{BASE}/manifest.webmanifest">
 <link rel="apple-touch-icon" href="{BASE}/icon-192.png">
 <meta name="theme-color" content="#070c18">
@@ -923,13 +923,13 @@ const PWA_REGISTRATION: &str = r#"if ('serviceWorker' in navigator && window.isS
 
 // Cache only this portfolio's public, same-origin pages and assets.
 // Network-first navigation avoids hiding newly published research behind stale HTML.
-const SERVICE_WORKER: &str = r#"const VERSION = 'pelaos-pwa-20261108-favicon';
+const SERVICE_WORKER: &str = r#"const VERSION = 'pelaos-pwa-20261109-blue-favicon';
 const BASE = '__BASE__/';
 const PRECACHE = [
   '', 'contact/', 'services/', 'research/', 'vera-mot/', 'ros3-limassol/',
   'cultural-storytelling-map/', 'riotuner/', 'riotuner/testing/',
   'riotuner/privacy/', 'privacy/', 'app.js', 'pwa.js',
-  'logo.svg', 'logo-dark.svg', 'inter.woff', 'favicon.ico', 'favicon.svg', 'icon-192.png', 'icon-512.png', 'manifest.webmanifest'
+  'logo.svg', 'logo-dark.svg', 'inter.woff', 'favicon-blue.ico', 'favicon.svg', 'icon-192.png', 'icon-512.png', 'manifest.webmanifest'
 ].map(path => BASE + path);
 
 self.addEventListener('install', event => {
@@ -1050,7 +1050,7 @@ mod tests {
         for page in pages() {
             let rendered = layout(&page);
             assert!(rendered.contains(&format!("<link rel=\"canonical\" href=\"{}\">", url(page.slug))));
-            assert!(rendered.contains(&format!("href=\"{BASE}/favicon.ico\"")));
+            assert!(rendered.contains(&format!("href=\"{BASE}/favicon-blue.ico\"")));
             assert!(rendered.contains(&format!("Hosted on {}.", hosting_name())));
             if page.script {
                 assert!(rendered.contains(&format!("src=\"{BASE}/app.js\"")));
@@ -1187,7 +1187,7 @@ mod tests {
     fn internal_links_resolve() {
         let mut files: Vec<String> = site().into_iter().map(|f| f.path).collect();
         // The generator writes binary PNG assets directly alongside text pages.
-        files.extend(["favicon.ico".to_string(), "icon-192.png".to_string(), "icon-512.png".to_string()]);
+        files.extend(["favicon-blue.ico".to_string(), "icon-192.png".to_string(), "icon-512.png".to_string()]);
         for (path, c) in html() {
             for part in c.split("href=\"").skip(1) {
                 let link = &part[..part.find('"').unwrap()];

@@ -88,7 +88,9 @@ pub fn write_site(out: &Path, files: &[File]) -> io::Result<()> {
         // Native launcher icons are small, precompressed PNGs tracked as source assets.
         // Ship them for both GitHub Pages and root-domain deployments.
         fs::write(stage.join("inter.woff"), include_bytes!("../assets/inter.woff"))?;
-        fs::write(stage.join("favicon.ico"), include_bytes!("../assets/favicon.ico"))?;
+        for filename in ["favicon.ico", "favicon-blue.ico"] {
+            fs::write(stage.join(filename), include_bytes!("../assets/favicon.ico"))?;
+        }
         fs::write(stage.join("icon-192.png"), include_bytes!("../assets/icon-192.png"))?;
         fs::write(stage.join("icon-512.png"), include_bytes!("../assets/icon-512.png"))?;
         fs::write(stage.join(MARKER), SIGNATURE)
