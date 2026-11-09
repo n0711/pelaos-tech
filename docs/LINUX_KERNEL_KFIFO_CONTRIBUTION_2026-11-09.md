@@ -1,6 +1,6 @@
 # Linux kernel kfifo janitor patch - 9 November 2026
 
-**Status:** Local patch produced and build-smoke-tested; **not emailed or merged upstream**.
+**Status:** AI-assisted draft patch for human review. Not emailed or merged upstream. A human contributor must review the changes and personally add a `Signed-off-by` tag before submitting.
 
 The patch is authored under Charalampos Nadiotis (GitHub `n0711`) and is stored in `integrations/linux-kernel/0001-samples-kfifo-use-unsigned-formats-for-FIFO-counts.patch`. It is **not** a patch to the PELAOS TECH website. It is meant to apply in a Linux kernel tree.
 
@@ -16,22 +16,23 @@ Original Git blob hashes, checked against the fetched upstream files:
 - `samples/kfifo/bytestream-example.c`: `4ae29a12cc8a03aa2a5c55992f55eaed35982c70`.
 - `samples/kfifo/inttype-example.c`: `e4f93317c5d049a337d39f2280c6fe52b45d3010`.
 
-## Validation
+## Validation and submission gates
 
-**Verified on 9 November 2026**
+The four format-string changes were verified against the fetched upstream source text. This review has not established that a complete current Linux kernel build passes or that `checkpatch.pl` passes. Previously reported local test results should be independently reproduced before submission.
 
-- Verified the local original-source Git blob hashes match upstream.
-- `git diff --check` and `git show --check` passed.
-- `git apply --check` passed on the original source snapshot.
-- Both modified samples compiled as out-of-tree kernel modules using the available Debian Linux **6.12.107+deb13-amd64** headers. This verifies compile compatibility with those headers only, not Linux 7.4.
+**Required steps before sending:**
 
-**Outstanding before emailing**
+1. Obtain a complete Linux kernel checkout matching the target source commit and apply the patch.
+2. Run `git apply --check`, `scripts/checkpatch.pl`, and `scripts/get_maintainer.pl`.
+3. Build or test the changed modules with the target kernel configuration, and inspect any warnings.
+4. Review the AI-assisted patch in full, the copyright/licensing basis and the DCO, then **personally add** the human `Signed-off-by` line. An AI agent must not supply it.
+5. Confirm that the sending email address and Git author identity are yours.
+6. Run `git send-email --dry-run`, inspect recipient addresses, and **send the patch yourself** with `git send-email` only after review. Do not send as an attachment.
 
-- Apply the patch in a full Linux tree and run `scripts/checkpatch.pl`.
-- Build with the matching upstream Linux 7.4-rc2 configuration, optionally run applicable kfifo tests.
-- Recheck `scripts/get_maintainer.pl` output against the current `MAINTAINERS`.
-- Review the patch text and the `Signed-off-by` line under the Developer's Certificate of Origin. The name/email must be correct.
-- Verify the sending email account is configured for plain-text `git send-email`; never commit SMTP credentials.
+Attribution: `Assisted-by: ChatGPT:GPT-6`, reflecting that ChatGPT suggested the patch and changelog.
+
+Kernel AI guidance: https://docs.kernel.org/process/coding-assistants.html
+Kernel submission guide: https://docs.kernel.org/process/submitting-patches.html
 
 ## Suggested commands from a local Linux checkout
 
@@ -49,7 +50,7 @@ git send-email --dry-run \
   0001-samples-kfifo-use-unsigned-formats-for-FIFO-counts.patch
 ```
 
-After verification and explicit review of the dry-run recipients/message, remove `--dry-run` to submit by SMTP with `git send-email`. The KFIFO maintainer and Linux mailing-list addresses are a starting point, not a substitute for the current maintainer script. If using `git am`, use a clean branch to ensure the patch is not applied twice.
+After performing the human review and adding your own DCO sign-off, remove `--dry-run` to submit by SMTP with `git send-email`. AI assistance does not certify the DCO or replace the required human submission. The KFIFO maintainer and Linux mailing-list addresses are a starting point, not a substitute for the current maintainer script. If using `git am`, use a clean branch to ensure the patch is not applied twice.
 
 ## Upstream references
 
