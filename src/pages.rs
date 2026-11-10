@@ -130,11 +130,13 @@ fn fixed2(value: f64) -> String {
 
 const CSS: &str = r#"
 @font-face{font-family:Inter;src:url('__BASE__/inter.woff') format('woff');font-weight:100 900;font-display:swap}
-:root{--bg:#f8fafb;--fg:#0b1424;--muted:#4a5870;--card:#fff;--line:#d7deea;--accent:#326887}
-@media (prefers-color-scheme:dark){:root{--bg:#070c18;--fg:#e9eef7;--muted:#9aa6bb;--card:#101829;--line:#26324a;--accent:#86bbd8}}
+:root{--bg:#fff;--fg:#000;--muted:#000;--card:#fff;--line:#a1c6d7;--accent:#000;--brand-blue:#488cb0}
+@media (prefers-color-scheme:dark){:root{--bg:#000;--fg:#fff;--muted:#cfe1ea;--card:#000;--line:#75a8c2;--accent:#a1c6d7}}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--fg);font:17px/1.6 Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
-a{color:var(--accent)}
+a{color:var(--accent);text-decoration-color:var(--brand-blue);text-underline-offset:.16em}
+.thesis-note{border-inline-start:4px solid var(--brand-blue);padding-inline-start:20px;margin:36px 0}
+.thesis-note h2{font-weight:700;letter-spacing:-.025em}
 .skip{position:absolute;left:-999px}.skip:focus{left:16px;top:8px;background:var(--card);padding:8px}
 header,main{max-width:760px;margin:0 auto;padding:0 16px}
 header{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;padding-top:16px;padding-bottom:8px}
@@ -152,8 +154,8 @@ dt{font-weight:700;margin-top:16px}dd{margin:4px 0 0}
 #pressure-live{display:grid;gap:8px;margin-top:12px}
 #pressure-live input{width:100%;min-height:44px}
 small,.muted{color:var(--muted)}
-footer{margin-top:clamp(48px,7vw,96px);background:#eaf2f6;color:#142633;border-top:1px solid #c9dae4;--footer-secondary:#425968;--footer-line:#c0d2dc}
-@media(prefers-color-scheme:dark){footer{background:#101c23;color:#f4f8fa;border-color:#2b404d;--footer-secondary:#b1c4cf;--footer-line:#314651}}
+footer{margin-top:clamp(48px,7vw,96px);background:#cfe1ea;color:#000;border-top:1px solid #a1c6d7;--footer-secondary:#000;--footer-line:#488cb0}
+@media(prefers-color-scheme:dark){footer{background:#000;color:#fff;border-color:#488cb0;--footer-secondary:#cfe1ea;--footer-line:#75a8c2}}
 .footer-inner{max-width:1080px;margin:auto;padding:clamp(36px,5vw,68px) 24px 20px}
 .footer-grid{display:grid;grid-template-columns:minmax(210px,1.65fr) 1fr minmax(215px,1.15fr);gap:clamp(24px,5vw,72px)}
 .footer-brand img{display:block;width:clamp(160px,16vw,200px);height:auto}
@@ -662,6 +664,11 @@ fn research() -> Page {
         r#"
 <h1>Computer science, AI and open research</h1>
 <p class="lead">Explore reproducible experiments in algorithms, computer vision and distributed robotics software. Each project separates established evidence from open questions.</p>
+<section class="thesis-note" aria-labelledby="prompt-thesis">
+<h2 id="prompt-thesis">Prompt engineering as a discrete-continuous optimization problem</h2>
+<p>Can a gradient tell us which word to replace? In his Frederick University BSc thesis, Charalampos Nadiotis tested every single-token replacement in a six-token synthetic vocabulary at prompt lengths two through four. The gradient flagged all 14,760 moves that improved the training score, alongside 1,004 that did not. Evaluation on language-model outputs remains pending.</p>
+<p><a href="https://github.com/n0711/bsc_thesis_2027/pull/2">Read the experiment and reproduce the counts</a></p>
+</section>
 <section aria-labelledby="complexity-research">
 <p class="eyebrow">Computer science / Complexity theory / Research note</p>
 <h2 id="complexity-research">P versus NP: a research question</h2>
