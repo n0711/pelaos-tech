@@ -11,6 +11,10 @@ Existing publication: **https://n0711.github.io/pelaos-tech/** (GitHub Pages).
 | `.github/workflows/pages.yml` | | Tests and builds pull requests; deploys on every push to `main`. |
 | `vercel.json`, `scripts/build-vercel.sh` | Bash | Builds the same site for Vercel, with root-path links and production canonical URLs. |
 
+## EUDIS Swarm research feature
+
+[Read the PELAOS research feature](https://n0711.github.io/pelaos-tech/research/#eudis-swarm) for the paired four-aircraft simulation, its completion counts and the October preprint. [Inspect the experiment commands and limitations](https://github.com/n0711/eudis-hackathon-swarm/blob/main/docs/measured_results.md).
+
 ## VERA-MOT research manuscript (3 November 2026)
 
 The new [VERA-MOT research page](https://n0711.github.io/pelaos-tech/vera-mot/) links to the [XeLaTeX manuscript source](https://github.com/n0711/vera-mot/blob/main/docs/papers/VERA_MOT_Implementation_Note.tex), its [compiled PDF](https://github.com/n0711/vera-mot/blob/main/docs/papers/VERA_MOT_Implementation_Note.pdf), and the [M4.6 checkpoint](https://github.com/n0711/vera-mot/blob/main/docs/checkpoints/M4_6_REID_2026-11-03.md). The manuscript is a preliminary working implementation note, not peer-reviewed or a real-vehicle quantitative performance study. The source's gated matching and memory protection passed synthetic regression checks; identity-annotated real vehicle evaluation is still outstanding. GitHub Pages publication should be verified after the merged workflow reports success.
