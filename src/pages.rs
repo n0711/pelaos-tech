@@ -15,7 +15,7 @@ const HOSTING: &str = match option_env!("PELAOS_HOSTING") {
     None => "github-pages",
 };
 /// Used in JSON-LD `dateModified` and sitemap `lastmod`.
-pub const UPDATED: &str = "2026-11-08";
+pub const UPDATED: &str = "2026-11-16";
 
 pub fn validate_config() -> std::io::Result<()> {
     let invalid = || std::io::Error::new(std::io::ErrorKind::InvalidInput, "deployment needs an HTTPS site URL without a trailing slash, a matching base path, and github-pages or vercel hosting");
@@ -135,6 +135,15 @@ const CSS: &str = r#"
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--fg);font:17px/1.6 Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
 a{color:var(--accent);text-decoration-color:var(--brand-blue);text-underline-offset:.16em}
+.swarm-study{margin:40px 0;padding:clamp(18px,4vw,44px);border:1px solid var(--line);border-top:5px solid var(--brand-blue);border-radius:0 0 12px 12px;scroll-margin-top:20px}
+.swarm-study h2{font-size:clamp(28px,4vw,46px);line-height:1.1;max-width:23ch;margin:12px 0}
+.swarm-study>p{max-width:72ch}.swarm-study .eyebrow{margin:0}
+.swarm-results{margin:24px 0}.swarm-results figcaption{font-weight:650}
+.swarm-results dl{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:16px;margin:12px 0}
+.swarm-results dl>div{border-top:2px solid var(--brand-blue);padding-top:8px}
+.swarm-results dt{margin:0;font-weight:500}.swarm-results dd{font-size:clamp(32px,5vw,54px);line-height:1.1;font-weight:750;letter-spacing:-.045em;font-variant-numeric:tabular-nums}
+.swarm-results small{font-size:.46em;letter-spacing:normal;font-weight:500}
+.swarm-links{display:flex;flex-wrap:wrap;gap:8px 24px}
 .thesis-note{border-inline-start:4px solid var(--brand-blue);padding-inline-start:20px;margin:36px 0}
 .thesis-note h2{font-weight:700;letter-spacing:-.025em}
 .skip{position:absolute;left:-999px}.skip:focus{left:16px;top:8px;background:var(--card);padding:8px}
@@ -357,6 +366,7 @@ fn home() -> Page {
 </div>
 </section>
 <section class="panel"><div><p class="eyebrow">Website pilot</p><h2>A clear website for a small business.</h2></div><div><p>PELAOS is preparing a website pilot for small businesses worldwide, with responsive design, contact links, basic search metadata and source handover. It is a proposal rather than an open booking service.</p><a href="{services}">Read the website pilot scope →</a></div></section>
+<section class="panel"><div><p class="eyebrow">EUDIS Swarm · Distributed robotics</p><h2>Can a swarm recover without a vote?</h2></div><div><p>Two simulated aircraft lose contact. One stops with a task unfinished. The survivor can never gather enough votes to declare its peer lost. See how a time-limited task claim changes the outcome.</p><a href="{research}#eudis-swarm">Explore the swarm experiment →</a></div></section>
 <section class="panel"><div><p class="eyebrow">Research notebook</p><h2>Algorithms, AI and experimental systems.</h2></div><div><p>Follow ongoing work on P versus NP (an open question, not a claimed proof), reliability-gated vehicle tracking and ROS3 telemetry monitoring. Additional marine engineering notes cover underwater pressure and navigation; experimental limits are stated for each project.</p><a href="{research}">Browse all research notes →</a></div></section>
 <section class="panel"><div><p class="eyebrow">The person behind PELAOS</p><h2>From Cyprus, with curiosity.</h2></div><div><p>I’m Charalampos Nadiotis, a robotics engineer and Computer Science student at Frederick University. This is my project portfolio: what is available, what is being tested and what I’m exploring next.</p><p><a href="https://github.com/n0711">GitHub</a> · <a href="{RESEARCHGATE}">ResearchGate</a> · <a href="{LINKEDIN}">Contact on LinkedIn</a></p></div></section>
 <section class="panel" id="support"><div><p class="eyebrow">Support</p><h2>Keep the projects going.</h2></div><div><p>The projects here are free and built in my own time. If one of them is useful to you, you can support further development with a one-off contribution via Revolut. Every contribution is voluntary and does not buy access, features or support.</p><a class="button primary" href="{REVOLUT}">Support via Revolut ↗</a></div></section>
@@ -668,6 +678,19 @@ fn research() -> Page {
 <h2 id="prompt-thesis">Prompt engineering as a discrete-continuous optimization problem</h2>
 <p>Can a gradient tell us which word to replace? In his Frederick University BSc thesis, Charalampos Nadiotis tested every single-token replacement in a six-token synthetic vocabulary at prompt lengths two through four. The gradient flagged all 14,760 moves that improved the training score, alongside 1,004 that did not. Evaluation on language-model outputs remains pending.</p>
 <p><a href="https://github.com/n0711/bsc_thesis_2027/pull/2">Read the experiment and reproduce the counts</a></p>
+</section>
+<section class="swarm-study" id="eudis-swarm" aria-labelledby="swarm-title">
+<p class="eyebrow">EUDIS Swarm · Simulation study</p>
+<h2 id="swarm-title">When a drone goes silent, who finishes its task?</h2>
+<p>A radio partition can hide a working aircraft. This experiment asks whether a team can recover an unfinished task while its members still disagree about who owns it.</p>
+<figure class="swarm-results">
+<figcaption>Missions completed within 300 simulated seconds</figcaption>
+<dl><div><dt>Replicated ownership</dt><dd>220 <small>/ 220</small></dd></div>
+<div><dt>Central coordinator</dt><dd>152 <small>/ 220</small></dd></div></dl>
+</figure>
+<p>Four aircraft, a modelled jammer, 11 communication ranges and 20 matched seeds per range. Both controllers detected the same losses at each range. Replicated ownership let another aircraft claim unfinished work after a lease expired. The centralized baseline waited for enough peers to confirm failure.</p>
+<p>Disconnected aircraft can temporarily claim the same task. The study measures coordination in a two-dimensional point-mass simulator. Flight performance and radio propagation require physical measurements.</p>
+<p class="swarm-links"><a href="https://github.com/n0711/eudis-hackathon-swarm/blob/main/paper/recovering-without-agreement.pdf">Read the October preprint (PDF)</a> <a href="https://github.com/n0711/eudis-hackathon-swarm/blob/main/docs/measured_results.md">Inspect the experiments</a></p>
 </section>
 <section aria-labelledby="complexity-research">
 <p class="eyebrow">Computer science / Complexity theory / Research note</p>
@@ -1199,6 +1222,7 @@ mod tests {
             for part in c.split("href=\"").skip(1) {
                 let link = &part[..part.find('"').unwrap()];
                 if let Some(rest) = link.strip_prefix(&format!("{BASE}/")) {
+                    let rest = rest.split('#').next().unwrap_or(rest);
                     let target = if rest.is_empty() || rest.ends_with('/') { format!("{rest}index.html") } else { rest.to_string() };
                     assert!(files.contains(&target), "{path} links to missing {link}");
                 } else {
