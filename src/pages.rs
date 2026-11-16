@@ -688,9 +688,9 @@ fn research() -> Page {
 <dl><div><dt>Replicated ownership</dt><dd>220 <small>/ 220</small></dd></div>
 <div><dt>Central coordinator</dt><dd>152 <small>/ 220</small></dd></div></dl>
 </figure>
-<p>Four aircraft, a modelled jammer, 11 communication ranges and 20 matched seeds per range. Both controllers detected the same losses at each range. Replicated ownership let another aircraft claim unfinished work after a lease expired. The centralized baseline waited for enough peers to confirm failure.</p>
+<p>Four aircraft, a modelled jammer, 11 communication ranges and 20 matched seeds per range. The same injected losses went undetected in each matched pair, although total failure declarations differed in six pairs. Replicated ownership let another aircraft claim unfinished work after a lease expired. The centralized baseline waited for enough peers to confirm failure.</p>
 <p>Disconnected aircraft can temporarily claim the same task. The study measures coordination in a two-dimensional point-mass simulator. Flight performance and radio propagation require physical measurements.</p>
-<p class="swarm-links"><a href="https://github.com/n0711/eudis-hackathon-swarm/blob/main/paper/recovering-without-agreement.pdf">Read the October preprint (PDF)</a> <a href="https://github.com/n0711/eudis-hackathon-swarm/blob/main/docs/measured_results.md">Inspect the experiments</a></p>
+<p class="swarm-links"><a href="https://github.com/n0711/eudis-hackathon-swarm/blob/main/paper/recovering-without-agreement.pdf">Read the October preprint (PDF)</a> <a href="https://github.com/n0711/eudis-hackathon-swarm/blob/main/docs/measured_results.md">Inspect the experiments</a> <a href="https://github.com/n0711/eudis-hackathon-swarm/blob/main/docs/data/communication-range-paired.csv">Download the 440 run records</a></p>
 </section>
 <section aria-labelledby="complexity-research">
 <p class="eyebrow">Computer science / Complexity theory / Research note</p>
