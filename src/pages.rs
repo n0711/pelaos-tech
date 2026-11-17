@@ -418,27 +418,48 @@ fn services() -> Page {
 <section class="hero">
 <p class="eyebrow">PELAOS Tech / Proposed website pilot</p>
 <h1>Custom websites for small businesses</h1>
-<p class="lead">We’re planning a remote website pilot for small businesses worldwide. We’ll plan the pages and features around your business and what your customers need to do.</p>
-<div class="actions"><a class="button primary" href="{LINKEDIN}">Ask about pilot availability ↗</a><a class="button" href="{home}">See PELAOS projects →</a></div>
+<p class="lead">Have a business that needs a clear, useful website? PELAOS is exploring a fixed-scope, remotely delivered website pilot for businesses worldwide. Start with the purpose of your site, then agree the exact deliverables before any work begins.</p>
+<div class="actions"><a class="button primary" href="mailto:{EMAIL}">Email a website brief ↗</a><a class="button" href="{home}">See PELAOS projects →</a></div>
+<p class="muted">Enquiries are welcome. Availability, final scope, schedule and price are not confirmed until agreed in writing.</p>
 </section>
 <section aria-labelledby="scope-title">
-<h2 id="scope-title">What the website pilot would include</h2>
+<h2 id="scope-title">What a pilot could include</h2>
 <ul>
-<li>Responsive layout for phone and desktop.</li>
-<li>Sections for services, contact links and a location or service area supplied by the business.</li>
-<li>A descriptive title, search description and sharing metadata for each page.</li>
+<li>A responsive landing page that works on phone and desktop.</li>
+<li>Clear sections explaining the business, its services and how to get in touch.</li>
+<li>Contact links and a business-provided location or service area, if relevant.</li>
+<li>A descriptive page title, search description and sharing metadata.</li>
 <li>One consolidated review round, source handover and basic editing instructions.</li>
 </ul>
-<p>Search-friendly content and metadata help search engines understand a page, but do not guarantee rankings, traffic or enquiries.</p>
+<p>This is an example scope, not a universal package. Additional pages or features require a separate quote. Search metadata cannot guarantee rankings, visitors or enquiries.</p>
+</section>
+<section aria-labelledby="process-title">
+<h2 id="process-title">How the pilot would work</h2>
+<ol>
+<li><strong>Send a brief.</strong> Explain what your business does and what visitors should be able to do.</li>
+<li><strong>Agree the quote.</strong> Confirm pages, content, dates, revisions, hosting, fees and any exclusions in writing.</li>
+<li><strong>Build and review.</strong> Supply approved text and images; review the agreed work and send one consolidated round of feedback.</li>
+<li><strong>Approve and hand over.</strong> Confirm the result, publish on the agreed hosting arrangement and receive the source and editing notes.</li>
+</ol>
+</section>
+<section aria-labelledby="brief-title">
+<h2 id="brief-title">What to include in your first email</h2>
+<ul>
+<li>Business type and country or target market.</li>
+<li>Existing website or public business page, if you have one.</li>
+<li>What the website should achieve and which pages or sections you need.</li>
+<li>Preferred language, whether text and permitted images are ready, and your ideal launch date.</li>
+</ul>
+<p>Please do not send account passwords, private customer information or other sensitive records in an initial enquiry. <a href="mailto:{EMAIL}">Email {EMAIL}</a>, or use the <a href="{BASE}/contact/">contact page</a>.</p>
 </section>
 <section aria-labelledby="inputs-title">
-<h2 id="inputs-title">What we would need from a client</h2>
-<p>Final approved business text, permission to use any images and brand assets, preferred contact details and the agreed hosting arrangement. Copywriting, translation, domains, hosting subscriptions, booking systems and ongoing maintenance would require separate agreement.</p>
+<h2 id="inputs-title">What is outside the example scope?</h2>
+<p>Copywriting, translation, domains, hosting subscriptions, booking systems, e-commerce, user accounts, custom applications, extra revisions and ongoing maintenance need separate agreement. Third-party expenses are not incurred without client approval.</p>
 </section>
 <section aria-labelledby="status-title">
 <h2 id="status-title">Pilot status and next step</h2>
 <p>This is an early service proposal, not a live ordering or payment page. Scope, schedule, availability, price, taxes and cancellation terms must be confirmed in a written quote before any work or payment. No lead form, tracking or checkout is used here.</p>
-<p>To discuss a potential pilot, <a href="{BASE}/contact/">contact Charalampos Nadiotis at PELAOS Tech</a>. For a sample of current engineering and software work, explore the <a href="{research}">computer science and AI research notes</a>.</p>
+<p>Browse <a href="{research}">PELAOS research and software work</a> for examples of technical projects. These are not claimed as completed client website engagements.</p>
 </section>
 "##, home = href(""), research = href("research/")),
         crumbs: vec![("services/", "Website services")],
@@ -1262,6 +1283,18 @@ mod tests {
         assert!(proposed.contains("Custom websites for small businesses"));
         assert!(proposed.contains("not a live ordering or payment page"));
         assert!(layout(&home()).contains(&href("services/")));
+    }
+
+    #[test]
+    fn website_pilot_enquiries_are_direct_and_qualified() {
+        let rendered = layout(&services());
+        assert!(rendered.contains(&format!(r#"href="mailto:{EMAIL}""#)));
+        assert!(rendered.contains("What to include in your first email"));
+        assert!(rendered.contains("Agree the quote"));
+        assert!(rendered.contains("not a live ordering or payment page"));
+        assert!(rendered.contains("No lead form, tracking or checkout is used here"));
+        assert!(!rendered.contains("<form"));
+        assert!(!rendered.contains("mailto:?"));
     }
 
     #[test]
