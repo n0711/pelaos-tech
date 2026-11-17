@@ -1074,6 +1074,12 @@ pub fn site() -> Vec<File> {
     // robots.txt is effective at the domain root (root-path Vercel builds). GitHub Pages
     // project URLs place this file in a subdirectory: there it is informational only.
     files.push(File { path: "robots.txt".into(), contents: format!("User-agent: *\nAllow: /\nSitemap: {SITE}/sitemap.xml\n") });
+    // The HTML-file method verifies the GitHub Pages URL-prefix property.
+    // Keep the exact Google-provided filename and bytes; do not add to sitemap.
+    files.push(File {
+        path: "googlebdd2b53990ba96b8.html".into(),
+        contents: include_str!("../googlebdd2b53990ba96b8.html").into(),
+    });
     files.push(File {
         path: "llms.txt".into(),
         contents: format!(
@@ -1263,6 +1269,17 @@ mod tests {
                 }
             }
         }
+    }
+
+    #[test]
+    fn google_search_console_verification_is_exact_and_not_sitemapped() {
+        let files = site();
+        let verification = files.iter().find(|f| f.path == "googlebdd2b53990ba96b8.html")
+            .expect("Google Search Console verification file must be deployed");
+        assert_eq!(verification.contents, include_str!("../googlebdd2b53990ba96b8.html"));
+        assert_eq!(verification.contents, "google-site-verification: googlebdd2b53990ba96b8.html");
+        let sitemap = files.iter().find(|f| f.path == "sitemap.xml").unwrap();
+        assert!(!sitemap.contents.contains("googlebdd2b53990ba96b8.html"));
     }
 
     #[test]
