@@ -121,6 +121,7 @@ RioTuner remains **pre-release**. Synthetic benchmark results establish algorith
 - [SEO launch checklist, target pages and Search Console measurement](docs/SEO.md)
 - [Commercial priorities and decision record](docs/PRODUCT_DECISIONS.md)
 - [Fixed-scope website service](docs/SERVICE_OFFER.md)
+- [Website pilot customer-validation sprint (17 November 2026)](docs/WEBSITE_CUSTOMER_VALIDATION_2026-11-17.md)
 - [Project map draft](docs/PROJECT_MAP.md)
 - [OpenPELAOS charter draft](docs/OPENPELAOS_CHARTER.md)
 - [Licence and attribution inventory](docs/LICENCE_INVENTORY.md)
