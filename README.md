@@ -87,8 +87,9 @@ dart analyze --fatal-infos web/app.dart
 dart compile js -O2 --csp -o dist/app.js web/app.dart
 ```
 
-Pull requests run the Rust tests, render the site, analyze the Dart enhancement
-(including informational diagnostics), and compile it before deployment is eligible.
+Pull requests run the Rust tests, render the site, verify generated SEO metadata,
+JSON-LD and the sitemap using `python3 scripts/check-seo.py dist`, analyze the Dart
+enhancement (including informational diagnostics), and compile it before deployment is eligible.
 Only pushes to `main` and manually triggered workflows deploy through GitHub Pages. The Pages workflow retains its existing behaviour; Vercel uses its own build and deployment status.
 
 With no deployment environment overrides, local builds produce GitHub Pages URLs. On Linux, set `PELAOS_SITE_URL` to the intended HTTPS production origin and run `bash scripts/build-vercel.sh` to build with Vercel's root-path settings.

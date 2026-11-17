@@ -14,8 +14,8 @@ const HOSTING: &str = match option_env!("PELAOS_HOSTING") {
     Some(value) => value,
     None => "github-pages",
 };
-/// Used in JSON-LD `dateModified` and sitemap `lastmod`.
-pub const UPDATED: &str = "2026-11-16";
+// Avoid emitting an unverified site-wide modification date for distinct pages.
+// A dated sitemap entry requires a documented per-page significant edit.
 
 pub fn validate_config() -> std::io::Result<()> {
     let invalid = || std::io::Error::new(std::io::ErrorKind::InvalidInput, "deployment needs an HTTPS site URL without a trailing slash, a matching base path, and github-pages or vercel hosting");
@@ -247,7 +247,7 @@ fn layout(p: &Page) -> String {
         .collect::<Vec<_>>()
         .join(",");
     let mut graph = vec![
-        format!(r##"{{"@type":"Organization","@id":"{SITE}/#org","name":"PELAOS Tech","alternateName":"PelaosTech","url":"{SITE}/","logo":"{SITE}/icon-512.png","founder":{{"@id":"{SITE}/contact/#person"}}}}"##),
+        format!(r##"{{"@type":"Organization","@id":"{SITE}/#org","name":"PELAOS Tech","alternateName":"PelaosTech","url":"{SITE}/","logo":"{SITE}/icon-512.png","email":"{EMAIL}","description":"Independent software projects, open research and a proposed small-business website pilot from Cyprus.","founder":{{"@id":"{SITE}/contact/#person"}}}}"##),
         format!(r##"{{"@type":"Person","@id":"{SITE}/contact/#person","name":"Charalampos Nadiotis","url":"{SITE}/contact/","email":"{EMAIL}","sameAs":["{LINKEDIN}","{RESEARCHGATE}","https://github.com/n0711"]}}"##),
         format!(
             "{{\"@type\":\"WebSite\",\"@id\":{},\"name\":\"PELAOS Tech\",\"url\":{},\"publisher\":{{\"@id\":{}}}}}",
@@ -256,7 +256,7 @@ fn layout(p: &Page) -> String {
             js(&format!("{SITE}/#org"))
         ),
         format!(
-            "{{\"@type\":{},\"name\":{},\"url\":{},\"description\":{},\"dateModified\":\"{UPDATED}\",\"isPartOf\":{{\"@id\":{}}}}}",
+            "{{\"@type\":{},\"name\":{},\"url\":{},\"description\":{},\"inLanguage\":\"en-GB\",\"isPartOf\":{{\"@id\":{}}}}}",
             js(if p.slug == "contact/" { "ContactPage" } else { "WebPage" }),
             js(p.title),
             js(&canonical),
@@ -350,10 +350,11 @@ fn home() -> Page {
         r##"
 <section class="hero">
 <p class="eyebrow">PELAOS / Independent software &amp; research / Cyprus</p>
-<h1>Independent software, AI and open research from Cyprus.</h1>
-<p class="lead">Explore original software, computer vision, distributed systems and mathematical research, alongside practical applications and an early website pilot.</p>
-<div class="actions"><a class="button primary" href="#projects">Explore the projects ↓</a><a class="button" href="{services}">Website pilot →</a></div>
+<h1>Independent software, websites and open research.</h1>
+<p class="lead">PELAOS Tech develops independent software and documents AI and robotics research from Cyprus. Explore the projects, or enquire about a proposed remote website pilot for small businesses worldwide.</p>
+<div class="actions"><a class="button primary" href="{services}">Explore the website pilot →</a><a class="button" href="#projects">Explore the projects ↓</a></div>
 </section>
+<section class="panel"><div><p class="eyebrow">Website pilot</p><h2>A clear website for a small business.</h2></div><div><p>PELAOS is preparing a website pilot for small businesses worldwide, with responsive design, contact links, basic search metadata and source handover. It is a proposal rather than an open booking service.</p><a href="{services}">Read the website pilot scope →</a></div></section>
 <section id="projects" aria-labelledby="project-heading">
 <p class="eyebrow">Selected projects</p><h2 id="project-heading">Software and open-source projects</h2>
 <div class="project-grid">
@@ -365,7 +366,6 @@ fn home() -> Page {
 <article class="card project wide"><span class="badge">Open research · Synthetic verification</span><h3>VERA-MOT</h3><p>Quality-gated appearance association for multi-object tracking in drone video. An opt-in BoT-SORT integration now protects stored identity features against low-quality crops in synthetic tests. The implementation note is available in XeLaTeX and PDF; real vehicle identity evaluation remains unverified.</p><a href="{vera}">Read the VERA-MOT research note →</a></article>
 </div>
 </section>
-<section class="panel"><div><p class="eyebrow">Website pilot</p><h2>A clear website for a small business.</h2></div><div><p>PELAOS is preparing a website pilot for small businesses worldwide, with responsive design, contact links, basic search metadata and source handover. It is a proposal rather than an open booking service.</p><a href="{services}">Read the website pilot scope →</a></div></section>
 <section class="panel"><div><p class="eyebrow">EUDIS Swarm · Distributed robotics</p><h2>Can a swarm recover without a vote?</h2></div><div><p>Two simulated aircraft lose contact. One stops with a task unfinished. The survivor can never gather enough votes to declare its peer lost. See how a time-limited task claim changes the outcome.</p><a href="{research}#eudis-swarm">Explore the swarm experiment →</a></div></section>
 <section class="panel"><div><p class="eyebrow">Research notebook</p><h2>Algorithms, AI and experimental systems.</h2></div><div><p>Follow ongoing work on P versus NP (an open question, not a claimed proof), reliability-gated vehicle tracking and ROS3 telemetry monitoring. Additional marine engineering notes cover underwater pressure and navigation; experimental limits are stated for each project.</p><a href="{research}">Browse all research notes →</a></div></section>
 <section class="panel"><div><p class="eyebrow">The person behind PELAOS</p><h2>From Cyprus, with curiosity.</h2></div><div><p>I’m Charalampos Nadiotis, a robotics engineer and Computer Science student at Frederick University. This is my project portfolio: what is available, what is being tested and what I’m exploring next.</p><p><a href="https://github.com/n0711">GitHub</a> · <a href="{RESEARCHGATE}">ResearchGate</a> · <a href="{LINKEDIN}">Contact on LinkedIn</a></p></div></section>
@@ -380,8 +380,8 @@ fn home() -> Page {
     );
     Page {
         slug: "",
-        title: "Charalampos Nadiotis | PELAOS Tech Software and AI Research",
-        description: "Explore software and AI research by Charalampos Nadiotis in Cyprus, including VERA-MOT vehicle tracking, ROS3-Limassol telemetry and the RioTuner Android tuner.",
+        title: "PELAOS Tech | Websites, Software and Open Research",
+        description: "Explore independent software and AI research from Cyprus, plus a proposed remote website pilot for small businesses worldwide. Discover PELAOS Tech projects.",
         body,
         crumbs: vec![],
         extra_ld: vec![],
@@ -400,6 +400,7 @@ fn contact() -> Page {
         description: "Contact Charalampos Nadiotis, founder of PELAOS Tech in Cyprus, by email or LinkedIn about software projects, website enquiries and research collaborations.",
         body: format!(r#"<h1>Contact Charalampos Nadiotis</h1>
 <p class="lead">I’m the founder of PELAOS Tech in Cyprus. Get in touch about a software project, a small-business website or a research collaboration.</p>
+<p>Interested in a website? <a href="{BASE}/services/">Read the proposed worldwide small-business website pilot</a> before sending a brief.</p>
 <address><p>Email: <a href="mailto:{EMAIL}">{EMAIL}</a></p>
 <p>LinkedIn: <a href="{LINKEDIN}" rel="me">Charalampos Nadiotis on LinkedIn</a></p></address>"#),
         crumbs: vec![("contact/", "Contact")],
@@ -412,8 +413,8 @@ fn contact() -> Page {
 fn services() -> Page {
     Page {
         slug: "services/",
-        title: "Custom Websites for Small Businesses | PELAOS Tech",
-        description: "PELAOS is preparing a website pilot for small businesses worldwide, with responsive design, basic SEO, contact links and source handover.",
+        title: "Small Business Website Pilot Worldwide | PELAOS Tech",
+        description: "Explore PELAOS Tech's proposed remote website pilot for businesses worldwide: responsive design, clear contact links, SEO basics and source handover.",
         body: format!(r##"
 <section class="hero">
 <p class="eyebrow">PELAOS Tech / Proposed website pilot</p>
@@ -455,6 +456,15 @@ fn services() -> Page {
 <section aria-labelledby="inputs-title">
 <h2 id="inputs-title">What is outside the example scope?</h2>
 <p>Copywriting, translation, domains, hosting subscriptions, booking systems, e-commerce, user accounts, custom applications, extra revisions and ongoing maintenance need separate agreement. Third-party expenses are not incurred without client approval.</p>
+</section>
+<section aria-labelledby="faq-title">
+<h2 id="faq-title">Website pilot questions</h2>
+<h3>Can a business outside Cyprus enquire?</h3>
+<p>Yes. The proposed website pilot is designed for remote collaboration with businesses worldwide. Language, meeting times, hosting and project fit are confirmed before a quote.</p>
+<h3>Will a website rank first on Google?</h3>
+<p>No search position, visitor count or sales result can be guaranteed. The example scope includes clear content structure and basic on-page metadata, not ongoing search marketing.</p>
+<h3>Are online stores and booking systems included?</h3>
+<p>Not in the example landing-page scope. Payments, account systems, booking integrations, hosting subscriptions and ongoing maintenance require separate discussion and pricing.</p>
 </section>
 <section aria-labelledby="status-title">
 <h2 id="status-title">Pilot status and next step</h2>
@@ -1050,7 +1060,9 @@ pub fn site() -> Vec<File> {
     let urls = pages
         .iter()
         .filter(|p| !p.noindex)
-        .map(|p| format!("  <url><loc>{}</loc><lastmod>{UPDATED}</lastmod></url>", url(p.slug)))
+        // An unverified shared date would misrepresent individual page updates.
+        // Add per-page <lastmod> only when evidence is maintained for each URL.
+        .map(|p| format!("  <url><loc>{}</loc></url>", url(p.slug)))
         .collect::<Vec<_>>()
         .join("\n");
     files.push(File {
@@ -1283,6 +1295,26 @@ mod tests {
         assert!(proposed.contains("Custom websites for small businesses"));
         assert!(proposed.contains("not a live ordering or payment page"));
         assert!(layout(&home()).contains(&href("services/")));
+    }
+
+    #[test]
+    fn search_metadata_is_consistent_and_dates_are_not_fabricated() {
+        let home_page = layout(&home());
+        let service_page = layout(&services());
+        let contact_page = layout(&contact());
+        assert!(home_page.contains("PELAOS Tech | Websites, Software and Open Research"));
+        assert!(service_page.contains("Small Business Website Pilot Worldwide"));
+        assert!(service_page.contains("Can a business outside Cyprus enquire?"));
+        assert!(contact_page.contains(&href("services/")));
+        for p in pages() {
+            let rendered = layout(&p);
+            assert!(rendered.contains(r#""inLanguage":"en-GB""#));
+            assert!(!rendered.contains(r#""dateModified":"#));
+            assert!(rendered.contains(&format!(r#"<meta property="og:url" content="{}">"#, url(p.slug))));
+        }
+        let sitemap = site().into_iter().find(|f| f.path == "sitemap.xml").unwrap().contents;
+        assert!(!sitemap.contains("<lastmod>"));
+        assert!(sitemap.contains(&format!("<loc>{}</loc>", url("services/"))));
     }
 
     #[test]
