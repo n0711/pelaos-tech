@@ -1110,7 +1110,16 @@ mod tests {
     use super::*;
 
     fn html() -> Vec<(String, String)> {
-        site().into_iter().filter(|f| f.path.ends_with(".html")).map(|f| (f.path, f.contents)).collect()
+        // Check only full generated webpages: verification tokens are served as
+        // standalone .html files but intentionally contain no HTML metadata.
+        let page_paths: std::collections::HashSet<_> = pages()
+            .into_iter()
+            .map(|p| if p.slug.ends_with(".html") { p.slug.to_string() } else { format!("{}index.html", p.slug) })
+            .collect();
+        site().into_iter()
+            .filter(|f| page_paths.contains(&f.path))
+            .map(|f| (f.path, f.contents))
+            .collect()
     }
 
     #[test]
