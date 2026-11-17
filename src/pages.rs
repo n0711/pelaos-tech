@@ -401,8 +401,14 @@ fn contact() -> Page {
         body: format!(r#"<h1>Contact Charalampos Nadiotis</h1>
 <p class="lead">I’m the founder of PELAOS Tech in Cyprus. Get in touch about a software project, a small-business website or a research collaboration.</p>
 <p>Interested in a website? <a href="{BASE}/services/">Read the proposed worldwide small-business website pilot</a> before sending a brief.</p>
+<h2>Website and software enquiries</h2>
+<p>For a proposed small-business website, start with your business type, target country or audience, preferred language and the main thing visitors should be able to do. If you already have a website, include its public URL and explain what is missing. Content, images, hosting and revision needs help define an accurate written scope and quote.</p>
+<p>For software questions, include the project name, a link to the relevant public page and a concise description of the issue or collaboration idea. You can browse the <a href="{BASE}/research/">research notes</a>, <a href="{BASE}/ros3-limassol/">ROS3-Limassol</a>, <a href="{BASE}/vera-mot/">VERA-MOT</a> and <a href="{BASE}/riotuner/">RioTuner</a> pages for technical context before contacting me.</p>
+<h2>Contact details and privacy</h2>
 <address><p>Email: <a href="mailto:{EMAIL}">{EMAIL}</a></p>
-<p>LinkedIn: <a href="{LINKEDIN}" rel="me">Charalampos Nadiotis on LinkedIn</a></p></address>"#),
+<p>LinkedIn: <a href="{LINKEDIN}" rel="me">Charalampos Nadiotis on LinkedIn</a></p></address>
+<p>PELAOS Tech is based in Cyprus, and remote enquiries from other countries are welcome. An enquiry does not create a service agreement. Availability, costs and timing require a written confirmation.</p>
+<p>Do not send account credentials, private customer records or confidential technical data in an initial message. This site does not collect enquiries through a web form; your chosen email or LinkedIn service handles the message. Read the <a href="{BASE}/privacy/">website privacy notice</a> for more about site hosting and browser storage.</p>"#),
         crumbs: vec![("contact/", "Contact")],
         extra_ld: vec![],
         script: false,
@@ -433,6 +439,11 @@ fn services() -> Page {
 <li>One consolidated review round, source handover and basic editing instructions.</li>
 </ul>
 <p>This is an example scope, not a universal package. Additional pages or features require a separate quote. Search metadata cannot guarantee rankings, visitors or enquiries.</p>
+</section>
+<section aria-labelledby="example-title">
+<h2 id="example-title">Explore an existing website project</h2>
+<p>For a public example of site structure and published content, browse <a href="https://cysk8clips.com">cysk8clips, a Cyprus skateboarding archive</a>. It presents skate videos, articles, event stories and a spot guide. It is an existing PELAOS portfolio project, not a commissioned customer case study or evidence of search ranking improvements.</p>
+<p>A useful small-business website also needs a clear explanation of what the business offers, readable navigation on a phone, accurate contact details and relevant page headings. The pilot brief starts with those visitor needs rather than promises about traffic or search position.</p>
 </section>
 <section aria-labelledby="process-title">
 <h2 id="process-title">How the pilot would work</h2>
@@ -914,11 +925,19 @@ fn site_privacy() -> Page {
     let body = format!(
         r#"
 <h1>Website privacy</h1>
-<p>This website has no cookies, no analytics, no tracking and no forms. Its only script is the depth slider on the research page, which runs entirely in your browser.</p>
+<p>PELAOS Tech does not add analytics, advertising trackers, enquiry forms or tracking cookies to this website. The public pages can be read without an account. The research page has an interactive depth calculator that runs locally in your browser; values you enter are not submitted to PELAOS.</p>
+<h2>Browser storage and offline access</h2>
+<p>The website includes a small progressive-web-app script and service worker. When supported by your browser, these can cache site pages and static files on your device so previously visited content may remain accessible offline. This cache is not an analytics system and is not sent to PELAOS. You can remove cached site content using your browser's site-data controls.</p>
+<h2>Hosting and external links</h2>
 {hosting_notice}
-<p>The RioTuner app has its own <a href="{policy}">privacy policy</a>.</p>
+<p>Some pages link to external services, including GitHub, LinkedIn, ResearchGate, Revolut and other project sites. Following those links takes you to another provider, whose own privacy terms and settings apply.</p>
+<h2>Contacting PELAOS</h2>
+<p>If you choose an email link, your email app handles the message and the information you decide to send. PELAOS receives that message through email rather than through this website. Do not include passwords or other sensitive information in an initial enquiry. You can find the public email and LinkedIn links on the <a href="{contact}">contact page</a>.</p>
+<h2>Separate application policies</h2>
+<p>The RioTuner Android app has its own <a href="{policy}">privacy policy</a>; this notice covers the website only.</p>
 "#,
         policy = href("riotuner/privacy/"),
+        contact = href("contact/"),
     );
     Page {
         slug: "privacy/",
@@ -1321,6 +1340,31 @@ mod tests {
         assert!(proposed.contains("Custom websites for small businesses"));
         assert!(proposed.contains("not a live ordering or payment page"));
         assert!(layout(&home()).contains(&href("services/")));
+    }
+
+    #[test]
+    fn service_example_and_contact_are_accurately_labeled() {
+        let services = layout(&services());
+        assert!(services.contains("Explore an existing website project"));
+        assert!(services.contains("https://cysk8clips.com"));
+        assert!(services.contains("not a commissioned customer case study"));
+        assert!(!services.contains("guaranteed Google rankings"));
+        let contact = layout(&contact());
+        assert!(contact.contains("Website and software enquiries"));
+        assert!(contact.contains(&href("privacy/")));
+        assert!(contact.contains(&href("vera-mot/")));
+        assert!(contact.contains(&href("riotuner/")));
+    }
+
+    #[test]
+    fn privacy_notice_describes_pwa_cache_and_email() {
+        let privacy = layout(&site_privacy());
+        assert!(privacy.contains("service worker"));
+        assert!(privacy.contains("cached site content"));
+        assert!(privacy.contains("email app handles the message"));
+        assert!(privacy.contains(&href("contact/")));
+        assert!(privacy.contains(&href("riotuner/privacy/")));
+        assert!(!privacy.contains("Its only script is the depth slider"));
     }
 
     #[test]
