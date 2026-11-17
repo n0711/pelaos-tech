@@ -22,4 +22,4 @@ Check the agreed content on phone and desktop widths, keyboard access, working c
 
 At €250 gross project revenue, 8 delivery hours is €31.25 per delivery hour; 12 hours is about €20.83. These figures are before acquisition time, overhead, fees and taxes. Record all hours. If the actual scope exceeds the pilot, revise the next quote or offer rather than doing unbounded work.
 
-Use the existing [LinkedIn contact](https://www.linkedin.com/in/nadiotis/) for initial conversations. No messages have been sent by this repository change.
+For public enquiries, visitors can email the founder from the [website pilot page](https://n0711.github.io/pelaos-tech/services/) or use the existing [LinkedIn contact](https://www.linkedin.com/in/nadiotis/). Follow the [customer-validation sprint](WEBSITE_CUSTOMER_VALIDATION_2026-11-17.md) to record demand and actual work without publishing personal lead information. No messages have been sent by this repository change.
