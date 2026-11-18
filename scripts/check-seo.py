@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Offline audit of the generated PELAOS site; no network or dependencies."""
+"""Audit generated SEO metadata offline (not live search-engine indexing)."""
 import json
 import sys
 from html.parser import HTMLParser
@@ -69,6 +69,7 @@ def audit(output):
 
     page_files = sorted(output.rglob("index.html"))
     urls = set()
+    # Enforce site-wide uniqueness in addition to per-page metadata validity.
     descriptions = set()
     titles = set()
     for path in page_files:
@@ -78,16 +79,17 @@ def audit(output):
         doc = Page(path.read_text(encoding="utf-8"))
         check(len(doc.canonicals) == 1 and doc.canonicals[0] == expected,
               f"{relative}: canonical mismatch")
-        check(doc.one_meta("description") not in descriptions, f"{relative}: duplicate description")
-        descriptions.add(doc.one_meta("description"))
-        check(len(doc.title) > 0 and bool("".join(doc.title).strip()), f"{relative}: empty title")
+        description = doc.one_meta("description")
+        check(description not in descriptions, f"{relative}: duplicate description")
+        descriptions.add(description)
         title = "".join(doc.title).strip()
+        check(bool(title), f"{relative}: empty title")
         check(title not in titles, f"{relative}: duplicate title")
         titles.add(title)
         check(doc.one_meta("og:url") == expected, f"{relative}: Open Graph URL mismatch")
         check(doc.one_meta("og:title") == title, f"{relative}: Open Graph title mismatch")
         check(doc.one_meta("twitter:title") == title, f"{relative}: Twitter title mismatch")
-        check(doc.one_meta("og:description") == doc.one_meta("description"),
+        check(doc.one_meta("og:description") == description,
               f"{relative}: Open Graph description mismatch")
         check(doc.one_meta("og:image") == origin + "icon-512.png",
               f"{relative}: Open Graph image missing or noncanonical")
