@@ -85,8 +85,8 @@ pub fn write_site(out: &Path, files: &[File]) -> io::Result<()> {
             fs::create_dir_all(path.parent().unwrap())?;
             fs::write(path, &file.contents)?;
         }
-        // Native launcher icons are small, precompressed PNGs tracked as source assets.
-        // Ship them for both GitHub Pages and root-domain deployments.
+        // Copy tracked assets into the stage so failures cannot partially publish them.
+        // Both GitHub Pages and root-domain deployments serve these files directly.
         fs::write(stage.join("inter.woff"), include_bytes!("../assets/inter.woff"))?;
         for filename in ["favicon.ico", "favicon-blue.ico"] {
             fs::write(stage.join(filename), include_bytes!("../assets/favicon.ico"))?;
@@ -111,6 +111,7 @@ pub fn write_site(out: &Path, files: &[File]) -> io::Result<()> {
         }
         return Ok(());
     }
+    // Preserve the previous generated site until the staged replacement succeeds.
     let backup = match vacant_sibling(parent, "backup") {
         Ok(path) => path,
         Err(e) => {
