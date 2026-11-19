@@ -28,6 +28,8 @@ jobs:
       - uses: dart-lang/setup-dart@6afc89df92d6eb3834022f73cd65adc8cdfcb92d # v1.8.1
         with:
           sdk: stable
+      - name: Check Python audit script syntax
+        run: python3 -m compileall -q scripts
       - name: Test the generator (one h1 per page, no forms, no http assets, links resolve)
         run: cargo test --locked
       - name: Render pages (Rust)
