@@ -367,7 +367,7 @@ fn home() -> Page {
 </div>
 </section>
 <section class="panel"><div><p class="eyebrow">EUDIS Swarm · Distributed robotics</p><h2>Can a swarm recover without a vote?</h2></div><div><p>Two simulated aircraft lose contact. One stops with a task unfinished. The survivor can never gather enough votes to declare its peer lost. See how a time-limited task claim changes the outcome.</p><a href="{research}#eudis-swarm">Explore the swarm experiment →</a></div></section>
-<section class="panel"><div><p class="eyebrow">Research notebook</p><h2>Algorithms, AI and experimental systems.</h2></div><div><p>Follow ongoing work on P versus NP (an open question, not a claimed proof), reliability-gated vehicle tracking and ROS3 telemetry monitoring. Additional marine engineering notes cover underwater pressure and navigation; experimental limits are stated for each project.</p><a href="{research}">Browse all research notes →</a></div></section>
+<section class="panel"><div><p class="eyebrow">Research notebook</p><h2>Algorithms, AI and experimental systems.</h2></div><div><p>Follow ongoing work on <a href="{research}#legendre-conjecture">Legendre’s conjecture</a>, P versus NP (both open questions, not claimed proofs), reliability-gated vehicle tracking and ROS3 telemetry monitoring. Additional marine engineering notes cover underwater pressure and navigation; experimental limits are stated for each project.</p><a href="{research}">Browse all research notes →</a></div></section>
 <section class="panel"><div><p class="eyebrow">The person behind PELAOS</p><h2>From Cyprus, with curiosity.</h2></div><div><p>I’m Charalampos Nadiotis, a robotics engineer and Computer Science student at Frederick University. This is my project portfolio: what is available, what is being tested and what I’m exploring next.</p><p><a href="https://github.com/n0711">GitHub</a> · <a href="{RESEARCHGATE}">ResearchGate</a> · <a href="{LINKEDIN}">Contact on LinkedIn</a></p></div></section>
 <section class="panel" id="support"><div><p class="eyebrow">Support</p><h2>Keep the projects going.</h2></div><div><p>The projects here are free and built in my own time. If one of them is useful to you, you can support further development with a one-off contribution via Revolut. Every contribution is voluntary and does not buy access, features or support.</p><a class="button primary" href="{REVOLUT}">Support via Revolut ↗</a></div></section>
 "##,
@@ -734,6 +734,25 @@ fn research() -> Page {
 <p>Disconnected aircraft can temporarily claim the same task. The study measures coordination in a two-dimensional point-mass simulator. Flight performance and radio propagation require physical measurements.</p>
 <p class="swarm-links"><a href="https://github.com/n0711/eudis-hackathon-swarm/blob/main/paper/recovering-without-agreement.pdf">Read the October preprint (PDF)</a> <a href="https://github.com/n0711/eudis-hackathon-swarm/blob/main/docs/measured_results.md">Inspect the experiments</a> <a href="https://github.com/n0711/eudis-hackathon-swarm/blob/main/docs/data/communication-range-paired.csv">Download the 440 run records</a></p>
 </section>
+<section id="legendre-conjecture" aria-labelledby="legendre-title">
+<p class="eyebrow">Mathematics / Computational number theory / November 2026</p>
+<h2 id="legendre-title">Legendre's conjecture: a discrete and analytic investigation</h2>
+<p>Charalampos Nadiotis investigates whether every interval between consecutive squares contains a prime: n² &lt; p &lt; (n+1)² for every positive integer n. The research combines discrete mathematics, prime-divisibility graphs, sieve theory and explicit formulas conditional on the Riemann hypothesis (RH).</p>
+<div class="card">
+<span class="badge">Open problem · Partial results</span>
+<h3>What has been established?</h3>
+<ul>
+<li>Exact Möbius sieve identities and a cube-root reduction that isolates residual semiprimes.</li>
+<li>Finite graph degree-count identities and bounds, with selected lemmas formalized in Lean 4.</li>
+<li>An obstruction to fixed odd inclusion-exclusion truncations as uniform positive lower bounds.</li>
+<li>C++20 and Python implementations of the Prime Graph Algorithm (PGA), with finite differential tests. The documented C++ graph analysis uses Θ(n log log n) word operations and Θ(n) bytes, exponential in the binary input length.</li>
+</ul>
+<h3>What remains open?</h3>
+<p>The decisive uniform one-sided cancellation estimate for the zeta-zero sum is not established. Neither Legendre's conjecture nor RH is proved by this project; finite computations and the certified graph lemmas do not establish an infinite prime-existence theorem.</p>
+</div>
+<p><a href="https://github.com/n0711/LEGENDRE_CONJECTURE">Explore the open-source research ↗</a> · <a href="https://github.com/n0711/LEGENDRE_CONJECTURE/blob/master/paper/legendre_research.tex">Read the XeLaTeX manuscript source ↗</a> · <a href="https://github.com/n0711/LEGENDRE_CONJECTURE/blob/master/docs/PUBLICATION_HANDOFF.md">Results, complexity and limitations ↗</a> · <a href="https://github.com/n0711/LEGENDRE_CONJECTURE/blob/master/docs/LEAN_VERIFICATION.md">Lean verification record ↗</a></p>
+</section>
+
 <section aria-labelledby="complexity-research">
 <p class="eyebrow">Computer science / Complexity theory / Research note</p>
 <h2 id="complexity-research">P versus NP: a research question</h2>
@@ -796,7 +815,7 @@ fn research() -> Page {
     Page {
         slug: "research/",
         title: "Computer Science, AI and Open Research | PelaosTech",
-        description: "Explore PELAOS research in algorithms, P versus NP, VERA-MOT computer vision and ROS3 distributed robotics software, plus underwater engineering notes.",
+        description: "Explore PELAOS research in Legendre’s conjecture, P versus NP, algorithms, VERA-MOT computer vision, ROS3 robotics and underwater engineering.",
         body,
         crumbs: vec![("research/", "Research")],
         extra_ld: vec![faq_ld],
@@ -1102,7 +1121,7 @@ pub fn site() -> Vec<File> {
     files.push(File {
         path: "llms.txt".into(),
         contents: format!(
-            "# PelaosTech\n\n> Independent software, computer science, AI and open research, including RioTuner, VERA-MOT and ROS3-Limassol.\n\n- [Research: algorithms, AI and robotics]({}): P versus NP (unverified), VERA-MOT, ROS3-Limassol, plus sourced underwater pressure and navigation notes\n- [ROS3-Limassol]({}): receiver-arrival liveness evidence from synthetic replay, Rover SITL over localhost and a limited Raspberry Pi–Arduino USB bench test; flight-controller, radio-link and field validation pending\n- [VERA-MOT]({}): quality-gated appearance matching verified only on synthetic pinned-tracker tests; vehicle identity performance remains unmeasured\n- [RioTuner]({}): offline Android instrument tuner, Google Play release in preparation, with synthetic benchmark results\n- [RioTuner privacy policy]({})\n",
+            "# PelaosTech\n\n> Independent software, computer science, AI and open research, including RioTuner, VERA-MOT and ROS3-Limassol.\n\n- [Research: algorithms, AI and robotics]({}): Legendre’s conjecture (open; finite graph and sieve results), P versus NP (unverified), VERA-MOT, ROS3-Limassol, plus sourced underwater pressure and navigation notes\n- [ROS3-Limassol]({}): receiver-arrival liveness evidence from synthetic replay, Rover SITL over localhost and a limited Raspberry Pi–Arduino USB bench test; flight-controller, radio-link and field validation pending\n- [VERA-MOT]({}): quality-gated appearance matching verified only on synthetic pinned-tracker tests; vehicle identity performance remains unmeasured\n- [RioTuner]({}): offline Android instrument tuner, Google Play release in preparation, with synthetic benchmark results\n- [RioTuner privacy policy]({})\n",
             url("research/"),
             url("ros3-limassol/"),
             url("vera-mot/"),
@@ -1229,6 +1248,18 @@ mod tests {
         assert!(landing.contains(&format!("href=\"{}\"", href("ros3-limassol/"))));
         let summary = site().into_iter().find(|f| f.path == "llms.txt").unwrap().contents;
         assert!(summary.contains(&url("ros3-limassol/")));
+    }
+
+    #[test]
+    fn legendre_research_links_and_proof_boundary() {
+        let rendered = layout(&research());
+        assert!(rendered.contains("id=\"legendre-conjecture\""));
+        assert!(rendered.contains("id=\"legendre-title\""));
+        assert!(rendered.contains("https://github.com/n0711/LEGENDRE_CONJECTURE"));
+        assert!(rendered.contains("paper/legendre_research.tex"));
+        assert!(rendered.contains("docs/LEAN_VERIFICATION.md"));
+        assert!(rendered.contains("Neither Legendre's conjecture nor RH is proved"));
+        assert!(layout(&home()).contains(&format!("{}#legendre-conjecture", href("research/"))));
     }
 
     #[test]
